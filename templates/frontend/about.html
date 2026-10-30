@@ -1444,7 +1444,21 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 @media (prefers-reduced-motion: reduce) {
     .dy-sv-bgimg, .dy-sv-panel, .dy-sv-btn, .dy-sv-arrow, .dy-sv-dot { transition: none !important; }
 }
+/* taller stats bar */
+.dy-about-stats{
+    padding: 38px 24px;          /* was 22px 20px; raise the first number for more height */
+    border-radius: 70px;         /* keeps the pill shape with the extra height */
+}
+.dy-about-stat > i{ font-size: 34px; }                         /* bigger icons to match */
+.dy-about-stat strong{ font-size: clamp(24px, 2.1vw, 32px); }  /* optional: bigger numbers */
+.dy-about-stat small{ font-size: 14px; }
 
+@media (max-width: 991px){
+    .dy-about-stats{
+        padding: 28px 20px;
+        border-radius: 36px;
+    }
+}
 </style>
 
 

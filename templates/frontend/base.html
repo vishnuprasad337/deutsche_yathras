@@ -792,6 +792,90 @@ header.main-header .nav-logo-center .logo-blue {
 	header.main-header.is-solid .slicknav_nav { background: #ffffff !important; }
 	header.main-header.is-solid .slicknav_nav a { color: #00367E !important; }
 	header.main-header.is-solid .slicknav_nav a:hover { color: #f4813f !important; }
+	/* dropdown + white-bar menu text: black instead of green */
+header.main-header .main-menu .nav-item > ul.dy-dropdown li a,
+header.main-header.is-solid .main-menu .nav-link,
+header.main-header.is-solid .main-menu ul li a {
+    color: #111111 !important;
+}
+
+/* keep the orange hover on dropdown links */
+header.main-header .main-menu .nav-item > ul.dy-dropdown li a:hover,
+header.main-header .main-menu .nav-item > ul.dy-dropdown li a:focus {
+    color: #f4813f !important;
+}
+/* all dropdown items: same weight */
+header.main-header .main-menu .nav-item > ul.dy-dropdown li a,
+header.main-header .main-menu .nav-item > ul.dy-dropdown li:first-child a {
+    font-weight: 500 !important;
+}
+/* scrollbar: brand colours */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #018ED2 #e8f6ff;          /* thumb | track (Firefox) */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 10px;
+    background: #e8f6ff !important;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: #e8f6ff !important;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: #018ED2 !important;            /* original brand blue */
+    border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: #046BF2 !important;            /* 3D logo blue on hover */
+}
+
+/* remove the custom cursor dot completely (.cb-cursor is the Awaiken theme's cursor) */
+.cb-cursor,
+.cb-cursor:before,
+.cb-cursor:after,
+#magic-cursor,
+#ball,
+#ball *,
+.cursor,
+.cursor-inner,
+.cursor-outer,
+.mouse-cursor,
+.magic-cursor {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}
+html, body, body * {
+    cursor: auto !important;
+}
+a, button, .btn-default, [role="button"], .open-book-trip {
+    cursor: pointer !important;
+}
+
+/* footer social icons: blue instead of green */
+.footer-main .footer-social-links ul li a,
+.footer-main .footer-social-links ul li a i {
+    color: #046BF2 !important;      /* use #14305e for a darker navy */
+}
+.footer-main .footer-social-links ul li a {
+    background: #ffffff !important;
+}
+.footer-main .footer-social-links ul li a:hover,
+.footer-main .footer-social-links ul li a:hover i {
+    background: #f4813f !important; /* orange on hover, like the buttons */
+    color: #ffffff !important;
+}
 	</style>
 
 	<!-- MOBILE QUICK-CONTACT BAR (Call / WhatsApp / Email) -->
@@ -892,7 +976,7 @@ header.main-header .nav-logo-center .logo-blue {
 								<li class="nav-item has-dd">
 									<a class="nav-link" href="{% url 'packages' %}">Packages</a>
 									<ul class="dy-dropdown">
-										<li><a href="{% url 'packages' %}">View All Packages</a></li>
+										
 										{% for p in nav_packages %}
 											<li><a href="{% url 'package_detail' p.slug %}">{{ p }}</a></li>
 										{% endfor %}
@@ -902,7 +986,7 @@ header.main-header .nav-logo-center .logo-blue {
 								<li class="nav-item has-dd">
 									<a class="nav-link" href="{% url 'destinations' %}">Destinations</a>
 									<ul class="dy-dropdown">
-										<li><a href="{% url 'destinations' %}">View All Destinations</a></li>
+										
 										{% for d in nav_destinations %}
 											<li><a href="{% url 'destination_detail' d.slug %}">{{ d }}</a></li>
 										{% endfor %}
@@ -1389,5 +1473,18 @@ header.main-header .nav-logo-center .logo-blue {
 		})();
 	</script>
 	{% block extra_js %}{% endblock %}
+
+	<!-- Remove the custom cursor dot completely (deletes it if the theme script creates it) -->
+	<script>
+	(function () {
+		var sel = '.cb-cursor, #magic-cursor, #ball, .cursor-inner, .cursor-outer, .mouse-cursor, .magic-cursor';
+		function kill() {
+			document.querySelectorAll(sel).forEach(function (el) { el.remove(); });
+		}
+		kill();
+		window.addEventListener('load', kill);
+		new MutationObserver(kill).observe(document.body, { childList: true });
+	})();
+	</script>
 </body>
 </html>
