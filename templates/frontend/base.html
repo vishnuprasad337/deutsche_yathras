@@ -538,19 +538,97 @@
 		.dy-blog-body h3 {
 			letter-spacing: -.01em !important;
 		}
+/* ---------- PRELOADER: brand-blue tint, blended logo, loading bar ---------- */
+.preloader {
+	background: radial-gradient(circle at 50% 45%, #ffffff 0%, #eaf4fe 65%, #d9ebfc 100%) !important;
+	z-index: 100000 !important;
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 26px;
+	transition: opacity .6s ease, visibility .6s ease;
+}
+.preloader:not(.dy-done) { opacity: 1 !important; visibility: visible !important; }
+.preloader.dy-done { opacity: 0 !important; visibility: hidden !important; pointer-events: none; }
+.preloader .loading-container,
+.preloader #loading-icon { display: none !important; }
+
+.dy-draw {
+	position: relative;
+	width: 200px;
+	max-width: 60vw;
+}
+.dy-draw img {
+	display: block;
+	width: 100%;
+	height: auto;
+	mix-blend-mode: multiply;      /* removes the off-white box around the PNG */
+}
+.dy-draw-ghost { opacity: .22; }
+.dy-draw-top {
+	position: absolute;
+	inset: 0;
+	clip-path: inset(0 100% 0 0);
+	animation: dyDraw 2.8s ease-in-out infinite;
+}
+@keyframes dyDraw {
+	0%        { clip-path: inset(0 100% 0 0); }
+	70%, 100% { clip-path: inset(0 0 0 0); }
+}
+
+/* loading bar in the two brand blues */
+.dy-bar {
+	width: 200px;
+	max-width: 60vw;
+	height: 4px;
+	border-radius: 4px;
+	background: rgba(4, 107, 242, 0.15);
+	overflow: hidden;
+}
+.dy-bar span {
+	display: block;
+	height: 100%;
+	width: 0;
+	border-radius: 4px;
+	background: linear-gradient(90deg, #018ED2, #046BF2);
+	animation: dyBar 2.8s ease-in-out infinite;
+}
+@keyframes dyBar {
+	0%        { width: 0; }
+	70%, 100% { width: 100%; }
+}
 	</style>
+	<!-- Preloader End -->
+<script>
+	(function () {
+		var start = Date.now();
+		var MIN_TIME = 3000;   /* minimum time the preloader shows, in milliseconds */
+
+		function hidePreloader() {
+			var p = document.querySelector('.preloader');
+			if (!p) return;
+			var wait = Math.max(0, MIN_TIME - (Date.now() - start));
+			setTimeout(function () { p.classList.add('dy-done'); }, wait);
+		}
+
+		if (document.readyState === 'complete') hidePreloader();
+		else window.addEventListener('load', hidePreloader);
+	})();
+</script>
 </head>
 <body>
 
 
 	<!-- Preloader Start -->
-	<div class="preloader">
-		<div class="loading-container">
-			<div class="loading"></div>
-			<div id="loading-icon"><img src="{% static 'frontend/assets/images/loader.svg' %}" alt=""></div>
-		</div>
+<div class="preloader">
+	<div class="dy-draw">
+		<img class="dy-draw-ghost" src="{% static 'frontend/logo-3d.png' %}" alt="">
+		<img class="dy-draw-top" src="{% static 'frontend/logo-3d.png' %}" alt="Deutsche Yathras">
 	</div>
-	<!-- Preloader End -->
+	<div class="dy-bar"><span></span></div>
+</div>
+<!-- Preloader End -->
 
 	<!-- Header Start -->
 	<header class="main-header">
