@@ -101,47 +101,123 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 /* grid */
 .dy-pkg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;}
 
-/* card (same design as the home page cards) */
-.dy-pkg-card{display:flex;flex-direction:column;height:100%;padding:16px;background:#fff;border-radius:30px;
-    box-shadow:0 10px 30px rgba(20,48,94,.08);transition:transform .35s,box-shadow .35s;}
-.dy-pkg-card:hover{transform:translateY(-8px);box-shadow:0 20px 44px rgba(20,48,94,.16);}
-.dy-pkg-image{position:relative;display:block;flex-shrink:0;height:260px;border-radius:22px;overflow:hidden;background:#cfe6f6;}
-.dy-pkg-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s;}
-.dy-pkg-card:hover .dy-pkg-image img{transform:scale(1.07);}
-.dy-pkg-badge{position:absolute;top:16px;left:16px;z-index:2;padding:8px 16px;border-radius:50px;
-    background:#fff;color:var(--dy-navy);font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.1);}
-.dy-pkg-badge.is-hot{background:var(--dy-orange);color:#fff;}
-.dy-pkg-body{display:flex;flex-direction:column;flex:1;min-width:0;padding:18px 10px 6px;}
-.dy-pkg-location{display:inline-flex;align-items:center;gap:8px;color:#5b6b85;font-size:15px;line-height:1.4;}
-.dy-pkg-location i{color:#2d5bd0;font-size:14px;}
-.dy-pkg-body h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 8px;
-    font-family:"Playfair Display",Georgia,serif !important;font-weight:700 !important;color:var(--dy-navy);
-    font-size:clamp(24px,2vw,30px);line-height:1.2;letter-spacing:-.3px;}
-.dy-pkg-body h3 a{color:inherit;text-decoration:none;}
-.dy-pkg-body h3 a:hover{color:var(--dy-coral);}
-.dy-pkg-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-    margin:0 0 18px;color:#6b7280;font-size:15px;line-height:1.65;}
-.dy-pkg-info{margin-top:auto;padding:18px 22px;background:#f2f2f2;border-radius:20px;}
-.dy-pkg-info-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin-bottom:14px;padding-bottom:14px;
-    border-bottom:1px dashed #c4c8ce;color:var(--dy-navy);font-size:15px;font-weight:600;}
-.dy-pkg-info-top i{margin-right:6px;color:var(--dy-coral);}
-.dy-pkg-info-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.dy-pkg-price{display:flex;flex-direction:column;min-width:0;}
-.dy-pkg-price small{display:block;color:#6b7280;font-size:13px;letter-spacing:.02em;}
-.dy-pkg-price strong{color:var(--dy-navy);font-size:26px;font-weight:700;line-height:1.2;}
+/* ==========================================
+   PACKAGE CARD: portrait, full image
+   (same design as the home page cards)
+========================================== */
+.dy-pkg-card{
+    position:relative;display:block;width:100%;
+    aspect-ratio:3 / 4.2;min-height:500px;
+    border-radius:24px;overflow:hidden;isolation:isolate;
+    background:linear-gradient(160deg,#046BF2,#00367E);   /* shows if a package has no image */
+    box-shadow:0 14px 34px rgba(0,54,126,.18);
+    container-type:inline-size;
+    transition:transform .35s ease,box-shadow .35s ease;
+}
+.dy-pkg-card:hover{transform:translateY(-8px);box-shadow:0 24px 48px rgba(0,54,126,.28);}
+
+.dy-pkg-img{
+    position:absolute;inset:0;z-index:-2;
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .7s ease;
+}
+.dy-pkg-card:hover .dy-pkg-img{transform:scale(1.06);}
+
+/* dark fade at the bottom */
+.dy-pkg-card::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(to top,
+        rgba(4,14,34,.96) 0%,
+        rgba(4,14,34,.82) 32%,
+        rgba(4,14,34,.25) 58%,
+        rgba(4,14,34,0) 75%);
+}
+
+/* whole card is clickable (sits under the buttons) */
+.dy-pkg-cover{position:absolute;inset:0;z-index:1;}
+.dy-pkg-cover:focus-visible{outline:3px solid var(--dy-gold);outline-offset:-3px;border-radius:24px;}
+
+/* duration badge */
+.dy-pkg-badge{
+    position:absolute;top:18px;right:18px;z-index:2;
+    padding:8px 16px;border-radius:50px;
+    background:rgba(4,14,34,.5);border:1px solid rgba(255,255,255,.35);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    font-size:12px;font-weight:600;letter-spacing:.06em;color:#fff;
+    pointer-events:none;
+}
+.dy-pkg-badge i{margin-right:4px;color:var(--dy-gold);}
+
+/* text block */
+.dy-pkg-body{
+    position:absolute;left:0;right:0;bottom:0;z-index:2;
+    padding:0 clamp(20px,6cqw,30px) clamp(20px,6cqw,28px);
+    pointer-events:none;
+}
+
+/* INTERNATIONAL ———  */
+.dy-pkg-cat{
+    display:flex;align-items:center;gap:12px;margin-bottom:10px;
+    font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--dy-gold);
+}
+.dy-pkg-cat::after{content:"";width:34px;height:1.5px;background:var(--dy-gold);}
+
+.dy-pkg-body h3{
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    margin:0 0 10px;
+    font-family:"Playfair Display",Georgia,serif !important;
+    font-size:clamp(28px,10cqw,48px) !important;
+    font-weight:600 !important;line-height:1.1 !important;letter-spacing:-.01em !important;
+    color:#fff !important;text-transform:capitalize;
+}
+
+.dy-pkg-desc{
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    margin:0 0 18px;font-size:14.5px;line-height:1.55;color:rgba(255,255,255,.88);
+}
+
+/* price + buttons */
+.dy-pkg-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+
+.dy-pkg-price{flex:0 0 auto;padding-left:14px;border-left:2px solid var(--dy-gold);}
+.dy-pkg-price small{
+    display:block;font-size:10.5px;font-weight:600;letter-spacing:.16em;
+    text-transform:uppercase;color:rgba(255,255,255,.75);
+}
+.dy-pkg-price strong{
+    display:block;margin:3px 0;
+    font-size:clamp(22px,7cqw,30px);font-weight:700;line-height:1.1;color:#fff;
+}
 .dy-pkg-price strong.is-request{font-size:18px;}
 .dy-pkg-currency{margin-right:2px;font-size:.7em;vertical-align:.1em;}
 
-/* action buttons: Explore More + Book Now */
-.dy-pkg-actions{display:flex;gap:10px;margin-top:14px;}
-.dy-pkg-enquire,.dy-pkg-book{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:10px;
-    padding:14px 16px;border-radius:50px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;
-    white-space:nowrap;cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s;}
-.dy-pkg-enquire{background:var(--dy-navy);}
-.dy-pkg-enquire:hover{background:#0e2347;color:#fff;transform:translateY(-2px);}
-.dy-pkg-book{background:var(--dy-orange);box-shadow:0 8px 18px rgba(244,129,63,.3);}
-.dy-pkg-book:hover{background:#ea7330;color:#fff;transform:translateY(-2px);}
-.dy-pkg-enquire:focus-visible,.dy-pkg-book:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+/* action buttons: Book Now + Know More */
+.dy-pkg-actions{display:flex;flex:1;justify-content:flex-end;gap:10px;pointer-events:auto;}
+.dy-pkg-book,.dy-pkg-enquire{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:13px 18px;border-radius:50px;
+    font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    white-space:nowrap;text-decoration:none;cursor:pointer;
+    background:rgba(4,14,34,.35);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    transition:background .3s ease,color .3s ease,transform .3s ease,border-color .3s ease;
+}
+.dy-pkg-book i,.dy-pkg-enquire i{transition:transform .3s ease;}
+.dy-pkg-book:hover i,.dy-pkg-enquire:hover i{transform:translateX(4px);}
+.dy-pkg-book:hover,.dy-pkg-enquire:hover{transform:translateY(-2px);}
+
+.dy-pkg-book{color:var(--dy-gold);border:1.5px solid var(--dy-gold);}
+.dy-pkg-book:hover{background:var(--dy-gold);color:#0a1a36;}
+.dy-pkg-enquire{color:#fff;border:1.5px solid rgba(255,255,255,.85);}
+.dy-pkg-enquire:hover{background:#fff;color:#0a1a36;}
+.dy-pkg-book:focus-visible,.dy-pkg-enquire:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* narrow cards: price on top, buttons side by side below */
+@container (max-width: 430px){
+    .dy-pkg-foot{flex-direction:column;align-items:stretch;gap:14px;}
+    .dy-pkg-actions{justify-content:stretch;}
+    .dy-pkg-book,.dy-pkg-enquire{flex:1;padding:12px 10px;}
+}
 
 /* empty state */
 .dy-pkg-empty{grid-column:1/-1;padding:70px 24px;text-align:center;background:rgba(255,255,255,.85);border-radius:30px;}
@@ -149,7 +225,7 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 .dy-pkg-empty h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:28px;}
 .dy-pkg-empty p{max-width:460px;margin:0 auto 26px;color:#5b6b85;line-height:1.7;}
 
-@media(max-width:1199px){.dy-pkg-grid{gap:22px;}.dy-pkg-info{padding:16px 18px;}.dy-pkg-price strong{font-size:22px;}}
+@media(max-width:1199px){.dy-pkg-grid{gap:22px;}}
 @media(max-width:991px){
     .dy-pkgs{padding:70px 0 80px;}
     .dy-pkg-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
@@ -157,12 +233,10 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 }
 @media(max-width:640px){
     .dy-pkg-grid{grid-template-columns:1fr;}
+    .dy-pkg-card{min-height:480px;}
     .dy-pkgs-plane{display:none;}
     .dy-filter{padding:10px 16px;font-size:13px;}
     .dy-filters{gap:9px;margin-bottom:34px;}
-}
-@media(max-width:400px){
-    .dy-pkg-actions{flex-direction:column;}
 }
 
 /* ==========================================
@@ -195,7 +269,7 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 
 @media(prefers-reduced-motion:reduce){
     .dy-pkgs::before,.dy-pkgs-plane{animation:none !important;}
-    .dy-pkg-card,.dy-pkg-image img,.dy-filter,.dy-btn,.dy-btn-ghost,.dy-pkg-enquire,.dy-pkg-book{transition:none !important;}
+    .dy-pkg-card,.dy-pkg-img,.dy-filter,.dy-btn,.dy-btn-ghost,.dy-pkg-enquire,.dy-pkg-book{transition:none !important;}
 }
 </style>
 {% endblock %}
@@ -238,66 +312,71 @@ header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
             {% for package in packages %}
             <article class="dy-pkg-card">
 
-                <a href="{% url 'package_detail' slug=package.slug %}" class="dy-pkg-image" aria-label="View details for {{ package.name }}">
-    {% if package.main_image %}
-    {% with sset=package.main_image|srcset %}
-    <img src="{{ package.main_image.url }}"
-         {% if sset %}srcset="{{ sset }}" sizes="(max-width: 640px) 100vw, (max-width: 991px) 50vw, 33vw"{% endif %}
-         alt="{{ package.name }}"
-         width="600" height="260"
-         loading="lazy"
-         decoding="async">
-    {% endwith %}
-    {% else %}
-    <img src="{% static 'frontend/assets/images/home/package-placeholder.jpg' %}"
-         alt="Travel destination"
-         width="600" height="260"
-         loading="lazy"
-         decoding="async">
-    {% endif %}
-</a>
+                <!-- BACKGROUND PHOTO -->
+                {% if package.main_image %}
+                {% with sset=package.main_image|srcset %}
+                <img class="dy-pkg-img"
+                     src="{{ package.main_image.url }}"
+                     {% if sset %}srcset="{{ sset }}" sizes="(max-width: 640px) 100vw, (max-width: 991px) 50vw, 33vw"{% endif %}
+                     alt="{{ package.name }}"
+                     loading="lazy"
+                     decoding="async">
+                {% endwith %}
+                {% else %}
+                <img class="dy-pkg-img"
+                     src="{% static 'frontend/assets/images/home/package-placeholder.jpg' %}"
+                     alt="Travel destination"
+                     loading="lazy"
+                     decoding="async">
+                {% endif %}
 
+                <!-- WHOLE CARD LINK (opens the package page) -->
+                <a href="{% url 'package_detail' slug=package.slug %}"
+                   class="dy-pkg-cover"
+                   aria-label="View details for {{ package.name }}"></a>
+
+                <!-- DURATION BADGE -->
+                {% if package.duration %}
+                <span class="dy-pkg-badge"><i class="fa-regular fa-clock" aria-hidden="true"></i>{{ package.duration }}</span>
+                {% endif %}
+
+                <!-- TEXT OVER IMAGE -->
                 <div class="dy-pkg-body">
 
-                    <h3><a href="{% url 'package_detail' slug=package.slug %}">{{ package.name }}</a></h3>
+                    <span class="dy-pkg-cat">{{ package.get_package_type_display }}</span>
 
-                    <p class="dy-pkg-desc">{{ package.description|striptags|truncatewords:20 }}</p>
+                    <h3>{{ package.name }}</h3>
 
-                    <div class="dy-pkg-info">
-                        {% if package.duration %}
-                        <div class="dy-pkg-info-top">
-                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i>{{ package.duration }}</span>
+                    <p class="dy-pkg-desc">{{ package.description|striptags|truncatewords:18 }}</p>
+
+                    <div class="dy-pkg-foot">
+
+                        <div class="dy-pkg-price">
+                            {% if package.price_from %}
+                                <small>Starting from</small>
+                                <strong><span class="dy-pkg-currency">₹</span>{{ package.price_from|floatformat:"0g" }}</strong>
+                                <small>Per person</small>
+                            {% else %}
+                                <small>Customised pricing</small>
+                                <strong class="is-request">On Request</strong>
+                            {% endif %}
                         </div>
-                        {% endif %}
 
-                        <div class="dy-pkg-info-bottom">
-                            <div class="dy-pkg-price">
-                                {% if package.price_from %}
-                                    <small>Package price</small>
-                                    <strong>
-                                        <span class="dy-pkg-currency">₹</span>{{ package.price_from|floatformat:"0g" }}
-                                    </strong>
-                                {% else %}
-                                    <small>Customised pricing</small>
-                                    <strong class="is-request">Price on Request</strong>
-                                {% endif %}
-                            </div>
-                        </div><!-- /dy-pkg-info-bottom -->
-                    </div><!-- /dy-pkg-info -->
+                        <div class="dy-pkg-actions">
+                            <a href="#"
+                               class="dy-pkg-book open-book-trip"
+                               data-package-id="{{ package.id }}"
+                               data-package-name="{{ package.name }}"
+                               data-package-slug="{{ package.slug }}"
+                               aria-label="Book {{ package.name }}">
+                                Book Now <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                            <a href="{% url 'package_detail' slug=package.slug %}" class="dy-pkg-enquire">
+                                Know More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
 
-                    <div class="dy-pkg-actions">
-                        <a href="{% url 'package_detail' slug=package.slug %}" class="dy-pkg-enquire">
-                            Explore More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                        </a>
-                        <a href="#"
-                           class="dy-pkg-book open-book-trip"
-                           data-package-id="{{ package.id }}"
-                           data-package-name="{{ package.name }}"
-                           data-package-slug="{{ package.slug }}"
-                           aria-label="Book {{ package.name }}">
-                            Book Now <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    </div><!-- /dy-pkg-foot -->
 
                 </div><!-- /dy-pkg-body -->
 

@@ -51,8 +51,10 @@
 			overflow: hidden;
 			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 		}
-		#bookTripModal .modal-header {
-			background: var(--primary-color, #265c4f);
+		#bookTripModal .modal-header,
+		#bookTripModal .modal-content .modal-header {
+			background-color: #046BF2 !important;
+			background-image: linear-gradient(135deg, #00367E 0%, #046BF2 100%) !important;
 			color: #fff;
 			padding: 22px 30px;
 			border: none;
@@ -83,8 +85,11 @@
 		}
 		#bookTripModal .form-control:focus,
 		#bookTripModal .form-select:focus {
-			border-color: var(--primary-color, #265c4f);
+			border-color: #046BF2;
+			box-shadow: 0 0 0 3px rgba(4, 107, 242, .15);
 		}
+		#bookTripModal .form-label { color: #00367E; }
+		#bookTripModal .form-control::placeholder { color: #8a97a8; }
 		#bookTripModal textarea.form-control { min-height: 100px; resize: none; }
 		#bookTripModal .book-trip-alert {
 			display: none;
@@ -112,7 +117,7 @@
 			height: 90px;
 			margin: 0 auto 24px;
 			border-radius: 50%;
-			background: var(--primary-color, #265c4f);
+			background: #046BF2 linear-gradient(135deg, #00367E 0%, #046BF2 100%) !important;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -130,11 +135,43 @@
 		#thankYouModal .thank-you-title {
 			font-size: 32px;
 			margin-bottom: 12px;
+			color: #00367E;
 		}
 		#thankYouModal .thank-you-text {
 			font-size: 16px;
-			margin-bottom: 28px;
+			margin-bottom: 12px;
+			color: #5b6b7f;
 		}
+		#thankYouModal .thank-you-redirect {
+			font-size: 14px;
+			margin-bottom: 22px;
+			color: #00367E;
+			font-weight: 600;
+		}
+		#thankYouModal .thank-you-actions {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 12px;
+		}
+		/* WhatsApp button */
+		#thankYouModal .btn-whatsapp {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			padding: 15px 28px;
+			border-radius: 50px;
+			background: #25D366 !important;
+			color: #ffffff !important;
+			font-size: 16px;
+			font-weight: 700;
+			text-decoration: none;
+			box-shadow: 0 10px 22px rgba(37, 211, 102, .35);
+			transition: background .3s ease, transform .3s ease;
+		}
+		#thankYouModal .btn-whatsapp:hover { background: #1ebe5b !important; transform: translateY(-2px); }
+		#thankYouModal .btn-whatsapp i { font-size: 20px; }
 		@keyframes thankYouPop {
 			0%   { transform: scale(.4); opacity: 0; }
 			70%  { transform: scale(1.1); opacity: 1; }
@@ -343,8 +380,9 @@
 	<style>
 	.footer-main {
 		--ft-navy: #14305e;   /* footer colour */
-		--ft-teal: #1a5f6e;   /* colour of the wave at the bottom of the image */
+		--ft-teal: #1a5f6e;   /* exact colour of the footer body's top edge */
 		--ft-overlap: clamp(60px, 9vw, 160px);   /* how far the image rises over the section above */
+		--ft-fade: clamp(14px, 1.6vw, 32px);     /* soft fade at the bottom of the image (bigger = softer seam) */
 
 		position: relative;          /* no z-index, so blending still works */
 		display: flow-root;
@@ -354,20 +392,47 @@
 		background-image: none !important;
 	}
 
-	/* the picture: its white sky multiplies into the sky colour behind it,
-	   so it blends with the section above and nothing is cut off */
-	.footer-main .footer-landmarks {
+	/* wrapper pulls the image up over the previous section.
+	   NO z-index / transform here, so the image still blends with the sky behind it */
+	.footer-main .footer-landmarks-wrap {
 		position: relative;
+		margin-top: calc(var(--ft-overlap) * -1);
+		line-height: 0;
+	}
+
+	/* the picture: its white sky multiplies into the sky colour behind it */
+	.footer-main .footer-landmarks {
 		display: block;
 		width: 100%;
 		height: auto;
-		margin-top: calc(var(--ft-overlap) * -1);   /* pulls the image up over the previous section */
+		margin: 0;
 		mix-blend-mode: multiply;
 		pointer-events: none;
 		user-select: none;
 	}
+
+	/* SEAM FIX: the bottom of the picture has blotchy light patches, while the
+	   footer body below is a flat colour, which made a visible line.
+	   This soft fade dissolves the bottom edge of the picture into the footer colour. */
+	.footer-main .footer-landmarks-wrap::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: -1px;
+		height: var(--ft-fade);
+		background: linear-gradient(to bottom,
+			rgba(26, 95, 110, 0)    0%,
+			rgba(26, 95, 110, .35)  35%,
+			rgba(26, 95, 110, .75)  70%,
+			rgba(26, 95, 110, 1)    100%);
+		pointer-events: none;
+	}
+
 	/* navy content area; fades from the image's teal wave into navy */
 	.footer-main .footer-body {
+		position: relative;
+		margin-top: -1px;            /* closes any hairline gap under the image */
 		padding: 50px 0 10px;
 		background: linear-gradient(to bottom, var(--ft-teal) 0, var(--ft-navy) 150px);
 	}
@@ -390,14 +455,11 @@
 		border-top: 1px solid rgba(255, 255, 255, 0.18);
 	}
 
-	.footer-main .footer-newsletters-form .form-control {
-		background: rgba(255, 255, 255, 0.08);
-		border-color: rgba(255, 255, 255, 0.25);
-		color: #ffffff;
-	}
-
-	.footer-main .footer-newsletters-form .form-control::placeholder {
-		color: rgba(255, 255, 255, 0.6);
+	/* ---------- icons in the contact boxes (Font Awesome version) ---------- */
+	.footer-main .footer-contact-item .icon-box i {
+		color: #14305e;
+		font-size: 18px;
+		line-height: 1;
 	}
 
 	/* ---------- FULL WIDTH FOOTER (no curve, no side gaps) ---------- */
@@ -538,15 +600,13 @@
 		.dy-blog-body h3 {
 			letter-spacing: -.01em !important;
 		}
-/* ---------- PRELOADER: brand-blue tint, blended logo, loading bar ---------- */
+/* ---------- PRELOADER: brand-blue tint, blended logo ---------- */
 .preloader {
 	background: radial-gradient(circle at 50% 45%, #ffffff 0%, #eaf4fe 65%, #d9ebfc 100%) !important;
 	z-index: 100000 !important;
 	display: flex !important;
-	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: 26px;
 	transition: opacity .6s ease, visibility .6s ease;
 }
 .preloader:not(.dy-done) { opacity: 1 !important; visibility: visible !important; }
@@ -563,7 +623,7 @@
 	display: block;
 	width: 100%;
 	height: auto;
-	mix-blend-mode: multiply;      /* removes the off-white box around the PNG */
+	mix-blend-mode: multiply;
 }
 .dy-draw-ghost { opacity: .22; }
 .dy-draw-top {
@@ -576,29 +636,207 @@
 	0%        { clip-path: inset(0 100% 0 0); }
 	70%, 100% { clip-path: inset(0 0 0 0); }
 }
+/* ---------- NAVBAR: longer bar + more space around the centre logo ---------- */
+@media (min-width: 992px) {
+	/* longer bar (was max-width 1140px) */
+	header.main-header .header-sticky,
+	header.main-header .header-sticky.active {
+		max-width: 1360px;
+		width: calc(100% - 40px);
+	}
 
-/* loading bar in the two brand blues */
-.dy-bar {
-	width: 200px;
-	max-width: 60vw;
-	height: 4px;
-	border-radius: 4px;
-	background: rgba(4, 107, 242, 0.15);
-	overflow: hidden;
+	/* let the content use the full width of the bar */
+	header.main-header .navbar > .container {
+		max-width: 100% !important;
+		padding-left: 36px;
+		padding-right: 36px;
+	}
+
+	/* more space on each side of the logo (was 22px) */
+	header.main-header .nav-logo-center {
+		margin: 0 60px;
+	}
+
+	/* a little more room between the menu links */
+	header.main-header .main-menu .nav-link {
+		padding-left: 16px !important;
+		padding-right: 16px !important;
+	}
 }
-.dy-bar span {
-	display: block;
-	height: 100%;
-	width: 0;
-	border-radius: 4px;
-	background: linear-gradient(90deg, #018ED2, #046BF2);
-	animation: dyBar 2.8s ease-in-out infinite;
-}
-@keyframes dyBar {
-	0%        { width: 0; }
-	70%, 100% { width: 100%; }
+
+/* if the logo shows a light box on the white bar, this removes it */
+header.main-header .nav-logo-center .logo-blue {
+	mix-blend-mode: multiply;
 }
 	</style>
+
+	<!-- NAV DROPDOWNS (Packages / Destinations) -->
+	<style>
+	@media (min-width: 992px) {
+
+		header.main-header .main-menu .has-dd { position: relative; }
+
+		/* small arrow after the label */
+		header.main-header .main-menu .has-dd > a.nav-link::after {
+			content: "";
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			margin-left: 8px;
+			border: solid currentColor;
+			border-width: 0 2px 2px 0;
+			transform: translateY(-3px) rotate(45deg);
+			transition: transform .3s ease;
+		}
+		header.main-header .main-menu .has-dd:hover > a.nav-link::after {
+			transform: translateY(0) rotate(225deg);
+		}
+
+		/* the dropdown box */
+		header.main-header .main-menu .has-dd > ul.dy-dropdown {
+			position: absolute !important;
+			top: 100% !important;
+			left: 0 !important;
+			right: auto !important;
+			display: block !important;
+			width: auto !important;
+			min-width: 230px;
+			max-height: 70vh;
+			overflow-y: auto;
+			margin: 0 !important;
+			padding: 8px !important;
+			list-style: none;
+			background: #ffffff !important;
+			border-radius: 16px;
+			box-shadow: 0 18px 40px rgba(0, 0, 0, .18);
+			opacity: 0;
+			visibility: hidden;
+			transform: translateY(10px);
+			transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+			z-index: 1100;
+			scrollbar-width: thin;
+			scrollbar-color: #d8dde0 transparent;
+		}
+
+		/* show on hover / keyboard focus */
+		header.main-header .main-menu .has-dd:hover > ul.dy-dropdown,
+		header.main-header .main-menu .has-dd:focus-within > ul.dy-dropdown {
+			opacity: 1;
+			visibility: visible;
+			transform: none;
+			transition-delay: 0s;
+		}
+
+		header.main-header .main-menu .has-dd > ul.dy-dropdown li {
+			display: block;
+			margin: 0;
+			padding: 0;
+		}
+
+		/* dropdown links: dark text on white (beats the white nav-link rule) */
+		header.main-header .main-menu .nav-item > ul.dy-dropdown li a {
+			display: block;
+			padding: 11px 16px !important;
+			border-radius: 10px;
+			color: #123e34 !important;
+			font-size: 15px;
+			font-weight: 500;
+			white-space: nowrap;
+			transition: background .25s ease, color .25s ease;
+		}
+		header.main-header .main-menu .nav-item > ul.dy-dropdown li a:hover,
+		header.main-header .main-menu .nav-item > ul.dy-dropdown li a:focus {
+			background: #fdf1e8;
+			color: #f4813f !important;
+		}
+
+		/* first item ("View All") stands out */
+		header.main-header .main-menu .nav-item > ul.dy-dropdown li:first-child a {
+			font-weight: 700;
+		}
+
+		/* make sure nothing clips the dropdown */
+		header.main-header .main-menu,
+		header.main-header .nav-menu-wrapper,
+		header.main-header .navbar-nav { overflow: visible !important; }
+	}
+	</style>
+
+	<!-- MOBILE MENU: logo-blue hamburger button + blue menu panel -->
+	<style>
+	header.main-header .slicknav_btn,
+	header.main-header .slicknav_btn:hover,
+	header.main-header .slicknav_btn:focus,
+	header.main-header .navbar-toggle .slicknav_btn {
+		background: #046BF2 !important;      /* logo blue */
+		border-radius: 12px;
+		box-shadow: none;
+	}
+
+	/* the three lines stay white on the blue button, in both navbar states */
+	header.main-header .slicknav_icon .slicknav_icon-bar,
+	header.main-header.is-solid .slicknav_icon .slicknav_icon-bar {
+		background-color: #ffffff !important;
+	}
+
+	/* opened menu panel: deep logo blue (was dark green) */
+	header.main-header .slicknav_menu,
+	header.main-header .slicknav_nav {
+		background: rgba(0, 54, 126, 0.96) !important;
+	}
+	header.main-header .slicknav_nav a { color: #ffffff !important; }
+	header.main-header .slicknav_nav a:hover { color: #f5a623 !important; background: transparent !important; }
+
+	/* white navbar state: white panel with dark-blue text */
+	header.main-header.is-solid .slicknav_menu,
+	header.main-header.is-solid .slicknav_nav { background: #ffffff !important; }
+	header.main-header.is-solid .slicknav_nav a { color: #00367E !important; }
+	header.main-header.is-solid .slicknav_nav a:hover { color: #f4813f !important; }
+	</style>
+
+	<!-- MOBILE QUICK-CONTACT BAR (Call / WhatsApp / Email) -->
+	<style>
+	.dy-quickbar { display: none; }
+
+	@media (max-width: 991px) {
+		.dy-quickbar {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 999;                 /* below the booking modals (99999) */
+			display: flex;
+			background: #ffffff;
+			border-top: 1px solid rgba(0, 54, 126, .12);
+			box-shadow: 0 -8px 24px rgba(0, 54, 126, .14);
+			padding-bottom: env(safe-area-inset-bottom, 0px);
+		}
+		.dy-quickbar a {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 5px;
+			padding: 11px 6px 10px;
+			color: #00367E;
+			font-size: 13px;
+			font-weight: 600;
+			line-height: 1;
+			text-decoration: none;
+			-webkit-tap-highlight-color: transparent;
+			transition: background .2s ease;
+		}
+		.dy-quickbar a + a { border-left: 1px solid rgba(0, 54, 126, .12); }
+		.dy-quickbar a:active { background: #e4f6fb; }
+		.dy-quickbar i { font-size: 20px; color: #046BF2; }
+		.dy-quickbar a.is-wa i { color: #25D366; }
+
+		/* keep the footer clear of the bar */
+		body { padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px)); }
+	}
+	</style>
+
 	<!-- Preloader End -->
 <script>
 	(function () {
@@ -620,13 +858,12 @@
 <body>
 
 
-	<!-- Preloader Start -->
+<!-- Preloader Start -->
 <div class="preloader">
 	<div class="dy-draw">
 		<img class="dy-draw-ghost" src="{% static 'frontend/logo-3d.png' %}" alt="">
 		<img class="dy-draw-top" src="{% static 'frontend/logo-3d.png' %}" alt="Deutsche Yathras">
 	</div>
-	<div class="dy-bar"><span></span></div>
 </div>
 <!-- Preloader End -->
 
@@ -651,8 +888,26 @@
 							<ul class="navbar-nav mr-auto" id="menu">
 								<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
 								<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-								<li class="nav-item"><a class="nav-link" href="{% url 'packages' %}">Packages</a></li>
-								<li class="nav-item"><a class="nav-link" href="{% url 'destinations' %}">Destinations</a></li>
+
+								<li class="nav-item has-dd">
+									<a class="nav-link" href="{% url 'packages' %}">Packages</a>
+									<ul class="dy-dropdown">
+										<li><a href="{% url 'packages' %}">View All Packages</a></li>
+										{% for p in nav_packages %}
+											<li><a href="{% url 'package_detail' p.slug %}">{{ p }}</a></li>
+										{% endfor %}
+									</ul>
+								</li>
+
+								<li class="nav-item has-dd">
+									<a class="nav-link" href="{% url 'destinations' %}">Destinations</a>
+									<ul class="dy-dropdown">
+										<li><a href="{% url 'destinations' %}">View All Destinations</a></li>
+										{% for d in nav_destinations %}
+											<li><a href="{% url 'destination_detail' d.slug %}">{{ d }}</a></li>
+										{% endfor %}
+									</ul>
+								</li>
 
 								<li class="nav-item nav-logo-center">
 									<a href="{% url 'home' %}">
@@ -690,8 +945,11 @@
 	<!-- Footer Main Start -->
 	<footer class="footer-main bg-section dark-section">
 
-		<!-- Landmarks image -->
-		<img class="footer-landmarks" src="{% static 'frontend/euro1.png' %}" alt="" aria-hidden="true">
+		<!-- Landmarks image (wrapper adds the soft fade that hides the seam) -->
+		<div class="footer-landmarks-wrap">
+			<img class="footer-landmarks" src="{% static 'frontend/euro1.png' %}" alt="" aria-hidden="true">
+		</div>
+
 		<div class="footer-body">
 			<div class="container">
 				<div class="row">
@@ -703,20 +961,9 @@
 							</div>
 
 							<div class="about-footer-content">
-								<p>With a passion for skin health, Dermal combines the latest technologies.</p>
+								<p>Your trusted travel partner in Europe. Curated holidays, visa support and personalised itineraries, planned with care.</p>
 							</div>
 
-							<!-- Footer Newsletters Form Start -->
-							<div class="footer-newsletters-form">
-								<form id="newslettersForm" action="#" method="POST">
-									{% csrf_token %}
-									<div class="form-group">
-										<input type="email" name="mail" class="form-control" id="mail" placeholder="Enter your email" required>
-										<button type="submit"><img src="{% static 'frontend/assets/images/arrow-white.svg' %}" alt=""></button>
-									</div>
-								</form>
-							</div>
-							<!-- Footer Newsletters Form End -->
 						</div>
 						<!-- About Footer End -->
 					</div>
@@ -730,18 +977,18 @@
 									<img src="{% static 'frontend/assets/images/icon-phone.svg' %}" alt="">
 								</div>
 								<div class="footer-contact-content">
-									<h3>For more information</h3>
-									<p><a href="tel:+7025550122">(702) 555-0122</a></p>
+									<h3>Call us</h3>
+									<p><a href="tel:+4915259283551">+49 1525 9283551</a></p>
 								</div>
 							</div>
 
 							<div class="footer-contact-item">
 								<div class="icon-box">
-									<img src="{% static 'frontend/assets/images/icon-headphone.svg' %}" alt="">
+									<i class="fa-solid fa-envelope"></i>
 								</div>
 								<div class="footer-contact-content">
-									<h3>Emergency toll free no</h3>
-									<p><a href="tel:+2195550114">(219) 555-0114</a></p>
+									<h3>Email us</h3>
+									<p><a href="mailto:deutscheyathras@gmail.com">deutscheyathras@gmail.com</a></p>
 								</div>
 							</div>
 						</div>
@@ -753,12 +1000,18 @@
 
 							<div class="footer-contact-info-item">
 								<h3>Location</h3>
-								<p>6391 Elgin St. Santa Ana Celina, Delaware 10299</p>
+								<p>
+									<a href="https://www.google.com/maps/search/?api=1&query=Deutsche+Yathras%2C+Berliner+Str.+80%2C+66849+Landstuhl%2C+Germany" target="_blank" rel="noopener">
+										Deutsche Yathras<br>
+										Berliner Str. 80<br>
+										66849 Landstuhl, Germany
+									</a>
+								</p>
 							</div>
 
 							<div class="footer-contact-info-item">
-								<h3>Email</h3>
-								<p><a href="mailto:info@domain.com">info@domain.com</a></p>
+								<h3>Support</h3>
+								<p>Available 24/7, before, during and after your trip</p>
 							</div>
 						</div>
 					</div>
@@ -769,8 +1022,12 @@
 							<ul>
 								<li><a href="{% url 'home' %}">Home</a></li>
 								<li><a href="{% url 'about' %}">About us</a></li>
-								<li><a href="{% url 'services' %}">our services</a></li>
-								<li><a href="https://html.awaikenthemes.com/dermal/projects.html">Client Reviews</a></li>
+								<li><a href="{% url 'packages' %}">Packages</a></li>
+								<li><a href="{% url 'destinations' %}">Destinations</a></li>
+								<li><a href="{% url 'services' %}">Our services</a></li>
+								<li><a href="{% url 'blog' %}">Blog</a></li>
+								<li><a href="{% url 'gallery' %}">Gallery</a></li>
+								<li><a href="{% url 'contact' %}">Contact us</a></li>
 							</ul>
 						</div>
 					</div>
@@ -779,15 +1036,15 @@
 						<!-- Footer Copyright Section Start -->
 						<div class="footer-copyright">
 							<div class="footer-copyright-text">
-								<p>Copyright © 2025  All Rights Reserved.</p>
+								<p>Copyright © {% now "Y" %} Deutsche Yathras. All Rights Reserved.</p>
 							</div>
 
 							<div class="footer-social-links">
 								<span>Follow us on social</span>
 								<ul>
-									<li><a href="#"><i class="fa-brands fa-dribbble"></i></a></li>
-									<li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-									<li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+									<!-- replace the # with your real page links -->
+									<li><a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a></li>
+									<li><a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
 								</ul>
 							</div>
 						</div>
@@ -799,6 +1056,22 @@
 
 	</footer>
 	<!-- Footer Main End -->
+
+	<!-- Mobile quick-contact bar -->
+	<nav class="dy-quickbar" aria-label="Quick contact">
+		<a href="tel:+4915259283551">
+			<i class="fa-solid fa-phone-volume"></i>
+			<span>Call</span>
+		</a>
+		<a href="https://wa.me/4915259283551" class="is-wa" target="_blank" rel="noopener">
+			<i class="fa-brands fa-whatsapp"></i>
+			<span>WhatsApp</span>
+		</a>
+		<a href="mailto:deutscheyathras@gmail.com">
+			<i class="fa-solid fa-envelope"></i>
+			<span>Email</span>
+		</a>
+	</nav>
 
 	<!-- Book Trip Modal Start -->
 	<div class="modal fade" id="bookTripModal" tabindex="-1" aria-labelledby="bookTripModalLabel" aria-hidden="true">
@@ -883,7 +1156,13 @@
 					</div>
 					<h3 class="thank-you-title" id="thankYouTitle">Thank You!</h3>
 					<p class="thank-you-text" id="thankYouText">Your enquiry has been received. We will contact you shortly.</p>
-					<button type="button" class="btn-default" data-bs-dismiss="modal">Close</button>
+					<p class="thank-you-redirect" id="thankYouRedirect"></p>
+					<div class="thank-you-actions">
+						<a href="#" class="btn-whatsapp" id="thankYouWhatsapp" target="_blank" rel="noopener">
+							<i class="fa-brands fa-whatsapp"></i> Continue on WhatsApp
+						</a>
+						<button type="button" class="btn-default" data-bs-dismiss="modal">Close</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -964,6 +1243,14 @@
 			var submitBtn = document.getElementById('bookTripSubmit');
 			var startInput = document.getElementById('bt_start_date');
 			var endInput = document.getElementById('bt_end_date');
+			var waBtn = document.getElementById('thankYouWhatsapp');
+			var redirectText = document.getElementById('thankYouRedirect');
+
+			/* ---- WhatsApp settings ---- */
+			var WA_NUMBER = '4915259283551';   // digits only, with country code, no + or spaces
+			var AUTO_REDIRECT = true;          // true = open WhatsApp automatically after booking
+			var REDIRECT_SECONDS = 5;          // countdown before the automatic redirect
+			var redirectTimer = null;
 
 			// Move both modals to <body> root so header/sticky styles never affect them
 			document.body.appendChild(modalEl);
@@ -1000,12 +1287,60 @@
 				bootstrap.Modal.getOrCreateInstance(modalEl).show();
 			});
 
+			// Build the WhatsApp message from the form (call BEFORE form.reset())
+			function buildWhatsAppUrl() {
+				var pkgSelect = document.getElementById('bt_package');
+				var pkgText = pkgSelect.options[pkgSelect.selectedIndex]
+					? pkgSelect.options[pkgSelect.selectedIndex].text : '';
+				var msg = document.getElementById('bt_message').value.trim();
+
+				var lines = [
+					'Hello Deutsche Yathras, I just submitted a booking enquiry on your website.',
+					'',
+					'Name: ' + document.getElementById('bt_name').value.trim(),
+					'Phone: ' + document.getElementById('bt_phone').value.trim(),
+					'Email: ' + document.getElementById('bt_email').value.trim(),
+					'Package: ' + pkgText,
+					'Start date: ' + startInput.value,
+					'End date: ' + endInput.value,
+					'Travelers: ' + document.getElementById('bt_travelers').value
+				];
+				if (msg) lines.push('Message: ' + msg);
+
+				return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(lines.join('\n'));
+			}
+
+			function stopRedirect() {
+				if (redirectTimer) { clearInterval(redirectTimer); redirectTimer = null; }
+				redirectText.textContent = '';
+			}
+
+			// Closing the thank you box cancels the automatic redirect
+			thanksEl.addEventListener('hidden.bs.modal', stopRedirect);
+			waBtn.addEventListener('click', stopRedirect);
+
 			// Close booking modal, then open the thank you modal
-			function showThankYou(message) {
+			function showThankYou(message, waUrl) {
 				thanksText.textContent = message || 'Your enquiry has been received. We will contact you shortly.';
+				waBtn.href = waUrl;
+				stopRedirect();
 
 				modalEl.addEventListener('hidden.bs.modal', function () {
 					bootstrap.Modal.getOrCreateInstance(thanksEl).show();
+
+					if (AUTO_REDIRECT) {
+						var left = REDIRECT_SECONDS;
+						redirectText.textContent = 'Opening WhatsApp in ' + left + 's...';
+						redirectTimer = setInterval(function () {
+							left--;
+							if (left <= 0) {
+								stopRedirect();
+								window.location.href = waUrl;
+							} else {
+								redirectText.textContent = 'Opening WhatsApp in ' + left + 's...';
+							}
+						}, 1000);
+					}
 				}, { once: true });
 
 				bootstrap.Modal.getOrCreateInstance(modalEl).hide();
@@ -1034,10 +1369,11 @@
 				.then(function (res) { return res.json(); })
 				.then(function (data) {
 					if (data.success) {
+						var waUrl = buildWhatsAppUrl();   // read the values before the form is cleared
 						form.reset();
 						document.getElementById('bt_travelers').value = 1;
 						endInput.setAttribute('min', today);
-						showThankYou(data.message);
+						showThankYou(data.message, waUrl);
 					} else {
 						showError(data.message || 'Something went wrong. Please try again.');
 					}

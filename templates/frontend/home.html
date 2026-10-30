@@ -5739,6 +5739,226 @@ html body .dy-why-explore-text:not(#dy) { font-size: 17px; font-weight: 500; fon
         transition: none !important;
     }
 }
+/* ---------- PACKAGE CARD: portrait, full-image ---------- */
+.dy-pc {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 460px;
+	aspect-ratio: 3 / 4.2;
+	border-radius: 24px;
+	overflow: hidden;
+	background: linear-gradient(160deg, #046BF2, #00367E);
+	box-shadow: 0 14px 34px rgba(0, 54, 126, .18);
+	isolation: isolate;
+	container-type: inline-size;
+}
+.dy-pc-img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: -2;
+	transition: transform .7s ease;
+}
+.dy-pc:hover .dy-pc-img { transform: scale(1.06); }
+
+/* dark fade at the bottom */
+.dy-pc::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background: linear-gradient(to top,
+		rgba(4, 14, 34, .96) 0%,
+		rgba(4, 14, 34, .82) 32%,
+		rgba(4, 14, 34, .25) 58%,
+		rgba(4, 14, 34, 0) 75%);
+}
+
+/* full-card link sits under the buttons */
+.dy-pc-cover {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+/* duration badge */
+.dy-pc-badge {
+	position: absolute;
+	top: 18px;
+	right: 18px;
+	z-index: 2;
+	padding: 8px 16px;
+	border-radius: 50px;
+	background: rgba(4, 14, 34, .5);
+	border: 1px solid rgba(255, 255, 255, .35);
+	-webkit-backdrop-filter: blur(8px);
+	        backdrop-filter: blur(8px);
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .06em;
+	color: #ffffff;
+	pointer-events: none;
+}
+.dy-pc-badge i { margin-right: 4px; color: #f5a623; }
+
+/* text block */
+.dy-pc-body {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	padding: 0 clamp(20px, 6cqw, 30px) clamp(20px, 6cqw, 28px);
+	pointer-events: none;
+}
+
+/* INTERNATIONAL ———  */
+.dy-pc-cat {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 10px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .22em;
+	text-transform: uppercase;
+	color: #f5a623;
+}
+.dy-pc-cat::after {
+	content: "";
+	width: 34px;
+	height: 1.5px;
+	background: #f5a623;
+}
+
+.dy-pc-title {
+	margin: 0 0 10px;
+	font-family: "Playfair Display", Georgia, serif !important;
+	font-size: clamp(30px, 11cqw, 52px) !important;
+	font-weight: 600 !important;
+	line-height: 1.08 !important;
+	letter-spacing: -.01em !important;
+	color: #ffffff !important;
+	text-transform: capitalize;
+}
+
+.dy-pc-desc {
+	margin: 0 0 20px;
+	font-size: 14.5px;
+	line-height: 1.55;
+	color: rgba(255, 255, 255, .88);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* price + buttons */
+.dy-pc-foot {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.dy-pc-price {
+	flex: 0 0 auto;
+	padding-left: 14px;
+	border-left: 2px solid #f5a623;
+}
+.dy-pc-price small {
+	display: block;
+	font-size: 10.5px;
+	font-weight: 600;
+	letter-spacing: .16em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, .75);
+}
+.dy-pc-price strong {
+	display: block;
+	margin: 3px 0;
+	font-size: clamp(22px, 7cqw, 30px);
+	font-weight: 700;
+	line-height: 1.1;
+	color: #ffffff;
+}
+.dy-pc-price .dy-pc-request { font-size: 18px; }
+
+.dy-pc-btns {
+	display: flex;
+	flex: 1;
+	justify-content: flex-end;
+	gap: 10px;
+	pointer-events: auto;
+}
+.dy-pc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 13px 18px;
+	border-radius: 50px;
+	font-size: 11.5px;
+	font-weight: 700;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	text-decoration: none;
+	background: rgba(4, 14, 34, .35);
+	-webkit-backdrop-filter: blur(6px);
+	        backdrop-filter: blur(6px);
+	transition: background .3s ease, color .3s ease, transform .3s ease, border-color .3s ease;
+}
+.dy-pc-btn i { transition: transform .3s ease; }
+.dy-pc-btn:hover i { transform: translateX(4px); }
+.dy-pc-btn:hover { transform: translateY(-2px); }
+
+.dy-pc-btn-gold {
+	color: #f5a623;
+	border: 1.5px solid #f5a623;
+}
+.dy-pc-btn-gold:hover {
+	background: #f5a623;
+	color: #0a1a36;
+}
+.dy-pc-btn-white {
+	color: #ffffff;
+	border: 1.5px solid rgba(255, 255, 255, .85);
+}
+.dy-pc-btn-white:hover {
+	background: #ffffff;
+	color: #0a1a36;
+}
+
+/* narrow cards: price on top, buttons side by side below */
+@container (max-width: 430px) {
+	.dy-pc-foot {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 14px;
+	}
+	.dy-pc-btns { justify-content: stretch; }
+	.dy-pc-btn { flex: 1; padding: 12px 10px; }
+}
+
+/* ---------- DESKTOP: card height follows the screen ---------- */
+@media (min-width: 992px) {
+	.dy-pc {
+		aspect-ratio: auto;
+		min-height: 0;
+		height: clamp(460px, calc(100vh - 250px), 640px);
+	}
+	.dy-pc-desc { margin-bottom: 16px; }
+}
+
+/* ---------- PHONE ---------- */
+@media (max-width: 575px) {
+	.dy-pc { min-height: 470px; }
+}
 </style>
 
 
@@ -5917,128 +6137,95 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.dy-pc .open-book-trip');
+    if (!btn) return;
+    var name = btn.dataset.serviceName || '';
+    var f = document.querySelector('#bookTripModal [name="service"], #bookTripModal [name="package_name"], #book-trip-package-name');
+    var t = document.querySelector('#book-trip-package-title');
+    if (f) f.value = name;
+    if (t) t.textContent = name;
+});
 </script>
 <!-- END WHY TRAVEL WITH US -->
-<!-- END WHY TRAVEL WITH US -->
-<!-- ==========================================
-     DEUTSCHE YATHRAS - PACKAGES
-========================================== -->
-
 <section class="dy-packages-section" id="dyPackages">
-
     <div class="dy-packages-pin">
 
         <div class="dy-packages-container">
             <div class="dy-packages-header">
                 <div class="dy-packages-heading">
-                    <h2>Our Popular <span class="dy-title-accent">T<span class="dy-ti">o<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M14 12V8a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v4" fill="none" stroke="#f4813f" stroke-width="3" stroke-linecap="round"/><rect x="3" y="12" width="34" height="24" rx="5" fill="#f4813f"/><rect x="11" y="12" width="3" height="24" fill="#ffffff" fill-opacity=".55"/><rect x="26" y="12" width="3" height="24" fill="#ffffff" fill-opacity=".55"/></svg></span>ur Packages</span></h2>
-                    <p>
-                        Discover unforgettable destinations with our
-                        carefully curated travel experiences.
-                    </p>
+                    <h2>Popular Tour <span class="dy-title-accent">Packages</span></h2>
+                    <p>Handpicked journeys planned around you.</p>
                 </div>
-
                 <a href="{% url 'packages' %}" class="dy-packages-view">
-                    View All Packages
-                    <i class="fa-solid fa-arrow-right"></i>
+                    View All Packages <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         </div>
 
         {% if packages %}
-
         <div class="dy-packages-viewport">
             <div class="dy-packages-track">
 
                 {% for package in packages %}
                 <div class="dy-pkg-slide">
+                    <article class="dy-pc">
 
-                    <article class="dy-pkg-card">
+                        {% if package.main_image %}
+                        <img class="dy-pc-img" src="{{ package.main_image.url }}" alt="{{ package.name }}" loading="lazy">
+                        {% endif %}
 
-                        <!-- IMAGE -->
-                        <a href="{% url 'packages' %}" class="dy-pkg-image">
-                            {% if package.main_image %}
-                            <img
-                                src="{{ package.main_image.url }}"
-                                alt="{{ package.name }}"
-                                loading="lazy">
-                            {% endif %}
-                        </a>
+                        <!-- whole card is clickable (Know More page) -->
+                        <a href="{% url 'packages' %}" class="dy-pc-cover" aria-label="View {{ package.name }}"></a>
 
-                        <div class="dy-pkg-body">
+                        {% if package.duration %}
+                        <span class="dy-pc-badge"><i class="fa-regular fa-clock"></i> {{ package.duration }}</span>
+                        {% endif %}
 
-                            <!-- LOCATION / TYPE -->
-                            <span class="dy-pkg-location">
-                                <i class="fa-solid fa-location-dot"></i>
-                                {{ package.get_package_type_display }}
-                            </span>
+                        <div class="dy-pc-body">
 
-                            <!-- TITLE -->
-                            <h3>
-                                <a href="{% url 'packages' %}">{{ package.name }}</a>
-                            </h3>
+                            <span class="dy-pc-cat">{{ package.get_package_type_display }}</span>
 
-                            <!-- DESCRIPTION -->
-                            <p class="dy-pkg-desc">
-                                {{ package.description|striptags|truncatewords:18 }}
-                            </p>
+                            <h3 class="dy-pc-title">{{ package.name }}</h3>
 
-                            <!-- GREY INFO BOX -->
-                            <div class="dy-pkg-info">
+                            <p class="dy-pc-desc">{{ package.description|striptags|truncatewords:18 }}</p>
 
-                                {% if package.duration %}
-                                <div class="dy-pkg-info-top">
-                                    <span>
-                                        <i class="fa-regular fa-clock"></i>
-                                        {{ package.duration }}
-                                    </span>
+                            <div class="dy-pc-foot">
+
+                                <div class="dy-pc-price">
+                                    <small class="dy-pc-from">Starting from</small>
+                                    {% if package.price_from %}
+                                        <strong>₹{{ package.price_from|floatformat:0 }}</strong>
+                                        <small class="dy-pc-per">Per person</small>
+                                    {% else %}
+                                        <strong class="dy-pc-request">On request</strong>
+                                    {% endif %}
                                 </div>
-                                {% endif %}
 
-                                <div class="dy-pkg-info-bottom">
-
-                                    <div class="dy-pkg-price">
-                                        {% if package.price_from %}
-                                            <strong>₹{{ package.price_from|floatformat:0 }}</strong>
-                                            <small>/ Per Person</small>
-                                        {% else %}
-                                            <strong class="dy-pkg-request">Price on Request</strong>
-                                        {% endif %}
-                                    </div>
-
-                                    <a href="{% url 'packages' %}" class="dy-pkg-explore">
-                                        Explore More <span aria-hidden="true">↗</span>
+                                <div class="dy-pc-btns">
+                                    <a href="#" class="dy-pc-btn dy-pc-btn-gold open-book-trip" data-service-name="{{ package.name }}">
+                                        Book Now <i class="fa-solid fa-arrow-right"></i>
                                     </a>
-
+                                    <a href="{% url 'packages' %}" class="dy-pc-btn dy-pc-btn-white">
+                                        Know More <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
 
                     </article>
-
                 </div>
                 {% endfor %}
 
             </div>
         </div>
-
-        <!-- scroll progress (desktop, while sliding) -->
-        <div class="dy-packages-progress" aria-hidden="true"><span></span></div>
-
         {% else %}
-
-        <div class="dy-packages-empty">
-            <h3>Exciting Journeys Coming Soon</h3>
-            <p>Our upcoming travel packages will be available shortly.</p>
-        </div>
-
+        <div class="dy-packages-empty"><p>Packages coming soon.</p></div>
         {% endif %}
 
     </div>
-
 </section>
-<!-- END PACKAGES -->
 {% load static %}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
@@ -6300,139 +6487,206 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 </style>
 
-
 <!-- ==================== SERVICES: HTML ==================== -->
-<section class="dy-svc" id="services">
-    <div class="dy-svc-head">
-        <span class="dy-eyebrow">Our Travel Services</span>
-        <h2 class="dy-h2">What We <span class="acc">Offer</span></h2>
-        <p>We create unforgettable travel experiences with complete support from planning to your return.</p>
-    </div>
+<section class="dy-sv" id="services">
+    <div class="dy-sv-track" id="dySvTrack">
+        <div class="dy-sv-stage">
 
-    <div class="dy-svc-track" id="dySvcTrack">
-        <div class="dy-svc-sticky">
+            <!-- BACKGROUND: one image per service, crossfades on scroll -->
+            <div class="dy-sv-bg" aria-hidden="true">
+                <img class="dy-sv-bgimg is-on" src="{% static 'frontend/service-1.png' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/service-2.png' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/service-3.png' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/services/service-4.jpg' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/service-5.webp' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/service-6.png' %}" alt="">
+            </div>
 
-            <span class="dy-svc-watermark" aria-hidden="true">SERVICES</span>
+            <!-- LEFT: content that changes with the active card -->
+            <div class="dy-sv-copy">
 
-            <div class="dy-svc-grid">
+                <span class="dy-sv-eyebrow">Our Travel Services</span>
 
-                <!-- LEFT: heading + swapping service panels -->
-                <div class="dy-svc-left">
-                    <div class="dy-svc-panels">
+                <div class="dy-sv-panels">
 
-                        <div class="dy-svc-panel is-active">
-                            <div class="dy-svc-title"><span class="dy-svc-num">01</span><h3>Curated Holiday <em>Packages</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>Europe &amp; UAE escapes</li>
-                                <li>Asia &amp; Africa adventures</li>
-                                <li>Family &amp; couples holidays</li>
-                                <li>Group tours</li>
-                                <li>And more</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="Curated Holiday Packages">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'packages' %}" class="dy-svc-link">View Packages <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 01 -->
+                    <div class="dy-sv-panel is-active">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">01</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>Curated Holiday <em>Packages</em></h2>
+                        <p class="dy-sv-desc">Ready-made holidays planned with care, so all you have to do is pack. Pick a destination and we take care of the rest.</p>
+                        <ul class="dy-sv-points">
+                            <li>Europe &amp; UAE city breaks and escapes</li>
+                            <li>Asia &amp; Africa adventures and culture</li>
+                            <li>Family and couples holidays</li>
+                            <li>Group tours with stay and transfers</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="Curated Holiday Packages">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'packages' %}" class="dy-sv-btn is-ghost">View All Packages</a>
                         </div>
+                    </div>
 
-                        <div class="dy-svc-panel">
-                            <div class="dy-svc-title"><span class="dy-svc-num">02</span><h3>Complete Visa <em>Support</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>UAE visas</li>
-                                <li>Armenia &amp; Kenya</li>
-                                <li>Turkey &amp; Thailand</li>
-                                <li>Document checks &amp; form filling</li>
-                                <li>Application follow-up</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="Complete Visa Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'contact' %}" class="dy-svc-link">Visa Enquiry <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 02 -->
+                    <div class="dy-sv-panel">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">02</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>Complete Visa <em>Support</em></h2>
+                        <p class="dy-sv-desc">We handle the paperwork so your visa is ready before you fly, from the first document check to the final follow-up.</p>
+                        <ul class="dy-sv-points">
+                            <li>UAE, Armenia, Kenya, Turkey and Thailand</li>
+                            <li>Document checks and form filling</li>
+                            <li>Submission and application follow-up</li>
+                            <li>Clear guidance on what you need</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="Complete Visa Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'contact' %}" class="dy-sv-btn is-ghost">Visa Enquiry</a>
                         </div>
+                    </div>
 
-                        <div class="dy-svc-panel">
-                            <div class="dy-svc-title"><span class="dy-svc-num">03</span><h3>Personalised <em>Itineraries</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>Built around your dates</li>
-                                <li>Fits your budget</li>
-                                <li>Matches your travel style</li>
-                                <li>Day-by-day plan</li>
-                                <li>Expert advisors</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="Personalised Itineraries">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'contact' %}" class="dy-svc-link">Plan My Trip <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 03 -->
+                    <div class="dy-sv-panel">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">03</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>Personalised <em>Itineraries</em></h2>
+                        <p class="dy-sv-desc">A trip shaped around you, not a one-size-fits-all template. Tell us what you love and we build the plan.</p>
+                        <ul class="dy-sv-points">
+                            <li>Built around your travel dates</li>
+                            <li>Fits your budget</li>
+                            <li>Matches your travel style</li>
+                            <li>Day-by-day plan from expert advisors</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="Personalised Itineraries">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'contact' %}" class="dy-sv-btn is-ghost">Plan My Trip</a>
                         </div>
+                    </div>
 
-                        <div class="dy-svc-panel">
-                            <div class="dy-svc-title"><span class="dy-svc-num">04</span><h3>All-in-One Booking <em>Support</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>Flights</li>
-                                <li>Hotels</li>
-                                <li>Transfers</li>
-                                <li>Guided tours</li>
-                                <li>Local experiences</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="All-in-One Booking Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'packages' %}" class="dy-svc-link">View Packages <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 04 -->
+                    <div class="dy-sv-panel">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">04</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>All-in-One Booking <em>Support</em></h2>
+                        <p class="dy-sv-desc">Everything for your trip booked in one place and handled end to end by our experienced travel advisors.</p>
+                        <ul class="dy-sv-points">
+                            <li>Flights and hotels</li>
+                            <li>Transfers</li>
+                            <li>Guided tours</li>
+                            <li>Local experiences</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="All-in-One Booking Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'packages' %}" class="dy-sv-btn is-ghost">View All Packages</a>
                         </div>
+                    </div>
 
-                        <div class="dy-svc-panel">
-                            <div class="dy-svc-title"><span class="dy-svc-num">05</span><h3>Airport Pickup in <em>Frankfurt</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>Frankfurt Airport, Germany</li>
-                                <li>Private car for 1–2 passengers</li>
-                                <li>Larger vehicles for groups</li>
-                                <li>Pre-arranged meeting point</li>
-                                <li>And more</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="Airport Pickup in Frankfurt">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'contact' %}" class="dy-svc-link">Ask a Question <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 05 -->
+                    <div class="dy-sv-panel">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">05</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>Airport Pickup in <em>Frankfurt</em></h2>
+                        <p class="dy-sv-desc">A smooth start to your trip, with a driver waiting for you when you land at Frankfurt Airport.</p>
+                        <ul class="dy-sv-points">
+                            <li>Frankfurt Airport, Germany</li>
+                            <li>Private car for 1&ndash;2 passengers</li>
+                            <li>Larger vehicles for groups</li>
+                            <li>Pre-arranged meeting point</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="Airport Pickup in Frankfurt">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'contact' %}" class="dy-sv-btn is-ghost">Ask a Question</a>
                         </div>
+                    </div>
 
-                        <div class="dy-svc-panel">
-                            <div class="dy-svc-title"><span class="dy-svc-num">06</span><h3>Reliable Customer <em>Support</em></h3></div>
-                            <ul class="dy-svc-list">
-                                <li>24/7 availability</li>
-                                <li>Help while planning</li>
-                                <li>Support during your trip</li>
-                                <li>Post-trip questions</li>
-                                <li>Dedicated advisors</li>
-                            </ul>
-                            <div class="dy-svc-actions">
-                                <a href="#" class="dy-svc-btn open-book-trip" data-service-name="Reliable Customer Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
-                                <a href="{% url 'contact' %}" class="dy-svc-link">Contact Us <i class="fa-solid fa-arrow-right"></i></a>
-                            </div>
+                    <!-- 06 -->
+                    <div class="dy-sv-panel">
+                        <div class="dy-sv-sl"><span class="dy-sv-sl-no">06</span><span class="dy-sv-sl-of">/ 06</span></div>
+                        <h2>Reliable Customer <em>Support</em></h2>
+                        <p class="dy-sv-desc">Real people on hand at every stage of your journey, from planning to the day you get back home.</p>
+                        <ul class="dy-sv-points">
+                            <li>24/7 availability</li>
+                            <li>Help while you plan</li>
+                            <li>Support during your trip</li>
+                            <li>Post-trip questions answered</li>
+                        </ul>
+                        <div class="dy-sv-actions">
+                            <a href="#" class="dy-sv-btn open-book-trip" data-service-name="Reliable Customer Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="{% url 'contact' %}" class="dy-sv-btn is-ghost">Contact Us</a>
                         </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT: cards (icon + service name only) + controls -->
+            <div class="dy-sv-rail">
+
+                <div class="dy-sv-viewport">
+                    <div class="dy-sv-strip">
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/service-1.png' %}" alt="Curated holiday packages" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2.5"/><path d="M9 8V6.5A1.5 1.5 0 0 1 10.5 5h3A1.5 1.5 0 0 1 15 6.5V8"/><path d="M3 13.5h18"/><path d="M10.5 13.5v1.5h3v-1.5"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">Curated Holiday Packages</h3>
+                        </article>
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/service-2.png' %}" alt="Visa support" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9.5 16.5h5"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">Complete Visa Support</h3>
+                        </article>
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/service-3.png' %}" alt="Personalised itineraries" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h7"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">Personalised Itineraries</h3>
+                        </article>
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/services/service-4.jpg' %}" alt="All-in-one booking support" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15.5l2 2 4-4"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">All-in-One Booking Support</h3>
+                        </article>
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/service-5.webp' %}" alt="Airport pickup in Frankfurt" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.2A2 2 0 0 1 8.5 5.5h7a2 2 0 0 1 1.9 1.3L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><path d="M6.5 17v2M17.5 17v2"/><circle cx="7.5" cy="14" r=".8"/><circle cx="16.5" cy="14" r=".8"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">Airport Pickup in Frankfurt</h3>
+                        </article>
+
+                        <article class="dy-sv-card">
+                            <img class="dy-sv-img" src="{% static 'frontend/service-6.png' %}" alt="Customer support" loading="lazy">
+                            <span class="dy-sv-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19a4 4 0 0 1-4 3h-2"/></svg>
+                            </span>
+                            <h3 class="dy-sv-name">Reliable Customer Support</h3>
+                        </article>
 
                     </div>
                 </div>
 
-                <!-- RIGHT: image stack (crossfade) -->
-                <div class="dy-svc-right">
-                    <div class="dy-svc-media is-active"><img src="{% static 'frontend/service-1.png' %}" alt="Curated holiday packages" loading="lazy"></div>
-                    <div class="dy-svc-media"><img src="{% static 'frontend/service-2.png' %}" alt="Visa support" loading="lazy"></div>
-                    <div class="dy-svc-media"><img src="{% static 'frontend/service-3.png' %}" alt="Personalised itineraries" loading="lazy"></div>
-                    <div class="dy-svc-media"><img src="{% static 'frontend/services/service-4.jpg' %}" alt="All-in-one booking support" loading="lazy"></div>
-                    <div class="dy-svc-media"><img src="{% static 'frontend/service-5.webp' %}" alt="Airport pickup in Frankfurt" loading="lazy"></div>
-                    <div class="dy-svc-media"><img src="{% static 'frontend/service-6.png' %}" alt="Customer support" loading="lazy"></div>
+                <!-- arrows + dots -->
+                <div class="dy-sv-ctrl">
+                    <button type="button" class="dy-sv-arrow" id="dySvPrev" aria-label="Previous service"><i class="fa-solid fa-arrow-left"></i></button>
+                    <div class="dy-sv-dots">
+                        <button type="button" class="dy-sv-dot is-on" aria-label="Curated Holiday Packages"></button>
+                        <button type="button" class="dy-sv-dot" aria-label="Complete Visa Support"></button>
+                        <button type="button" class="dy-sv-dot" aria-label="Personalised Itineraries"></button>
+                        <button type="button" class="dy-sv-dot" aria-label="All-in-One Booking Support"></button>
+                        <button type="button" class="dy-sv-dot" aria-label="Airport Pickup in Frankfurt"></button>
+                        <button type="button" class="dy-sv-dot" aria-label="Reliable Customer Support"></button>
+                    </div>
+                    <button type="button" class="dy-sv-arrow" id="dySvNext" aria-label="Next service"><i class="fa-solid fa-arrow-right"></i></button>
                 </div>
+
             </div>
 
-            <!-- progress dots -->
-            <nav class="dy-svc-dots" id="dySvcDots" aria-label="Services navigation">
-                <button type="button" class="is-on" aria-label="Curated Holiday Packages"></button>
-                <button type="button" aria-label="Complete Visa Support"></button>
-                <button type="button" aria-label="Personalised Itineraries"></button>
-                <button type="button" aria-label="All-in-One Booking Support"></button>
-                <button type="button" aria-label="Airport Pickup in Frankfurt"></button>
-                <button type="button" aria-label="Reliable Customer Support"></button>
-            </nav>
         </div>
     </div>
 </section>
@@ -6440,237 +6694,479 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <!-- ==================== SERVICES: CSS ==================== -->
 <style>
-.dy-svc {
-    --sv-blue: #018ed2;
-    --sv-orange: #f4813f;
-    --sv-orange-dark: #ea7330;
+.dy-sv {
+    --cw: clamp(320px, 26vw, 460px);      /* card width  */
+    --ch: clamp(500px, 68vh, 660px);      /* card height */
+    --gap: 28px;
     --sv-gold: #f5a623;
-    --sv-sky: #e8f6ff;
-    --sv-text: #4d5e78;
-    --sv-line: rgba(1,142,210,.16);
+    --sv-orange: #f4813f;
+    --sv-coral: #f4906e;
 
     position: relative;
-    background: var(--sv-sky);
-    color: var(--sv-text);
+    background: #0a1a36;
+    color: #ffffff;
 }
-.dy-svc *, .dy-svc *::before, .dy-svc *::after { box-sizing: border-box; }
+.dy-sv *, .dy-sv *::before, .dy-sv *::after { box-sizing: border-box; }
 
-/* scroll track: 6 services = 6 screens of scrolling */
-.dy-svc-track { position: relative; height: 600vh; }
-.dy-svc-sticky {
-    position: sticky; top: 0; height: 100vh; overflow: hidden;
-    display: flex; align-items: center;
-}
+/* scroll length: 6 services = 6 screens (change 600vh to make it faster / slower) */
+.dy-sv-track { position: relative; height: 600vh; }
 
-/* big faded word behind everything */
-.dy-svc-watermark {
-    position: absolute; left: 50%; bottom: -0.16em; transform: translateX(-50%);
-    font-size: clamp(120px, 22vw, 380px); font-weight: 800; letter-spacing: .02em; line-height: 1;
-    color: rgba(1,142,210,.07); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0;
-}
-
-.dy-svc-grid {
-    position: relative; z-index: 1; width: 100%;
-    padding: 0 clamp(24px, 7vw, 135px);
-    display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    gap: clamp(32px, 5vw, 110px); align-items: center;
+.dy-sv-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-top: 78px;                    /* keeps everything clear of the fixed navbar */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    isolation: isolate;
 }
 
-/* ---------- heading (same as old "What We Offer") ---------- */
-.dy-svc { padding-top: 80px; }
-.dy-svc-head { position: relative; z-index: 5; max-width: 760px; margin: 0 auto; padding: 0 24px; text-align: center; }
-.dy-svc .dy-eyebrow {
-    display: inline-block; position: relative; margin-bottom: 14px; padding-bottom: 10px;
-    color: var(--sv-blue); font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
+/* ---------- BACKGROUND (crossfade) ---------- */
+.dy-sv-bg { position: absolute; inset: 0; z-index: 0; background: #0a1a36; }
+.dy-sv-bgimg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 1s ease, transform 6s ease;
 }
-.dy-svc .dy-eyebrow::after {
-    content: ""; position: absolute; left: 50%; bottom: 0; width: 56px; height: 2px;
-    background: var(--sv-gold); transform: translateX(-50%);
-}
-.dy-svc .dy-h2 {
-    margin: 0 0 16px; color: var(--sv-blue); font-weight: 600; letter-spacing: 0;
-    font-size: var(--dy-heading-size, clamp(32px, 3.4vw, 52px)); line-height: 1.15;
-}
-.dy-svc .dy-h2 .acc { color: var(--sv-orange); }
-.dy-svc-head p { margin: 0 auto; max-width: 620px; color: #5b6b85; font-size: 17px; line-height: 1.7; }
+.dy-sv-bgimg.is-on { opacity: 1; transform: scale(1); }
 
-/* ---------- left: service panels ---------- */
-.dy-svc-panels { display: grid; max-width: 680px; }
-.dy-svc-panel {
-    grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(18px);
-    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
-}
-.dy-svc-panel.is-active { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-
-.dy-svc-title { margin-bottom: 18px; }
-.dy-svc-num {
-    display: inline-block; margin-bottom: 14px; min-width: 56px; padding: 9px 16px; text-align: center; border-radius: 50px;
-    border: 1.5px solid rgba(1,142,210,.35); background: #fff;
-    font-size: 17px; font-weight: 700; color: var(--sv-blue);
-}
-/* every service name: 2 lines (name on line 1, last word in orange on line 2), same size for all */
-.dy-svc-title h3 {
-    margin: 0; font-weight: 600; letter-spacing: 0; line-height: 1.12; color: var(--sv-blue);
-    font-size: clamp(30px, 3.5vw, 56px); white-space: nowrap;
-}
-.dy-svc-title h3 em { display: block; font-style: normal; color: var(--sv-orange); }
-
-/* white checklist card */
-.dy-svc-list {
-    margin: 0 0 28px; padding: 10px 28px; list-style: none;
-    background: #fff; border-radius: 14px; color: var(--sv-blue);
-    box-shadow: 0 14px 34px rgba(1,142,210,.12);
-}
-.dy-svc-list li {
-    position: relative; padding: 13px 0 13px 46px; font-size: 17px; line-height: 1.4;
-    border-bottom: 1px solid var(--sv-line);
-}
-.dy-svc-list li:last-child { border-bottom: 0; }
-.dy-svc-list li::before {
-    content: ""; position: absolute; left: 0; top: 50%; width: 28px; height: 28px; transform: translateY(-50%);
-    border-radius: 50%; background: #ffe9db;
-}
-.dy-svc-list li::after {
-    content: ""; position: absolute; left: 10px; top: 50%; width: 6px; height: 11px;
-    border: solid var(--sv-orange); border-width: 0 2px 2px 0; transform: translateY(-62%) rotate(45deg);
+.dy-sv-bg::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(90deg, rgba(4,14,34,.92) 0%, rgba(4,14,34,.70) 42%, rgba(4,14,34,.38) 100%),
+        linear-gradient(to top, rgba(4,14,34,.55) 0%, rgba(4,14,34,0) 40%);
 }
 
-/* actions (same buttons as before) */
-.dy-svc-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; }
-.dy-svc .dy-svc-btn {
-    display: inline-flex; align-items: center; gap: 14px; padding: 20px 40px; border-radius: 50px;
-    background: var(--sv-orange); color: #fff; font-size: 18px; font-weight: 600; text-decoration: none;
-    box-shadow: 0 12px 26px rgba(244,129,63,.35); transition: transform .3s, background .3s;
+/* ---------- LEFT CONTENT ---------- */
+.dy-sv-copy {
+    position: relative; z-index: 3;
+    width: min(37vw, 580px);
+    margin-left: clamp(32px, 5vw, 96px);
 }
-.dy-svc .dy-svc-btn:hover { background: var(--sv-orange-dark); color: #fff; transform: translateY(-3px); }
-.dy-svc .dy-svc-btn i, .dy-svc .dy-svc-link i { transition: transform .3s; }
-.dy-svc .dy-svc-btn:hover i, .dy-svc .dy-svc-link:hover i { transform: translateX(5px); }
-.dy-svc .dy-svc-link {
-    display: inline-flex; align-items: center; gap: 12px; padding: 18px 38px; border-radius: 50px;
-    border: 1.5px solid var(--sv-orange); background: rgba(255,255,255,.55); color: var(--sv-orange);
-    font-size: 18px; font-weight: 600; text-decoration: none; transition: background .3s, color .3s, transform .3s;
-}
-.dy-svc .dy-svc-link:hover { background: var(--sv-orange); color: #fff; transform: translateY(-3px); }
-.dy-svc a:focus-visible, .dy-svc button:focus-visible { outline: 2px solid var(--sv-gold); outline-offset: 3px; }
 
-/* ---------- right ---------- */
-.dy-svc-right { position: relative; height: min(72vh, 640px); }
-.dy-svc-media {
-    position: absolute; inset: 0; border-radius: 32px; overflow: hidden;
-    box-shadow: 0 26px 60px rgba(1,142,210,.22);
-    opacity: 0; transform: scale(.96); transition: opacity .6s ease, transform .8s ease;
+.dy-sv-eyebrow {
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-bottom: 18px;
+    color: var(--sv-gold);
+    font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
 }
-.dy-svc-media.is-active { opacity: 1; transform: none; }
-.dy-svc-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dy-sv-eyebrow::before { content: ""; width: 44px; height: 1.5px; background: var(--sv-gold); }
 
-/* ---------- progress dots ---------- */
-.dy-svc-dots {
-    position: absolute; right: 18px; top: 50%; transform: translateY(-50%); z-index: 3;
-    display: flex; flex-direction: column; gap: 10px;
+/* panels stack on top of each other; only the active one shows */
+.dy-sv-panels { display: grid; }
+.dy-sv-panel {
+    grid-area: 1 / 1;
+    opacity: 0; visibility: hidden; transform: translateY(18px);
+    transition: opacity .5s ease, transform .6s cubic-bezier(.22,1,.36,1), visibility 0s linear .5s;
 }
-.dy-svc-dots button {
-    width: 8px; height: 8px; padding: 0; border: 0; border-radius: 8px; cursor: pointer;
-    background: rgba(1,142,210,.25); transition: height .3s, background .3s;
+.dy-sv-panel.is-active {
+    opacity: 1; visibility: visible; transform: none;
+    transition-delay: .08s, .08s, 0s;
 }
-.dy-svc-dots button.is-on { height: 26px; background: var(--sv-orange); }
 
-/* ---------- tablet & phone: no sticky, services stack one after another ---------- */
+/* serial number */
+.dy-sv-sl { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.dy-sv-sl-no {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(46px, 4.4vw, 72px); font-weight: 700; line-height: 1;
+    color: var(--sv-gold);
+}
+.dy-sv-sl-of {
+    font-size: 16px; font-weight: 600; letter-spacing: .12em;
+    color: rgba(255,255,255,.6);
+}
+
+.dy-sv-panel h2 {
+    margin: 0 0 16px;
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-weight: 600 !important;
+    font-size: clamp(32px, 3.5vw, 56px) !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0 !important;
+    color: #ffffff !important;
+}
+.dy-sv-panel h2 em { font-style: normal; color: var(--sv-coral); }
+
+.dy-sv-desc {
+    max-width: 500px;
+    margin: 0 0 20px;
+    color: rgba(255,255,255,.88);
+    font-size: clamp(15px, 1.12vw, 18px);
+    line-height: 1.65;
+}
+
+/* bullet points */
+.dy-sv-points {
+    list-style: none; margin: 0 0 26px; padding: 0;
+    display: grid; gap: 10px;
+}
+.dy-sv-points li {
+    position: relative;
+    padding-left: 34px;
+    color: #ffffff;
+    font-size: clamp(15px, 1.1vw, 17px); font-weight: 500; line-height: 1.4;
+}
+.dy-sv-points li::before {
+    content: ""; position: absolute; left: 0; top: 0;
+    width: 23px; height: 23px; border-radius: 50%;
+    background: rgba(245,166,35,.2);
+    border: 1px solid rgba(245,166,35,.7);
+}
+.dy-sv-points li::after {
+    content: ""; position: absolute; left: 8px; top: 4px;
+    width: 5px; height: 10px;
+    border: solid var(--sv-gold); border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* buttons */
+.dy-sv-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+.dy-sv-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 17px 32px; border-radius: 50px;
+    border: 2px solid var(--sv-orange);
+    background: var(--sv-orange);
+    color: #ffffff;
+    font-size: 16px; font-weight: 700; text-decoration: none; white-space: nowrap;
+    box-shadow: 0 12px 26px rgba(244,129,63,.35);
+    transition: background .3s, color .3s, transform .3s, border-color .3s;
+}
+.dy-sv-btn i { transition: transform .3s; }
+.dy-sv-btn:hover { background: #ea7330; border-color: #ea7330; color: #ffffff; transform: translateY(-3px); }
+.dy-sv-btn:hover i { transform: translateX(5px); }
+.dy-sv-btn.is-ghost {
+    background: rgba(255,255,255,.1);
+    border-color: rgba(255,255,255,.85);
+    box-shadow: none;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.dy-sv-btn.is-ghost:hover { background: #ffffff; border-color: #ffffff; color: #0a1a36; }
+.dy-sv a:focus-visible, .dy-sv button:focus-visible { outline: 3px solid var(--sv-gold); outline-offset: 3px; }
+
+/* ---------- RIGHT: CARDS (icon + name only) ---------- */
+.dy-sv-rail {
+    position: absolute; z-index: 3;
+    top: 78px; bottom: 0; left: 44%; right: 0;
+    display: flex; flex-direction: column; justify-content: center; gap: 22px;
+}
+.dy-sv-viewport { overflow: hidden; padding: 16px 0; }
+.dy-sv-strip {
+    position: relative;
+    display: flex; align-items: center; gap: var(--gap);
+    width: max-content;
+    will-change: transform;
+}
+
+.dy-sv-card {
+    --a: 1;                                   /* 1 = active, 0 = far away (set by JS) */
+    position: relative;
+    flex: 0 0 var(--cw);
+    height: var(--ch);
+    border-radius: 30px;
+    overflow: hidden;
+    isolation: isolate;
+    cursor: pointer;
+    background: #0a1a36;
+    border: 1px solid rgba(245,166,35, calc(.16 + .5 * var(--a)));
+    box-shadow: 0 26px 60px rgba(0,0,0,.38);
+    transform: scale(calc(.86 + .14 * var(--a)));
+    opacity: calc(.5 + .5 * var(--a));
+}
+.dy-sv-img {
+    position: absolute; inset: 0; z-index: -3;
+    width: 100%; height: 100%; object-fit: cover;
+}
+.dy-sv-card::before {
+    content: ""; position: absolute; inset: 0; z-index: -2;
+    background: linear-gradient(to top,
+        rgba(4,14,34,.94) 0%, rgba(4,14,34,.70) 24%,
+        rgba(4,14,34,.15) 50%, rgba(4,14,34,0) 70%);
+}
+.dy-sv-card::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: rgba(4,14,34, calc(.5 * (1 - var(--a))));
+    pointer-events: none;
+}
+
+/* SVG icon (different on every card) */
+.dy-sv-icon {
+    position: absolute; top: 24px; left: 24px;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 68px; height: 68px; border-radius: 50%;
+    background: rgba(10,26,54,.72);
+    border: 1px solid rgba(245,166,35,.6);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.dy-sv-icon svg {
+    width: 32px; height: 32px;
+    fill: none; stroke: var(--sv-gold);
+    stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* service name */
+.dy-sv-name {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    margin: 0; padding: 0 28px 32px;
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-weight: 600 !important;
+    font-size: clamp(26px, 2.3vw, 38px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0 !important;
+    color: #ffffff !important;
+}
+.dy-sv-name::before {
+    content: ""; display: block;
+    width: 44px; height: 2px; margin-bottom: 16px;
+    background: var(--sv-gold);
+}
+
+/* ---------- ARROWS + DOTS ---------- */
+.dy-sv-ctrl { display: flex; align-items: center; justify-content: center; gap: 18px; }
+.dy-sv-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px; padding: 0; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,.7);
+    background: rgba(4,14,34,.35);
+    color: #ffffff; font-size: 17px; cursor: pointer;
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    transition: background .3s, color .3s, transform .3s;
+}
+.dy-sv-arrow:hover { background: var(--sv-gold); border-color: var(--sv-gold); color: #0a1a36; transform: scale(1.06); }
+.dy-sv-dots { display: flex; align-items: center; gap: 10px; }
+.dy-sv-dot {
+    width: 10px; height: 10px; padding: 0; border: 0; border-radius: 10px;
+    background: rgba(255,255,255,.4); cursor: pointer;
+    transition: width .3s, background .3s;
+}
+.dy-sv-dot.is-on { width: 32px; background: var(--sv-gold); }
+
+/* laptops / shorter screens: tighten so the whole left panel always fits */
+@media (min-width: 992px) and (max-height: 820px) {
+    .dy-sv-sl-no { font-size: 44px; }
+    .dy-sv-panel h2 { margin-bottom: 12px; }
+    .dy-sv-desc { margin-bottom: 14px; }
+    .dy-sv-points { gap: 7px; margin-bottom: 20px; }
+    .dy-sv-btn { padding: 14px 26px; font-size: 15px; }
+}
+
+/* ---------- TABLET + PHONE: details on top, one card at a time below ---------- */
 @media (max-width: 991px) {
-    .dy-svc { padding: 70px 0; }
-    .dy-svc-track { margin-top: 10px; }
-    .dy-svc-track { height: auto; }
-    .dy-svc-sticky { position: static; height: auto; display: block; overflow: visible; }
-    .dy-svc-grid { display: block; padding: 0 24px; }
-    .dy-svc-dots { display: none; }
-    .dy-svc-watermark { bottom: 0; font-size: 26vw; }
+    .dy-sv { background: #0a1a36; }
+    .dy-sv-track { height: auto; }
 
-    /* flatten left + right so each service = title, list, image */
-    .dy-svc-left, .dy-svc-panels, .dy-svc-right { display: contents; }
+    .dy-sv-stage {
+        position: relative;          /* bg sits behind the content */
+        height: auto;
+        display: block;
+        padding: 70px 0 50px;
+        overflow: hidden;            /* clips the zoomed bg images */
+    }
 
-    .dy-svc-grid { display: flex; flex-direction: column; gap: 0; }
-    .dy-svc-panel, .dy-svc-media { opacity: 1; visibility: visible; transform: none; position: static; }
-    .dy-svc-panel { margin-top: 44px; }
-    .dy-svc-list li { font-size: 15.5px; padding: 11px 0 11px 42px; }
-    .dy-svc .dy-svc-btn { padding: 16px 30px; font-size: 16px; }
-    .dy-svc .dy-svc-link { padding: 14px 26px; font-size: 16px; }
-    .dy-svc-title h3 { font-size: clamp(26px, 7vw, 38px); }
-    .dy-svc-media { height: 240px; margin-top: 22px; }
+    /* background (crossfades as you swipe) */
+    .dy-sv-bg { display: block; }
+    .dy-sv-bg::after {
+        background: linear-gradient(180deg,
+            rgba(4,14,34,.88) 0%,
+            rgba(4,14,34,.72) 45%,
+            rgba(4,14,34,.60) 100%);
+    }
 
-    /* order: eyebrow, h2, then panel1, img1, panel2, img2 ... */
-    .dy-svc-panel:nth-child(1) { order: 2; }  .dy-svc-media:nth-child(1) { order: 3; }
-    .dy-svc-panel:nth-child(2) { order: 4; }  .dy-svc-media:nth-child(2) { order: 5; }
-    .dy-svc-panel:nth-child(3) { order: 6; }  .dy-svc-media:nth-child(3) { order: 7; }
-    .dy-svc-panel:nth-child(4) { order: 8; }  .dy-svc-media:nth-child(4) { order: 9; }
-    .dy-svc-panel:nth-child(5) { order: 10; } .dy-svc-media:nth-child(5) { order: 11; }
-    .dy-svc-panel:nth-child(6) { order: 12; } .dy-svc-media:nth-child(6) { order: 13; }
+    /* left content */
+    .dy-sv-copy { width: auto; margin: 0 24px 28px; }
+    .dy-sv-panel h2 { font-size: clamp(30px, 7.5vw, 44px) !important; }
+    .dy-sv-btn { padding: 14px 26px; font-size: 15px; }
+
+    /* cards: must stay relative so they sit above the bg */
+    .dy-sv-rail {
+    position: relative;
+    top: auto; right: auto; bottom: auto; left: auto;   /* cancel the desktop offsets */
+    display: block;
+    width: 100%;
+    z-index: 3;
 }
 
-/* short laptop screens: tighten so a whole service always fits in one screen */
-@media (min-width: 992px) and (max-height: 780px) {
-    .dy-svc-list li { padding-top: 9px; padding-bottom: 9px; font-size: 16px; }
-    .dy-svc-list { margin-bottom: 20px; }
-    .dy-svc .dy-svc-btn { padding: 16px 34px; font-size: 16px; }
-    .dy-svc .dy-svc-link { padding: 14px 32px; font-size: 16px; }
+    .dy-sv-viewport {
+        overflow-x: auto;
+        padding: 6px 0 18px;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: 24px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .dy-sv-viewport::-webkit-scrollbar { display: none; }
+
+    .dy-sv-strip { width: max-content; gap: 24px; padding: 0 24px; }
+
+    .dy-sv-card {
+        flex: 0 0 calc(100vw - 48px);   /* one full card per screen */
+        height: 400px;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        transform: none;
+        opacity: 1;
+        border-color: rgba(245,166,35,.25);
+    }
+    .dy-sv-card.is-current { border-color: var(--sv-gold); }
+    .dy-sv-card::after { display: none; }
+    .dy-sv-icon { width: 56px; height: 56px; top: 18px; left: 18px; }
+    .dy-sv-icon svg { width: 27px; height: 27px; }
+    .dy-sv-name { padding: 0 22px 24px; font-size: 26px !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .dy-svc-panel, .dy-svc-media, .dy-svc-dots button { transition: none !important; }
+    .dy-sv-bgimg, .dy-sv-panel, .dy-sv-btn, .dy-sv-arrow, .dy-sv-dot { transition: none !important; }
 }
+
 </style>
 
 
 <!-- ==================== SERVICES: JS ==================== -->
 <script>
 (function () {
-    var track  = document.getElementById('dySvcTrack');
+    var track = document.getElementById('dySvTrack');
     if (!track) return;
 
-    var panels = [].slice.call(track.querySelectorAll('.dy-svc-panel'));
-    var media  = [].slice.call(track.querySelectorAll('.dy-svc-media'));
-    var dots   = [].slice.call(track.querySelectorAll('#dySvcDots button'));
+    var cards  = [].slice.call(track.querySelectorAll('.dy-sv-card'));
+    var bgs    = [].slice.call(track.querySelectorAll('.dy-sv-bgimg'));
+    var panels = [].slice.call(track.querySelectorAll('.dy-sv-panel'));
+    var dots   = [].slice.call(track.querySelectorAll('.dy-sv-dot'));
+    var rail   = track.querySelector('.dy-sv-viewport');
+    var strip  = track.querySelector('.dy-sv-strip');
+    var prevBt = document.getElementById('dySvPrev');
+    var nextBt = document.getElementById('dySvNext');
+
+    var n = cards.length;
+    if (n < 2) return;
+
     var wide   = window.matchMedia('(min-width: 992px)');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var current = -1, ticking = false;
+    var SMOOTH = 0.12;                 // 0.05 = floaty, 0.25 = tight to the scrollbar
 
+    var railW = 0, cardW = 0, step = 0;
+    var target = 0, cur = 0, running = false, active = -1, mTick = false;
+
+    var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+
+    /* swaps the background, the left panel, the dots and the highlighted card */
     function setActive(i) {
-        if (i === current) return;
-        current = i;
+        if (i === active) return;
+        active = i;
+        bgs.forEach(function (b, k)    { b.classList.toggle('is-on', k === i); });
         panels.forEach(function (p, k) { p.classList.toggle('is-active', k === i); });
-        media.forEach(function (m, k) { m.classList.toggle('is-active', k === i); });
-        dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); });
+        dots.forEach(function (d, k)   { d.classList.toggle('is-on', k === i); });
+        cards.forEach(function (c, k)  { c.classList.toggle('is-current', k === i); });
     }
 
-    function update() {
-        ticking = false;
-        if (!wide.matches) return;
+    function reset() {
+        strip.style.transform = '';
+        cards.forEach(function (c) { c.style.removeProperty('--a'); });
+    }
+
+    function measure() {
+        if (!wide.matches) { reset(); updateMobile(); return; }
+        railW = rail.clientWidth;
+        cardW = cards[0].offsetWidth;
+        step  = cards[1].offsetLeft - cards[0].offsetLeft;
+        readScroll();
+        cur = target;
+        render();
+    }
+
+    /* ---------- desktop: scroll position -> card position (short hold on each card) ---------- */
+    function readScroll() {
         var rect = track.getBoundingClientRect();
         var scrollable = track.offsetHeight - window.innerHeight;
-        var progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-        setActive(Math.min(panels.length - 1, Math.floor(progress * panels.length)));
+        var p = scrollable > 0 ? clamp(-rect.top / scrollable, 0, 1) : 0;
+
+        var raw = p * (n - 1);
+        var i0  = Math.min(Math.floor(raw), n - 1);
+        var t   = raw - i0;
+        var s   = t * t * t * (t * (t * 6 - 15) + 10);   // smootherstep
+        target  = Math.min(n - 1, i0 + s);
     }
 
-    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    function render() {
+        strip.style.transform =
+            'translate3d(' + (railW / 2 - cardW / 2 - cur * step).toFixed(1) + 'px,0,0)';
 
-    dots.forEach(function (d, i) {
-        d.addEventListener('click', function () {
+        cards.forEach(function (c, i) {
+            var a = Math.max(0, 1 - Math.abs(i - cur));
+            c.style.setProperty('--a', a.toFixed(3));
+        });
+
+        setActive(Math.round(cur));
+    }
+
+    function loop() {
+        var diff = target - cur;
+        if (Math.abs(diff) < 0.0008) {
+            cur = target; render(); running = false; return;
+        }
+        cur += diff * SMOOTH;
+        render();
+        requestAnimationFrame(loop);
+    }
+
+    function onScroll() {
+        if (!wide.matches) return;
+        readScroll();
+        if (reduce.matches) { cur = target; render(); return; }
+        if (!running) { running = true; requestAnimationFrame(loop); }
+    }
+
+    /* ---------- tablet / phone: swipe row decides the active service ---------- */
+    function updateMobile() {
+        if (wide.matches) return;
+        var left = rail.scrollLeft, best = 0, bestD = 1e9;
+        cards.forEach(function (c, i) {
+            var d = Math.abs(c.offsetLeft - 24 - left);
+            if (d < bestD) { bestD = d; best = i; }
+        });
+        setActive(best);
+    }
+
+    rail.addEventListener('scroll', function () {
+        if (wide.matches || mTick) return;
+        mTick = true;
+        requestAnimationFrame(function () { mTick = false; updateMobile(); });
+    }, { passive: true });
+
+    /* ---------- go to a service (arrows, dots, clicking a card) ---------- */
+    function goTo(i) {
+        i = clamp(i, 0, n - 1);
+        var behavior = reduce.matches ? 'auto' : 'smooth';
+
+        if (wide.matches) {
             var scrollable = track.offsetHeight - window.innerHeight;
             var top = track.getBoundingClientRect().top + window.pageYOffset;
-            window.scrollTo({
-                top: top + (scrollable / panels.length) * (i + 0.5),
-                behavior: reduce.matches ? 'auto' : 'smooth'
-            });
-        });
+            window.scrollTo({ top: top + (i / (n - 1)) * scrollable, behavior: behavior });
+        } else {
+            rail.scrollTo({ left: cards[i].offsetLeft - 24, behavior: behavior });
+        }
+    }
+
+    dots.forEach(function (d, i) { d.addEventListener('click', function () { goTo(i); }); });
+    if (prevBt) prevBt.addEventListener('click', function () { goTo(active - 1); });
+    if (nextBt) nextBt.addEventListener('click', function () { goTo(active + 1); });
+    cards.forEach(function (c, i) {
+        c.addEventListener('click', function () { if (i !== active) goTo(i); });
     });
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    window.addEventListener('load', update);
-    update();
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    if (wide.addEventListener) wide.addEventListener('change', measure);
+    measure();
 })();
 
 /* send the chosen service name to the booking popup */
 document.addEventListener('click', function (e) {
-    var btn = e.target.closest('.dy-svc .open-book-trip');
+    var btn = e.target.closest('.dy-sv .open-book-trip');
     if (!btn) return;
     var name = btn.dataset.serviceName || '';
     var f = document.querySelector('#bookTripModal [name="service"], #bookTripModal [name="package_name"], #book-trip-package-name');
