@@ -1,683 +1,503 @@
-
 {% extends 'frontend/base.html' %}
 {% load static %}
 
-{% block title %}
-Travel Photo Gallery | Deutsche Yathras
-{% endblock %}
-
+{% block title %}Travel Photo Gallery | Deutsche Yathras{% endblock %}
 
 {% block extra_css %}
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
 
-/* ============================================
-   DEUTSCHE YATHRAS - DYNAMIC GALLERY
-============================================ */
+/* ==========================================
+   SHARED (same palette as Home + About + Packages)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
 
-/* Gallery section */
-.dy-gallery-section {
-    padding-top: 80px;
-    padding-bottom: 90px;
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:inline;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-page-hero-title em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-crumbs{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
 }
 
-/* Section heading */
-.dy-gallery-heading {
-    text-align: center;
-    max-width: 750px;
-    margin: 0 auto 45px;
+/* ==========================================
+   1) GALLERY  (sky + drifting clouds)
+========================================== */
+.dy-gal{position:relative;overflow:hidden;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e8f6ff);}
+.dy-gal *{box-sizing:border-box;}
+.dy-gal::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-gal-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+.dy-gal .dy-wrap{position:relative;z-index:2;}
+
+.dy-gal-head{max-width:760px;margin:0 auto 50px;text-align:center;}
+.dy-gal-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+
+/* filter pills */
+.dy-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:50px;}
+.dy-filter{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;
+    background:#fff;border:1px solid rgba(20,48,94,.12);color:var(--dy-navy);font-size:14px;font-weight:700;
+    text-decoration:none;box-shadow:0 6px 18px rgba(20,48,94,.06);
+    transition:background .3s,color .3s,border-color .3s,transform .3s;}
+.dy-filter:hover{transform:translateY(-3px);border-color:var(--dy-navy);color:var(--dy-navy);}
+.dy-filter.active{background:var(--dy-navy);border-color:var(--dy-navy);color:#fff;}
+.dy-filter:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* ---------- FLEX ROWS: photos of different widths and heights stretch to fill every row edge to edge ---------- */
+.dy-mosaic{display:flex;flex-wrap:wrap;gap:18px;}
+.dy-tile{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;background:#cfe6f6;cursor:zoom-in;
+    flex:1 1 var(--b,300px);min-height:var(--h,300px);
+    box-shadow:0 12px 30px rgba(20,48,94,.16);
+    transition:flex-grow .7s cubic-bezier(.2,.7,.2,1),opacity .45s,filter .45s,box-shadow .4s;}
+.dy-tile:nth-child(7n+1){--b:300px;--h:330px;}
+.dy-tile:nth-child(7n+2){--b:440px;--h:270px;}
+.dy-tile:nth-child(7n+3){--b:260px;--h:370px;}
+.dy-tile:nth-child(7n+4){--b:380px;--h:310px;}
+.dy-tile:nth-child(7n+5){--b:340px;--h:270px;}
+.dy-tile:nth-child(7n+6){--b:280px;--h:350px;}
+.dy-tile:nth-child(7n){--b:420px;--h:330px;}
+
+.dy-frame{position:absolute;inset:0;display:block;overflow:hidden;border-radius:inherit;}
+.dy-frame img{position:absolute;inset:-9% 0;width:100%;height:118%;object-fit:cover;display:block;
+    translate:0 var(--py,0px);transform:scale(1.04);
+    transition:transform 1.6s cubic-bezier(.2,.7,.2,1);}
+.dy-tile:hover .dy-frame img{transform:scale(1.1);transition-duration:1s;}
+.dy-frame::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top,rgba(20,48,94,.82) 0%,rgba(20,48,94,.18) 34%,transparent 58%);}
+.dy-frame:focus-visible{outline:3px solid var(--dy-gold);outline-offset:-4px;}
+
+/* hover: the photo grows inside its row and the others step back (mouse devices only) */
+@media(hover:hover){
+    .dy-tile:hover{flex-grow:2.6;box-shadow:0 26px 52px rgba(20,48,94,.32);}
+    .dy-mosaic:hover .dy-tile:not(:hover){opacity:.62;filter:saturate(.65);}
 }
 
-.dy-gallery-heading h3 {
-    color: #b58b4b;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 15px;
+/* caption: handwritten category name on the shaded bottom edge */
+.dy-cap{position:absolute;left:24px;right:84px;bottom:20px;z-index:3;pointer-events:none;
+    display:flex;align-items:center;gap:10px;color:#fff;}
+.dy-cap i.pin{color:var(--dy-gold);font-size:15px;}
+.dy-cap span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    color:#fff;font-family:"Kaushan Script",cursive;font-size:28px;line-height:1.2;text-shadow:0 3px 12px rgba(0,0,0,.4);
+    transition:transform .5s cubic-bezier(.2,.7,.2,1);}
+.dy-tile:hover .dy-cap span{transform:translateX(6px);}
+.dy-go{position:absolute;right:18px;bottom:16px;z-index:3;width:48px;height:48px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;background:var(--dy-orange);color:#fff;font-size:14px;
+    box-shadow:0 8px 18px rgba(244,129,63,.45);pointer-events:none;
+    transform:scale(.8);opacity:.9;transition:transform .5s cubic-bezier(.3,1.5,.5,1),background .3s;}
+.dy-tile:hover .dy-go{transform:rotate(90deg) scale(1.1);background:#fff;color:var(--dy-orange);}
+
+/* ---------- ENTRANCE: a two-colour shutter (orange, then navy) slides off each photo, from a different side ---------- */
+.dy-g-ready .dy-tile::before,
+.dy-g-ready .dy-tile::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
+    transform-origin:var(--o,right center);
+    transition:transform 1s cubic-bezier(.77,0,.18,1) var(--cd,0s);}
+.dy-g-ready .dy-tile::before{background:var(--dy-navy);transition-delay:calc(var(--d,0s) + .2s);}
+.dy-g-ready .dy-tile::after{background:var(--dy-orange);z-index:6;transition-delay:var(--d,0s);}
+
+/* three directions cycle: from the left, from the right, from the top */
+.dy-g-ready .dy-tile:nth-child(3n+1){--o:right center;}
+.dy-g-ready .dy-tile:nth-child(3n+2){--o:left center;}
+.dy-g-ready .dy-tile:nth-child(3n){--o:center top;}
+.dy-g-ready .dy-tile:nth-child(3n+1)::before,.dy-g-ready .dy-tile:nth-child(3n+1)::after,
+.dy-g-ready .dy-tile:nth-child(3n+2)::before,.dy-g-ready .dy-tile:nth-child(3n+2)::after{transform:scaleX(1);}
+.dy-g-ready .dy-tile:nth-child(3n)::before,.dy-g-ready .dy-tile:nth-child(3n)::after{transform:scaleY(1);}
+.dy-g-ready .dy-tile.in:nth-child(3n+1)::before,.dy-g-ready .dy-tile.in:nth-child(3n+1)::after,
+.dy-g-ready .dy-tile.in:nth-child(3n+2)::before,.dy-g-ready .dy-tile.in:nth-child(3n+2)::after{transform:scaleX(0);}
+.dy-g-ready .dy-tile.in:nth-child(3n)::before,.dy-g-ready .dy-tile.in:nth-child(3n)::after{transform:scaleY(0);}
+
+/* the photo settles from a zoom while the shutter opens, then the caption slides up */
+.dy-g-ready .dy-frame img{transform:scale(1.35);transition:transform 2s cubic-bezier(.2,.7,.2,1) var(--d,0s);}
+.dy-g-ready .dy-tile.in .dy-frame img{transform:scale(1.04);}
+.dy-g-ready .dy-tile.in:hover .dy-frame img{transform:scale(1.1);transition-delay:0s;transition-duration:1s;}
+.dy-g-ready .dy-cap,.dy-g-ready .dy-go{opacity:0;translate:0 22px;
+    transition:opacity .6s ease calc(var(--d,0s) + .85s),translate .8s cubic-bezier(.2,.7,.2,1) calc(var(--d,0s) + .85s),transform .5s cubic-bezier(.3,1.5,.5,1),background .3s;}
+.dy-g-ready .dy-tile.in .dy-cap,.dy-g-ready .dy-tile.in .dy-go{opacity:1;translate:0 0;}
+.dy-g-ready .dy-tile.in:hover .dy-cap,.dy-g-ready .dy-tile.in:hover .dy-go{transition-delay:0s;}
+
+/* empty state */
+.dy-gal-empty{flex:1 1 100%;padding:70px 24px;text-align:center;background:rgba(255,255,255,.85);border-radius:30px;}
+.dy-gal-empty>i{margin-bottom:18px;color:var(--dy-orange);font-size:44px;}
+.dy-gal-empty h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:28px;}
+.dy-gal-empty p{max-width:460px;margin:0 auto 26px;color:#5b6b85;line-height:1.7;}
+
+/* pagination */
+.dy-pager{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:60px 0 0;padding:0;list-style:none;}
+.dy-pager a{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;
+    background:#fff;border:1px solid rgba(20,48,94,.12);color:var(--dy-navy);font-size:15px;font-weight:700;
+    text-decoration:none;box-shadow:0 6px 18px rgba(20,48,94,.06);transition:background .3s,color .3s,transform .3s;}
+.dy-pager a:hover{transform:translateY(-3px);border-color:var(--dy-navy);}
+.dy-pager li.active a{background:var(--dy-navy);border-color:var(--dy-navy);color:#fff;pointer-events:none;}
+.dy-pager a:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+@media(max-width:1199px){.dy-mosaic{gap:14px;}}
+@media(max-width:991px){
+    .dy-gal{padding:70px 0 80px;}
+    .dy-gal-plane{max-width:24%;}
+}
+@media(max-width:575px){
+    .dy-gal-plane{display:none;}
+    .dy-mosaic{gap:10px;}
+    .dy-tile{border-radius:18px;}
+    .dy-tile:nth-child(7n+1){--b:150px;--h:230px;}
+    .dy-tile:nth-child(7n+2){--b:220px;--h:190px;}
+    .dy-tile:nth-child(7n+3){--b:130px;--h:250px;}
+    .dy-tile:nth-child(7n+4){--b:200px;--h:200px;}
+    .dy-tile:nth-child(7n+5){--b:170px;--h:210px;}
+    .dy-tile:nth-child(7n+6){--b:140px;--h:240px;}
+    .dy-tile:nth-child(7n){--b:210px;--h:220px;}
+    .dy-cap{left:12px;right:12px;bottom:12px;}
+    .dy-cap span{font-size:18px;}
+    .dy-cap i.pin{font-size:11px;}
+    .dy-go{display:none;}
+    .dy-filter{padding:10px 16px;font-size:13px;}
+    .dy-filters{gap:9px;margin-bottom:34px;}
 }
 
-.dy-gallery-heading h2 {
-    color: #194d42;
-    font-size: clamp(30px, 3.5vw, 46px);
-    line-height: 1.2;
-    margin-bottom: 18px;
+/* ==========================================
+   LIGHTBOX
+========================================== */
+.dy-lb{position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;
+    padding:60px 70px;background:rgba(10,22,46,.94);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+.dy-lb.open{opacity:1;visibility:visible;}
+.dy-lb figure{margin:0;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.dy-lb img{max-width:100%;max-height:calc(100vh - 170px);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);
+    transform:scale(.92);transition:transform .4s cubic-bezier(.2,.7,.2,1);}
+.dy-lb.open img{transform:none;}
+.dy-lb figcaption{color:#fff;text-align:center;font-size:16px;font-weight:600;}
+.dy-lb figcaption small{display:block;margin-top:4px;color:var(--dy-gold);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.dy-lb button{position:absolute;display:flex;align-items:center;justify-content:center;width:52px;height:52px;border:0;border-radius:50%;
+    background:rgba(255,255,255,.14);color:#fff;font-size:18px;cursor:pointer;transition:background .3s,transform .3s;}
+.dy-lb button:hover{background:var(--dy-orange);}
+.dy-lb button:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+.dy-lb-close{top:20px;right:22px;}
+.dy-lb-prev{left:18px;top:50%;margin-top:-26px;}
+.dy-lb-next{right:18px;top:50%;margin-top:-26px;}
+.dy-lb-count{position:absolute;top:30px;left:30px;color:rgba(255,255,255,.8);font-size:14px;font-weight:700;letter-spacing:2px;}
+@media(max-width:767px){
+    .dy-lb{padding:70px 14px 60px;}
+    .dy-lb-prev,.dy-lb-next{top:auto;bottom:10px;margin:0;width:46px;height:46px;}
+    .dy-lb-prev{left:calc(50% - 56px);} .dy-lb-next{right:calc(50% - 56px);}
 }
 
-.dy-gallery-heading p {
-    color: #73827c;
-    font-size: 16px;
-    line-height: 1.8;
+/* ==========================================
+   2) CTA BANNER
+========================================== */
+.dy-cta{position:relative;overflow:hidden;isolation:isolate;padding:30px 0 100px;
+    background:linear-gradient(180deg,#e8f6ff,#e8f5fd);}
+.dy-cta *{box-sizing:border-box;}
+.dy-cta-box{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-cta-box::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-cta-box::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-cta h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-cta h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-cta p{margin:0;max-width:520px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-cta-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+@media(max-width:991px){
+    .dy-cta{padding:10px 0 70px;}
+    .dy-cta-box{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-cta-btns{justify-content:flex-start;}
 }
 
-/* ============================================
-   CATEGORY FILTER BUTTONS
-============================================ */
-
-.dy-gallery-filters {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 45px;
+@media(prefers-reduced-motion:reduce){
+    .dy-gal::before,.dy-gal-plane{animation:none !important;}
+    .dy-g-ready .dy-tile::before,.dy-g-ready .dy-tile::after{display:none !important;}
+    .dy-g-ready .dy-cap,.dy-g-ready .dy-go{opacity:1 !important;translate:none !important;transition:none !important;}
+    .dy-g-ready .dy-frame img{transform:scale(1.04) !important;transition:none !important;}
+    .dy-frame img{translate:none !important;}
+    .dy-tile,.dy-filter,.dy-btn,.dy-btn-ghost,.dy-pager a,.dy-lb,.dy-lb img{transition:none !important;}
 }
-
-.dy-gallery-filter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 12px 25px;
-
-    background: #fff;
-    border: 1px solid #dce8e2;
-    border-radius: 50px;
-
-    color: #194d42;
-    font-size: 14px;
-    font-weight: 600;
-
-    text-decoration: none !important;
-
-    transition: all .3s ease;
-}
-
-.dy-gallery-filter:hover,
-.dy-gallery-filter.active {
-    background: #194d42;
-    border-color: #194d42;
-    color: #fff;
-    transform: translateY(-2px);
-}
-
-/* ============================================
-   GALLERY GRID
-============================================ */
-
-.dy-gallery-grid {
-    row-gap: 25px;
-}
-
-.dy-gallery-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 22px;
-    background: #eaf0ec;
-}
-
-.dy-gallery-card > a {
-    display: block;
-    position: relative;
-    overflow: hidden;
-    border-radius: inherit;
-    text-decoration: none;
-}
-
-.dy-gallery-card figure {
-    margin: 0;
-    width: 100%;
-    overflow: hidden;
-    border-radius: inherit;
-}
-
-.dy-gallery-card figure img {
-    display: block;
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: inherit;
-    transition: transform .6s ease;
-}
-
-.dy-gallery-card:hover figure img {
-    transform: scale(1.08);
-}
-
-/* Subtle gradient */
-.dy-gallery-card > a::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, .48) 0%,
-        transparent 48%
-    );
-    opacity: .7;
-    transition: opacity .3s ease;
-}
-
-.dy-gallery-card:hover > a::after {
-    opacity: 1;
-}
-
-/* Image title and category */
-.dy-gallery-caption {
-    position: absolute;
-    left: 22px;
-    bottom: 20px;
-    right: 65px;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.dy-gallery-caption h3 {
-    color: #fff !important;
-    font-size: 20px;
-    line-height: 1.35;
-    margin: 0 0 5px;
-}
-
-.dy-gallery-caption p {
-    color: rgba(255, 255, 255, .88) !important;
-    font-size: 13px;
-    margin: 0;
-}
-
-/* Hover zoom icon */
-.dy-gallery-zoom {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    z-index: 2;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-    background: #fff;
-    color: #194d42;
-
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: all .3s ease;
-
-    pointer-events: none;
-}
-
-.dy-gallery-card:hover .dy-gallery-zoom {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* ============================================
-   EMPTY STATE
-============================================ */
-
-.dy-gallery-empty {
-    padding: 75px 25px;
-    border: 1px dashed #dce8e2;
-    border-radius: 24px;
-    text-align: center;
-}
-
-.dy-gallery-empty i {
-    color: #194d42;
-    font-size: 42px;
-    margin-bottom: 20px;
-}
-
-.dy-gallery-empty h3 {
-    color: #194d42;
-    margin-bottom: 12px;
-}
-
-.dy-gallery-empty p {
-    color: #73827c;
-    margin-bottom: 25px;
-}
-
-/* ============================================
-   PAGINATION
-============================================ */
-
-.dy-gallery-pagination {
-    margin-top: 50px;
-}
-
-.dy-gallery-pagination .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.dy-gallery-pagination .pagination li a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 44px;
-    height: 44px;
-
-    border-radius: 50%;
-    background: #f0f5f2;
-    color: #194d42;
-
-    text-decoration: none;
-    transition: all .3s ease;
-}
-
-.dy-gallery-pagination .pagination li.active a,
-.dy-gallery-pagination .pagination li a:hover {
-    background: #194d42;
-    color: #fff;
-}
-
-.dy-gallery-pagination .pagination li.active a {
-    pointer-events: none;
-}
-
-/* ============================================
-   RESPONSIVE
-============================================ */
-
-@media (max-width: 991px) {
-    .dy-gallery-section {
-        padding-top: 65px;
-        padding-bottom: 70px;
-    }
-
-    .dy-gallery-card figure img {
-        height: 280px;
-    }
-}
-
-@media (max-width: 767px) {
-    .dy-gallery-section {
-        padding-top: 45px;
-        padding-bottom: 55px;
-    }
-
-    .dy-gallery-filters {
-        gap: 8px;
-        margin-bottom: 30px;
-    }
-
-    .dy-gallery-filter {
-        padding: 10px 16px;
-        font-size: 12px;
-    }
-
-    .dy-gallery-card {
-        border-radius: 16px;
-    }
-
-    .dy-gallery-card figure img {
-        height: 220px;
-    }
-
-    .dy-gallery-caption {
-        left: 14px;
-        bottom: 14px;
-        right: 12px;
-    }
-
-    .dy-gallery-caption h3 {
-        font-size: 16px;
-    }
-
-    .dy-gallery-zoom {
-        width: 34px;
-        height: 34px;
-        opacity: 1;
-        transform: none;
-    }
-}
-
-@media (max-width: 575px) {
-    .dy-gallery-card figure img {
-        height: 180px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dy-gallery-card figure img,
-    .dy-gallery-filter,
-    .dy-gallery-zoom {
-        transition: none;
-    }
-}
-
 </style>
 {% endblock %}
 
 
 {% block content %}
 
-<!-- ============================================
-     PAGE HEADER
-============================================ -->
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-page-hero" aria-label="Deutsche Yathras travel gallery">
+    <img src="{% static 'frontend/hero.webp' %}" alt="Travel gallery by Deutsche Yathras">
 
-<div class="page-header bg-section dark-section">
-
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-lg-12">
-
-                <div class="page-header-box">
-
-                    <h1
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Travel Gallery
-                    </h1>
-
-                    <nav class="wow fadeInUp">
-
-                        <ol class="breadcrumb">
-
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li
-                                class="breadcrumb-item active"
-                                aria-current="page"
-                            >
-                                Gallery
-                            </li>
-
-                        </ol>
-
-                    </nav>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">Travel <em>Gallery</em></h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Gallery</span>
+        </nav>
     </div>
-
-</div>
-<!-- PAGE HEADER END -->
+</section>
 
 
-<!-- ============================================
-     DYNAMIC GALLERY SECTION
-============================================ -->
+<!-- ============ 1) GALLERY ============ -->
+<section class="dy-gal" id="gallery">
 
-<div class="page-gallery dy-gallery-section">
+    <img class="dy-gal-plane" src="{% static 'frontend/assets/images/home/airplane.png' %}" alt="" aria-hidden="true" loading="lazy">
 
-    <div class="container">
+    <div class="dy-wrap">
 
-        <!-- SECTION HEADING -->
-        <div class="dy-gallery-heading">
-
-            <h3 class="wow fadeInUp">
-                Captured Moments
-            </h3>
-
-            <h2 class="text-anime-style-3" data-cursor="-opaque">
-                Explore The World Through Our Lens
-            </h2>
-
-            <p class="wow fadeInUp" data-wow-delay="0.2s">
-                Discover beautiful destinations, unforgettable
-                travel experiences, and inspiring moments
-                from around the world.
-            </p>
-
+        <div class="dy-gal-head">
+            <span class="dy-eyebrow is-center">Captured Moments</span>
+            <h2 class="dy-h2">Explore The World Through Our <span class="acc">Lens</span></h2>
+            <p>Beautiful destinations, unforgettable experiences and inspiring moments from journeys around the world.</p>
         </div>
 
-
-        <!-- ========================================
-             CATEGORY FILTERS
-        ======================================== -->
-
-        <div class="dy-gallery-filters wow fadeInUp">
-
-            <!-- ALL IMAGES -->
-            <a
-                href="{% url 'gallery' %}"
-                class="dy-gallery-filter {% if selected_category == 'all' %}active{% endif %}"
-            >
-                All Photos
-            </a>
-
-
-            <!-- DYNAMIC CATEGORIES -->
+        <!-- CATEGORY FILTERS -->
+        <div class="dy-filters">
+            <a href="{% url 'gallery' %}" class="dy-filter {% if selected_category == 'all' %}active{% endif %}">All Photos</a>
             {% for category in categories %}
-
-            <a
-                href="{% url 'gallery' %}?category={{ category.id }}"
-                class="dy-gallery-filter {% if selected_category == category.id|stringformat:'s' %}active{% endif %}"
-            >
-                {{ category.name }}
-            </a>
-
+            <a href="{% url 'gallery' %}?category={{ category.id }}"
+               class="dy-filter {% if selected_category == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a>
             {% endfor %}
-
         </div>
 
-
-        <!-- ========================================
-             DYNAMIC GALLERY IMAGES
-        ======================================== -->
-
-        <div class="row gallery-items page-gallery-box dy-gallery-grid">
+        <!-- FLEX ROWS -->
+        <div class="dy-mosaic" id="dyMosaic">
 
             {% for photo in gallery_images %}
-
-            <div class="col-lg-4 col-md-6 col-6">
-
-                <div class="photo-gallery dy-gallery-card wow fadeInUp">
-
-                    <a
-                        href="{{ photo.image.url }}"
-                        data-cursor-text="View"
-                        aria-label="View {{ photo.title|default:'Gallery image' }}"
-                    >
-
-                        <figure class="image-anime">
-
-                            <img
-                                src="{{ photo.image.url }}"
-                                alt="{{ photo.title|default:photo.category.name }}"
-                                loading="lazy"
-                            >
-
-                        </figure>
-
-
-                        <!-- HOVER ZOOM ICON -->
-                        <span class="dy-gallery-zoom" aria-hidden="true">
-
-                            <i class="fa-solid fa-expand"></i>
-
-                        </span>
-
-
-                        {% comment %} <!-- IMAGE CAPTION -->
-                        <div class="dy-gallery-caption">
-
-                     
-
-                            <p>
-                                {{ photo.category.name }}
-                            </p>
-
-                        </div> {% endcomment %}
-
-                    </a>
-
-                </div>
-
-            </div>
-
+            <figure class="dy-tile" data-title="{{ photo.category.name }}" data-cat="">
+                <a href="{{ photo.image.url }}" class="dy-frame" aria-label="View {{ photo.category.name }} photo">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.category.name }} photo" loading="lazy">
+                </a>
+                <figcaption class="dy-cap">
+                    <i class="fa-solid fa-location-dot pin" aria-hidden="true"></i>
+                    <span>{{ photo.category.name }}</span>
+                </figcaption>
+                <span class="dy-go" aria-hidden="true"><i class="fa-solid fa-expand"></i></span>
+            </figure>
             {% empty %}
-
-            <!-- EMPTY STATE -->
-            <div class="col-lg-12">
-
-                <div class="dy-gallery-empty">
-
-                    <i class="fa-regular fa-images"></i>
-
-                    <h3>No Gallery Images Found</h3>
-
-                    <p>
-                        There are currently no images available
-                        in this category.
-                    </p>
-
-                    <a
-                        href="{% url 'gallery' %}"
-                        class="btn-default"
-                    >
-                        View All Photos
-                    </a>
-
-                </div>
-
+            <div class="dy-gal-empty">
+                <i class="fa-regular fa-images" aria-hidden="true"></i>
+                <h3>No photos found</h3>
+                <p>There are no images in this category yet. Try another category or view all photos.</p>
+                <a href="{% url 'gallery' %}" class="dy-btn">View All Photos <i class="fa-solid fa-arrow-right"></i></a>
             </div>
-
             {% endfor %}
 
         </div>
 
-
-        <!-- ========================================
-             DYNAMIC PAGINATION
-        ======================================== -->
-
+        <!-- PAGINATION -->
         {% if page_obj.has_other_pages %}
+        <ul class="dy-pager">
+            {% if page_obj.has_previous %}
+            <li><a href="?category={{ selected_category }}&page={{ page_obj.previous_page_number }}" aria-label="Previous page"><i class="fa-solid fa-arrow-left-long"></i></a></li>
+            {% endif %}
 
-        <div class="row">
+            {% for num in page_obj.paginator.page_range %}
+            <li class="{% if page_obj.number == num %}active{% endif %}">
+                <a href="?category={{ selected_category }}&page={{ num }}" {% if page_obj.number == num %}aria-current="page"{% endif %}>{{ num }}</a>
+            </li>
+            {% endfor %}
 
-            <div class="col-lg-12">
-
-                <div class="page-pagination dy-gallery-pagination wow fadeInUp">
-
-                    <ul class="pagination">
-
-                        <!-- PREVIOUS PAGE -->
-                        {% if page_obj.has_previous %}
-
-                        <li>
-                            <a
-                                href="?category={{ selected_category }}&page={{ page_obj.previous_page_number }}"
-                                aria-label="Previous page"
-                            >
-                                <i class="fa-solid fa-arrow-left-long"></i>
-                            </a>
-                        </li>
-
-                        {% endif %}
-
-
-                        <!-- PAGE NUMBERS -->
-                        {% for num in page_obj.paginator.page_range %}
-
-                        <li class="{% if page_obj.number == num %}active{% endif %}">
-
-                            <a
-                                href="?category={{ selected_category }}&page={{ num }}"
-                                {% if page_obj.number == num %}
-                                aria-current="page"
-                                {% endif %}
-                            >
-                                {{ num }}
-                            </a>
-
-                        </li>
-
-                        {% endfor %}
-
-
-                        <!-- NEXT PAGE -->
-                        {% if page_obj.has_next %}
-
-                        <li>
-                            <a
-                                href="?category={{ selected_category }}&page={{ page_obj.next_page_number }}"
-                                aria-label="Next page"
-                            >
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </a>
-                        </li>
-
-                        {% endif %}
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-
+            {% if page_obj.has_next %}
+            <li><a href="?category={{ selected_category }}&page={{ page_obj.next_page_number }}" aria-label="Next page"><i class="fa-solid fa-arrow-right-long"></i></a></li>
+            {% endif %}
+        </ul>
         {% endif %}
 
     </div>
-
-</div>
-<!-- DYNAMIC GALLERY SECTION END -->
+</section>
 
 
-<!-- ============================================
-     TRAVEL SCROLLING TICKER
-============================================ -->
-
-<div class="our-scrolling-ticker">
-
-    <div class="scrolling-ticker-box">
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Explore The World
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Discover New Destinations
-            </span>
-
+<!-- ============ 2) CTA BANNER ============ -->
+<section class="dy-cta">
+    <div class="dy-wrap">
+        <div class="dy-cta-box">
+            <div>
+                <h2>Loved what you saw? <em>Let's plan it</em></h2>
+                <p>Turn these moments into your own journey. Our travel advisors will build a personalised itinerary just for you.</p>
+            </div>
+            <div class="dy-cta-btns">
+                <a href="{% url 'packages' %}" class="dy-btn">Explore Packages <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'contact' %}" class="dy-btn-ghost">Contact Us</a>
+            </div>
         </div>
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Unforgettable Journeys
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Travel With Deutsche Yathras
-            </span>
-
-        </div>
-
     </div>
+</section>
 
+<!-- LIGHTBOX -->
+<div class="dy-lb" id="dyLb" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <span class="dy-lb-count" id="dyLbCount"></span>
+    <button type="button" class="dy-lb-close" id="dyLbClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <button type="button" class="dy-lb-prev" id="dyLbPrev" aria-label="Previous photo"><i class="fa-solid fa-arrow-left"></i></button>
+    <button type="button" class="dy-lb-next" id="dyLbNext" aria-label="Next photo"><i class="fa-solid fa-arrow-right"></i></button>
+    <figure>
+        <img id="dyLbImg" src="" alt="">
+        <figcaption id="dyLbCap"></figcaption>
+    </figure>
 </div>
-<!-- SCROLLING TICKER END -->
 
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+(function () {
+    var tiles = Array.prototype.slice.call(document.querySelectorAll('.dy-tile'));
+    if (!tiles.length) return;
+
+    /* ---------- entrance animations (each tile type enters differently) ---------- */
+    if ('IntersectionObserver' in window) {
+        document.body.classList.add('dy-g-ready');
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (en.isIntersecting) {
+                    en.target.classList.add('in');
+                    io.unobserve(en.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        tiles.forEach(function (t, i) {
+            t.style.setProperty('--d', ((i % 4) * 0.09) + 's');   /* small stagger within each row */
+            io.observe(t);
+        });
+    }
+
+    /* ---------- scroll animation: photos drift inside their tiles, tiles float at different speeds ---------- */
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+        var imgs = tiles.map(function (t) { return t.querySelector('img'); });
+        var ticking = false;
+        function parallax() {
+            ticking = false;
+            var vh = window.innerHeight;
+            tiles.forEach(function (t, i) {
+                var r = t.getBoundingClientRect();
+                if (r.top < vh * 0.95 && r.bottom > 0 && !t.classList.contains('in')) t.classList.add('in');
+                if (r.bottom < -100 || r.top > vh + 100) return;
+                var p = ((r.top + r.height / 2) - vh / 2) / vh;           /* -1 (above) .. 1 (below) */
+                p = Math.max(-1, Math.min(1, p));
+                imgs[i].style.setProperty('--py', (p * -7).toFixed(2) + '%');   /* photo moves inside the frame */
+            });
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(parallax); } }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        parallax();
+        setTimeout(parallax, 600);
+    }
+
+    /* ---------- lightbox ---------- */
+    var lb = document.getElementById('dyLb'),
+        img = document.getElementById('dyLbImg'),
+        cap = document.getElementById('dyLbCap'),
+        count = document.getElementById('dyLbCount'),
+        current = 0, lastFocus = null;
+
+    function show(i) {
+        current = (i + tiles.length) % tiles.length;
+        var t = tiles[current], a = t.querySelector('a');
+        img.src = a.getAttribute('href');
+        img.alt = t.dataset.title || '';
+        cap.innerHTML = '';
+        cap.appendChild(document.createTextNode(t.dataset.title || ''));
+        if (t.dataset.cat) {
+            var s = document.createElement('small');
+            s.textContent = t.dataset.cat;
+            cap.appendChild(s);
+        }
+        count.textContent = (current + 1) + ' / ' + tiles.length;
+    }
+    function open(i) {
+        lastFocus = document.activeElement;
+        show(i);
+        lb.classList.add('open');
+        document.documentElement.style.overflow = 'hidden';
+        document.getElementById('dyLbClose').focus();
+    }
+    function close() {
+        lb.classList.remove('open');
+        document.documentElement.style.overflow = '';
+        if (lastFocus) lastFocus.focus();
+    }
+
+    tiles.forEach(function (t, i) {
+        t.addEventListener('click', function (e) { e.preventDefault(); open(i); });
+    });
+    document.getElementById('dyLbClose').addEventListener('click', close);
+    document.getElementById('dyLbPrev').addEventListener('click', function () { show(current - 1); });
+    document.getElementById('dyLbNext').addEventListener('click', function () { show(current + 1); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') show(current - 1);
+        else if (e.key === 'ArrowRight') show(current + 1);
+    });
+
+    /* swipe on touch screens */
+    var x0 = null;
+    lb.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', function (e) {
+        if (x0 === null) return;
+        var dx = e.changedTouches[0].clientX - x0;
+        if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+        x0 = null;
+    });
+})();
+</script>
 {% endblock %}

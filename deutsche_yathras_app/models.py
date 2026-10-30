@@ -1,5 +1,9 @@
+import logging
+
 from django.db import models
 from django.utils.text import slugify
+
+logger = logging.getLogger(__name__)
 
 
 class OptimizedImageModel(models.Model):
@@ -9,16 +13,34 @@ class OptimizedImageModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        for field in self.image_fields:
-            image_field = getattr(self, field, None)
-            if image_field and hasattr(image_field, "path"):
-                try:
-                    from .utils.image_optimizer import optimize_image
-                    optimize_image(image_field.path)
-                except Exception:
-                    pass
+        # find which image fields are new or replaced
+        changed = []
+        old = None
+        if self.pk:
+            old = type(self).objects.filter(pk=self.pk).first()
 
+        for field in self.image_fields:
+            new_file = getattr(self, field, None)
+            old_file = getattr(old, field, None) if old else None
+            if new_file and (not old_file or old_file.name != new_file.name):
+                changed.append((field, old_file))
+
+        super().save(*args, **kwargs)
+
+        from .utils.image_optimizer import optimize_image, delete_variants
+
+        for field, old_file in changed:
+            try:
+                # remove variants of the replaced image
+                if old_file and old_file.name:
+                    try:
+                        delete_variants(old_file.path)
+                    except Exception:
+                        pass
+                # create the new mobile + desktop variants
+                optimize_image(getattr(self, field).path)
+            except Exception:
+                logger.exception("Image optimization failed for %s", field)
 
 
 class TourPackage(OptimizedImageModel):
@@ -40,7 +62,7 @@ class TourPackage(OptimizedImageModel):
         max_length=20,
         choices=PACKAGE_TYPE_CHOICES,
         default="domestic",
-        help_text="Category of the tour package"
+        help_text="Category of the tour package",
     )
     highlights = models.TextField(blank=True, help_text="Key highlights, one per line")
     inclusions = models.TextField(blank=True, help_text="What is included, one per line")
@@ -73,82 +95,9 @@ class TourPackage(OptimizedImageModel):
         super().save(*args, **kwargs)
 
 
-
-# class TourPackage(OptimizedImageModel):
-#     image_fields = ["main_image"]
-
-#     name = models.CharField(max_length=200)
-#     slug = models.SlugField(unique=True, blank=True)
-#     description = models.TextField()
-#     main_image = models.ImageField(upload_to="packages/")
-#     duration = models.CharField(max_length=100, blank=True, help_text="e.g. 7 Days / 6 Nights")
-#     price_from = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-#     highlights = models.TextField(blank=True, help_text="Key highlights, one per line")
-#     inclusions = models.TextField(blank=True, help_text="What is included, one per line")
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ["-created_at"]
-#         verbose_name_plural = "Tour Packages"
-
-#     def __str__(self):
-#         return self.name
-
-#     @property
-#     def highlights_list(self):
-#         return [h.strip() for h in self.highlights.splitlines() if h.strip()]
-
-#     @property
-#     def inclusions_list(self):
-#         return [i.strip() for i in self.inclusions.splitlines() if i.strip()]
-
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             base_slug = slugify(self.name)
-#             slug = base_slug
-#             counter = 1
-#             while TourPackage.objects.filter(slug=slug).exists():
-#                 slug = f"{base_slug}-{counter}"
-#                 counter += 1
-#             self.slug = slug
-#         super().save(*args, **kwargs)
-
-
-
-
-# class Destination(OptimizedImageModel):
-#     image_fields = ["image"]
-
-#     name = models.CharField(max_length=200)
-#     slug = models.SlugField(unique=True, blank=True)
-#     description = models.TextField()
-#     image = models.ImageField(upload_to="destinations/")
-#     location = models.CharField(max_length=200, blank=True, help_text="Country or region")
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     class Meta:
-#         ordering = ["-created_at"]
-#         verbose_name_plural = "Destinations"
-
-#     def __str__(self):
-#         return self.name
-
-#     def save(self, *args, **kwargs):
-#         if not self.slug:
-#             base_slug = slugify(self.name)
-#             slug = base_slug
-#             counter = 1
-#             while Destination.objects.filter(slug=slug).exists():
-#                 slug = f"{base_slug}-{counter}"
-#                 counter += 1
-#             self.slug = slug
-#         super().save(*args, **kwargs)
-
-
 class Destination(OptimizedImageModel):
     image_fields = ["image"]
 
-    # Destination Type Choices
     DOMESTIC = "domestic"
     INTERNATIONAL = "international"
 
@@ -161,20 +110,13 @@ class Destination(OptimizedImageModel):
     slug = models.SlugField(unique=True, blank=True)
     description = models.TextField()
     image = models.ImageField(upload_to="destinations/")
-    location = models.CharField(
-        max_length=200,
-        blank=True,
-        help_text="Country or region"
-    )
-
-    # New Field
+    location = models.CharField(max_length=200, blank=True, help_text="Country or region")
     destination_type = models.CharField(
         max_length=20,
         choices=DESTINATION_TYPE_CHOICES,
         default=DOMESTIC,
-        help_text="Select destination type"
+        help_text="Select destination type",
     )
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -194,6 +136,7 @@ class Destination(OptimizedImageModel):
                 counter += 1
             self.slug = slug
         super().save(*args, **kwargs)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)

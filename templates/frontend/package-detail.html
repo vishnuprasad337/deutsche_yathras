@@ -1,592 +1,500 @@
-
 {% extends 'frontend/base.html' %}
 {% load static %}
+{% load image_tags %}
+{% block title %}{{ package.name }} Tour Package | Deutsche Yathras{% endblock %}
 
-{% block title %}{{ package.name }} | Deutsche Yathras{% endblock %}
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
+
+/* ==========================================
+   SHARED (same palette + fonts as the Packages page)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-text:#5b6b85; --dy-soft:#f2f6fb;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
+
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-14px);}}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.35));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{max-width:1000px;margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(36px,5.4vw,78px);line-height:1.08;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-crumbs{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
+}
+
+/* ==========================================
+   BANDS (sky + drifting clouds)
+========================================== */
+.dy-flow{position:relative;width:100%;overflow-x:clip;background:#e8f6ff;}
+.dy-flow *{box-sizing:border-box;}
+.dy-sec{position:relative;overflow:clip;isolation:isolate;padding:90px 0 100px;}
+.dy-sec::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-sec>.dy-wrap{position:relative;z-index:2;}
+.dy-sec-1{background:linear-gradient(180deg,#e6f8f9,#e8f6ff);padding-top:70px;}
+.dy-sec-2{background:linear-gradient(180deg,#d9eefb,#cfe7f7);margin-top:-50px;padding-top:120px;
+    border-radius:56px 56px 0 0;box-shadow:0 -14px 30px rgba(20,48,94,.08);z-index:2;}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+@media(max-width:991px){
+    .dy-sec{padding:60px 0 70px;}
+    .dy-sec-1{padding-top:50px;}
+    .dy-sec-2{margin-top:-36px;padding-top:90px;border-radius:40px 40px 0 0;}
+}
+
+/* type */
+.dy-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;color:var(--dy-orange);
+    font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;}
+.dy-title{margin:0 0 16px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    letter-spacing:-.025em;line-height:1.08;font-size:clamp(32px,3.8vw,54px);}
+.dy-label{margin:0 0 16px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-weight:800;
+    letter-spacing:-.015em;line-height:1.15;font-size:clamp(24px,2.4vw,32px);}
+
+/* buttons */
+.dy-btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-btn-navy{background:var(--dy-navy);box-shadow:0 12px 26px rgba(20,48,94,.3);width:100%;}
+.dy-btn-navy:hover{background:#0e2347;}
+.dy-btn:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* scroll reveal: left column slides from the left, right from the right */
+.rv-ready .rv{opacity:0;transform:translateY(34px);transition:opacity .8s ease var(--d,0s),transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s);}
+.rv-ready .rv.in{opacity:1;transform:none;}
+.rv-ready .rv-left{transform:translateX(-90px);}
+.rv-ready .rv-right{transform:translateX(90px);}
+@media(max-width:767px){.rv-ready .rv-left{transform:translateX(-50px);}.rv-ready .rv-right{transform:translateX(50px);}}
+
+/* ==========================================
+   MAIN COLUMN
+========================================== */
+.dy-stack{display:flex;flex-direction:column;gap:38px;}
+.dy-facts{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;}
+.dy-fact{display:flex;align-items:center;gap:12px;padding:10px 24px 10px 12px;background:#fff;border-radius:50px;
+    box-shadow:0 8px 22px rgba(20,48,94,.08);}
+.dy-fact i{flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-orange);color:#fff;font-size:16px;}
+.dy-fact small{display:block;color:#8a96ab;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+.dy-fact strong{color:var(--dy-navy);font-size:16px;font-weight:700;}
+
+.dy-image{position:relative;isolation:isolate;margin:0 14px 14px 0;}
+.dy-image::before{content:"";position:absolute;inset:14px -14px -14px 14px;z-index:-1;border-radius:36px;
+    border:2px dashed var(--dy-gold);}
+.dy-image figure{position:relative;margin:0;border-radius:34px;overflow:hidden;background:#cfe6f6;
+    box-shadow:0 22px 48px rgba(20,48,94,.22);}
+.dy-image figure::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(20,48,94,.18),transparent 30%,transparent 55%,rgba(20,48,94,.6));}
+.dy-image img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;transition:transform .8s;}
+.dy-image:hover img{transform:scale(1.05);}
+.dy-image-badge{position:absolute;top:20px;left:20px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+    padding:9px 18px;border-radius:50px;background:var(--dy-orange);color:#fff;font-size:13px;font-weight:700;
+    box-shadow:0 8px 18px rgba(244,129,63,.4);}
+.dy-image-bar{position:absolute;left:20px;right:20px;bottom:20px;z-index:2;display:flex;flex-wrap:wrap;align-items:center;
+    justify-content:space-between;gap:10px 20px;padding:14px 22px;border-radius:22px;color:#fff;
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);}
+.dy-image-bar span{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:#fff;}
+.dy-image-bar span i{color:var(--dy-gold);}
+.dy-image-bar strong{font-family:"Playfair Display",Georgia,serif;font-size:24px;font-weight:800;color:#fff;}
+.dy-image-bar small{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:.85;color:#fff;}
+@media(max-width:575px){
+    .dy-image{margin:0 10px 10px 0;}
+    .dy-image::before{inset:10px -10px -10px 10px;}
+    .dy-image figure{border-radius:26px;}
+    .dy-image-bar{left:12px;right:12px;bottom:12px;padding:10px 16px;}
+    .dy-image-badge{top:12px;left:12px;}
+    .dy-image-bar strong{font-size:20px;}
+}
+
+.dy-desc,.dy-desc p{color:var(--dy-text);font-size:16.5px;line-height:1.85;}
+.dy-desc p{margin:0 0 16px;}
+.dy-desc p:last-child{margin-bottom:0;}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+.dy-sidebar{position:sticky;top:110px;display:flex;flex-direction:column;gap:30px;}
+.dy-box{padding:30px;background:#fff;border-radius:30px;box-shadow:0 10px 30px rgba(20,48,94,.08);}
+.dy-box h3{margin:0 0 18px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;
+    font-weight:800 !important;font-size:26px;line-height:1.2;}
+
+.dy-groups{max-height:340px;overflow-y:auto;padding-right:6px;}
+.dy-groups::-webkit-scrollbar{width:5px;}
+.dy-groups::-webkit-scrollbar-thumb{background:rgba(20,48,94,.25);border-radius:5px;}
+.dy-group+.dy-group{margin-top:22px;}
+.dy-group-title{margin:0 0 4px;padding:0 0 8px;color:var(--dy-orange);font-size:12px;font-weight:700;
+    letter-spacing:2px;text-transform:uppercase;border-bottom:2px solid var(--dy-gold);}
+.dy-list{list-style:none;margin:0;padding:0;}
+.dy-list li{border-bottom:1px solid rgba(20,48,94,.1);}
+.dy-list li:last-child{border-bottom:none;}
+.dy-list a{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 0;color:var(--dy-navy);
+    font-size:15px;font-weight:600;text-decoration:none;transition:color .25s,padding .25s;}
+.dy-list a i{color:var(--dy-orange);font-size:12px;transition:transform .25s;}
+.dy-list a:hover{color:var(--dy-orange);padding-left:6px;}
+.dy-list a:hover i{transform:translateX(3px);}
+
+/* More Packages: image cards */
+.dy-more{padding:28px 22px 22px;}
+.dy-more .dy-eyebrow{margin:0 0 6px 8px;}
+.dy-more h3{margin:0 0 16px 8px;}
+.dy-more-list{display:flex;flex-direction:column;gap:12px;max-height:380px;overflow-y:auto;padding:4px 6px 4px 0;}
+.dy-more-list::-webkit-scrollbar{width:5px;}
+.dy-more-list::-webkit-scrollbar-thumb{background:rgba(20,48,94,.25);border-radius:5px;}
+.dy-more-item{display:flex;align-items:center;gap:14px;padding:10px 14px 10px 10px;background:var(--dy-soft);
+    border:1px solid transparent;border-radius:20px;text-decoration:none;
+    transition:transform .3s,background .3s,border-color .3s,box-shadow .3s;}
+.dy-more-item:hover{transform:translateX(4px);background:#fff;border-color:rgba(244,129,63,.45);
+    box-shadow:0 10px 24px rgba(20,48,94,.12);}
+.dy-more-item:focus-visible{outline:3px solid var(--dy-gold);outline-offset:2px;}
+.dy-more-thumb{flex:0 0 68px;width:68px;height:68px;border-radius:16px;overflow:hidden;background:#cfe6f6;
+    display:flex;align-items:center;justify-content:center;color:var(--dy-navy);font-size:22px;}
+.dy-more-thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.dy-more-item:hover .dy-more-thumb img{transform:scale(1.12);}
+.dy-more-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+.dy-more-info strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:17px;line-height:1.25;}
+.dy-more-info small{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;color:#6b7280;font-size:13px;line-height:1.4;}
+.dy-more-info small i{margin-right:5px;color:var(--dy-coral);}
+.dy-more-info small em{font-style:normal;font-weight:700;color:var(--dy-orange);}
+.dy-more-go{flex:0 0 34px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:#fff;color:var(--dy-orange);font-size:12px;box-shadow:0 4px 10px rgba(20,48,94,.1);
+    transition:background .3s,color .3s,transform .3s;}
+.dy-more-item:hover .dy-more-go{background:var(--dy-orange);color:#fff;transform:translateX(2px);}
+
+/* solid Book card */
+.dy-cta-card{padding:36px 32px;background:var(--dy-orange);color:#fff;border-radius:30px;
+    box-shadow:0 20px 44px rgba(244,129,63,.35);}
+.dy-cta-card .dy-cta-icon{width:64px;height:64px;margin-bottom:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-navy);color:var(--dy-gold);font-size:26px;}
+.dy-cta-card h3{margin:0 0 20px;color:#fff;font-family:"Playfair Display",Georgia,serif !important;font-weight:800 !important;font-size:26px;line-height:1.2;}
+.dy-cta-card .dy-btn{background:var(--dy-navy);box-shadow:0 10px 22px rgba(20,48,94,.3);width:100%;}
+.dy-cta-card .dy-btn:hover{background:#fff;color:var(--dy-navy);}
+.dy-cta-more{display:flex;align-items:center;gap:14px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.4);}
+.dy-cta-more i{font-size:20px;}
+.dy-cta-more small{display:block;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.85;}
+.dy-cta-more a{color:#fff;font-size:18px;font-weight:700;text-decoration:none;}
+.dy-cta-more a:hover{color:var(--dy-navy);}
+
+/* ==========================================
+   BAND 2: highlights, inclusions, booking
+========================================== */
+.dy-lists{display:grid;grid-template-columns:1fr 1fr;gap:30px;}
+.dy-lists.one{grid-template-columns:minmax(0,760px);justify-content:center;}
+.dy-lists>div{padding:36px 38px;background:#fff;border-radius:30px;box-shadow:0 10px 30px rgba(20,48,94,.08);}
+.dy-checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+.dy-checks li{position:relative;padding-left:42px;color:var(--dy-text);font-size:16.5px;line-height:1.6;}
+.dy-checks li::before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;position:absolute;left:0;top:-1px;
+    width:28px;height:28px;border-radius:50%;background:var(--dy-soft);color:var(--dy-orange);font-size:12px;
+    display:flex;align-items:center;justify-content:center;}
+
+.dy-book{text-align:center;max-width:640px;margin:0 auto;}
+.dy-lists+.dy-book{margin-top:70px;padding-top:50px;border-top:2px dashed rgba(20,48,94,.3);}
+.dy-book p{margin:0 0 22px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-weight:800;
+    letter-spacing:-.015em;font-size:clamp(26px,2.8vw,36px);line-height:1.15;}
+
+/* flight path: dotted trail draws itself, plane arrives and floats. Replays on scroll. */
+.dy-art-wrap{width:100%;}
+.dy-art{position:relative;width:100%;max-width:460px;margin:0 auto 14px;pointer-events:none;user-select:none;}
+.dy-art svg{display:block;width:100%;height:auto;overflow:visible;}
+.dy-art path{fill:none;stroke:var(--dy-navy);stroke-width:3;stroke-linecap:round;stroke-dasharray:3 11;opacity:.55;
+    stroke-dashoffset:0;clip-path:inset(0 100% 0 0);}
+.dy-art .dy-art-plane{position:absolute;right:0;top:0;width:34%;opacity:0;transform:translate(-80%,90%) rotate(40deg);}
+.dy-art-wrap.in-view path{animation:dyTrail 2s linear .1s forwards;}
+.dy-art-wrap.in-view .dy-art-plane{animation:dyPlane 1.4s cubic-bezier(.3,.6,.3,1) .7s forwards,dyFloat 4s ease-in-out 2.2s infinite;}
+@keyframes dyTrail{to{clip-path:inset(0 0 0 0);}}
+@keyframes dyPlane{to{opacity:1;transform:translate(0,0) rotate(0deg);}}
+
+@media(max-width:991px){
+    .dy-lists{grid-template-columns:1fr;}
+    .dy-sidebar{position:static;}
+}
+@media(max-width:575px){
+    .dy-fact{width:100%;border-radius:30px;}
+    .dy-box,.dy-lists>div{padding:26px 22px;}
+    .dy-cta-card{padding:28px 22px;}
+    .dy-art{max-width:320px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+    .dy-sec::before,.dy-art .dy-art-plane{animation:none !important;}
+    .rv-ready .rv{opacity:1;transform:none;transition:none;}
+    .dy-art path{clip-path:none;animation:none !important;}
+    .dy-art .dy-art-plane{opacity:1;transform:none;}
+    .dy-btn{transition:none !important;}
+}
+</style>
+{% endblock %}
+
 
 {% block content %}
 
-<!-- Page Header Start -->
-<div class="page-header bg-section dark-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="page-header-box">
+<!-- ============ HERO (package image + title) ============ -->
+<section class="dy-page-hero" aria-label="{{ package.name }}">
+    {% if package.main_image %}
+    {% with sset=package.main_image|srcset %}
+    <img src="{{ package.main_image.url }}"
+         {% if sset %}srcset="{{ sset }}" sizes="100vw"{% endif %}
+         alt="{{ package.name }}"
+         fetchpriority="high"
+         decoding="async">
+    {% endwith %}
+    {% else %}
+    <img src="{% static 'frontend/hero.webp' %}" alt="{{ package.name }}" fetchpriority="high" decoding="async">
+    {% endif %}
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">{{ package.name }}</h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="{% url 'packages' %}">Packages</a>
+            <span aria-hidden="true">/</span>
+            <span>Details</span>
+        </nav>
+    </div>
+</section>
 
-                    <h1 class="text-anime-style-3" data-cursor="-opaque">
-                        {{ package.name }}
-                    </h1>
 
-                    <nav class="wow fadeInUp">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}">Home</a>
-                            </li>
+<div class="dy-flow">
 
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'packages' %}">Packages</a>
-                            </li>
+<!-- ============ BAND 1: title, image, description + sidebar ============ -->
+<section class="dy-sec dy-sec-1">
+    <div class="dy-wrap">
+        <div class="row g-4 g-xl-5">
 
-                            <li class="breadcrumb-item active" aria-current="page">
-                                {{ package.name }}
-                            </li>
-                        </ol>
-                    </nav>
+            <!-- Main column -->
+            <div class="col-lg-8 order-lg-2">
+                <div class="dy-stack">
+
+                    <!-- 1. Title + facts -->
+                    <div class="rv rv-right">
+                        <div class="dy-eyebrow"><i class="fa-solid fa-crown"></i>Tour Package</div>
+                        <h2 class="dy-title">{{ package.name }}</h2>
+
+                        <div class="dy-facts">
+                            
+                            {% if package.duration %}
+                            <div class="dy-fact">
+                                <i class="fa-regular fa-clock"></i>
+                                <div><small>Duration</small><strong>{{ package.duration }}</strong></div>
+                            </div>
+                            {% endif %}
+                            <div class="dy-fact">
+                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                                <div>
+                                    {% if package.price_from %}
+                                    <small>Starting from</small><strong>₹{{ package.price_from|floatformat:"0g" }}</strong>
+                                    {% else %}
+                                    <small>Pricing</small><strong>On Request</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Image -->
+                    {% if package.main_image %}
+                    <div class="dy-image rv rv-right">
+                        <figure>
+                            {% with sset=package.main_image|srcset %}
+                            <img src="{{ package.main_image.url }}"
+                                 {% if sset %}srcset="{{ sset }}" sizes="(max-width: 991px) 100vw, 66vw"{% endif %}
+                                 alt="{{ package.name }}"
+                                 loading="lazy"
+                                 decoding="async">
+                            {% endwith %}
+                            <span class="dy-image-badge"><i class="fa-solid fa-location-dot" aria-hidden="true"></i>{{ package.get_package_type_display }}</span>
+                            {% if package.duration or package.price_from %}
+                            <div class="dy-image-bar">
+                                {% if package.duration %}<span><i class="fa-regular fa-clock" aria-hidden="true"></i>{{ package.duration }}</span>{% endif %}
+                                {% if package.price_from %}<div><small>Starting from</small><strong>₹{{ package.price_from|floatformat:"0g" }}</strong></div>{% endif %}
+                            </div>
+                            {% endif %}
+                        </figure>
+                    </div>
+                    {% endif %}
+
+                    <!-- 3. Description -->
+                    <div class="rv rv-right">
+                        <h3 class="dy-label">About this package</h3>
+                        <div class="dy-desc">
+                            {{ package.description|safe }}
+                        </div>
+                    </div>
 
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<!-- Page Header End -->
 
+            <!-- Sidebar -->
+            <div class="col-lg-4 order-lg-1">
+                <aside class="dy-sidebar">
 
-<!-- Page Package Details Start -->
-<div class="page-case-study-single">
-    <div class="container">
-        <div class="row">
-
-            <!-- LEFT SIDEBAR -->
-            <div class="col-lg-4">
-                <div class="page-single-sidebar">
-
-                    <!-- Package Information -->
-                    <div class="case-study-catagery-list wow fadeInUp">
-                        <ul>
-                            <li>
-                                Package:
-                                <span>{{ package.name }}</span>
-                            </li>
-
-                            <li>
-                                Category:
-                                <span>{{ package.get_package_type_display }}</span>
-                            </li>
-
-                            {% if package.duration %}
-                            <li>
-                                Duration:
-                                <span>{{ package.duration }}</span>
-                            </li>
-                            {% endif %}
-
-                            <li>
-                                Starting Price:
-                                <span>
-                                    {% if package.price_from %}
-                                        ₹{{ package.price_from|floatformat:0 }}
+                    {% if other_packages %}
+                    <div class="dy-box dy-more rv rv-left">
+                        <span class="dy-eyebrow"><i class="fa-solid fa-compass"></i>Explore more</span>
+                        <h3>More Packages</h3>
+                        <div class="dy-more-list">
+                            {% for o in other_packages %}
+                            <a href="{% url 'package_detail' slug=o.slug %}" class="dy-more-item">
+                                <span class="dy-more-thumb">
+                                    {% if o.main_image %}
+                                    {% with sset=o.main_image|srcset %}
+                                    <img src="{{ o.main_image.url }}"
+                                         {% if sset %}srcset="{{ sset }}" sizes="68px"{% endif %}
+                                         alt="" width="68" height="68"
+                                         loading="lazy" decoding="async">
+                                    {% endwith %}
                                     {% else %}
-                                        On Request
+                                    <i class="fa-solid fa-mountain-sun" aria-hidden="true"></i>
                                     {% endif %}
                                 </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- Package Information End -->
-
-                    <!-- Travel Enquiry CTA -->
-                    <div class="sidebar-cta-box wow fadeInUp" data-wow-delay="0.25s">
-
-                        <div class="sidebar-cta-content">
-
-                            <div class="icon-box">
-                                <i class="fa-solid fa-plane-departure"></i>
-                            </div>
-
-                            <p>Your next adventure starts here</p>
-
-                            <h3>
-                                Discover the World with Deutsche Yathras
-                            </h3>
-
-                            <p>
-                                Let our travel team help you plan
-                                a memorable holiday with personalised
-                                assistance and carefully selected experiences.
-                            </p>
-                        </div>
-
-                        <div class="sidebar-cta-contact">
-
-                            <div class="icon-box">
-                                <i class="fa-solid fa-headset"></i>
-                            </div>
-
-                            <div class="sidebar-contact-content">
-
-                                <p>Plan your journey</p>
-
-                                <h3>
-                                    <a href="{% url 'contact' %}?package={{ package.slug|urlencode }}">
-                                        Enquire Now
-                                    </a>
-                                </h3>
-
-                            </div>
-
-                        </div>
-                    </div>
-                    <!-- Travel Enquiry CTA End -->
-
-                </div>
-            </div>
-            <!-- LEFT SIDEBAR END -->
-
-
-            <!-- RIGHT CONTENT -->
-            <div class="col-lg-8">
-
-                <div class="case-study-content">
-
-                    <!-- FEATURE IMAGE -->
-                    <div class="case-study-feature-image">
-
-                        {% if package.main_image %}
-                        <figure class="image-anime reveal">
-                            <img
-                                src="{{ package.main_image.url }}"
-                                alt="{{ package.name }}"
-                            >
-                        </figure>
-                        {% else %}
-                        <div class="dy-package-image-placeholder">
-                            <i class="fa-solid fa-mountain-sun"></i>
-                        </div>
-                        {% endif %}
-
-                    </div>
-                    <!-- FEATURE IMAGE END -->
-
-
-                    <!-- PACKAGE DESCRIPTION -->
-                    <div class="case-study-entry">
-
-                        <h2 class="wow fadeInUp">
-                            Explore {{ package.name }}
-                        </h2>
-
-                        <div class="wow fadeInUp" data-wow-delay="0.2s">
-                            {{ package.description|linebreaks }}
-                        </div>
-
-
-                        <!-- PACKAGE HIGHLIGHTS -->
-                        {% if package.highlights_list %}
-
-                        <h2 class="wow fadeInUp">
-                            Package Highlights
-                        </h2>
-
-                        <ul class="wow fadeInUp" data-wow-delay="0.4s">
-
-                            {% for highlight in package.highlights_list %}
-                            <li>{{ highlight }}</li>
+                                <span class="dy-more-info">
+                                    <strong>{{ o.name }}</strong>
+                                    <small>
+                                        {% if o.duration %}<span><i class="fa-regular fa-clock" aria-hidden="true"></i>{{ o.duration }}</span>{% endif %}
+                                        <em>{% if o.price_from %}From ₹{{ o.price_from|floatformat:"0g" }}{% else %}Price on request{% endif %}</em>
+                                    </small>
+                                </span>
+                                <span class="dy-more-go" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                            </a>
                             {% endfor %}
-
-                        </ul>
-
-                        {% endif %}
-
-
-                        <!-- TRAVEL EXPERIENCE SECTION -->
-                        <div class="case-study-transform-box">
-
-                            <h2 class="text-anime-style-3">
-                                Every Journey, A New Story
-                            </h2>
-
-                            <p class="wow fadeInUp">
-                                At Deutsche Yathras, we believe that
-                                every holiday should be as unique as
-                                the traveller. Our carefully planned
-                                packages bring together memorable
-                                destinations, thoughtful arrangements,
-                                and personalised travel assistance.
-                            </p>
-
-                            <!-- CONTENT AND IMAGE -->
-                            <div class="case-study-image-content">
-
-                                <div class="case-study-content-box">
-
-                                    <!-- INCLUSIONS -->
-                                    <div
-                                        class="case-study-content-item wow fadeInUp"
-                                        data-wow-delay="0.2s"
-                                    >
-
-                                        <h3>Package Inclusions</h3>
-
-                                        {% if package.inclusions_list %}
-
-                                        <ul>
-                                            {% for inclusion in package.inclusions_list %}
-                                            <li>{{ inclusion }}</li>
-                                            {% endfor %}
-                                        </ul>
-
-                                        {% else %}
-
-                                        <p>
-                                            Contact our team for a detailed
-                                            list of services included in
-                                            this package.
-                                        </p>
-
-                                        {% endif %}
-
-                                    </div>
-
-                                    <!-- TRAVEL SUPPORT -->
-                                    <div
-                                        class="case-study-content-item wow fadeInUp"
-                                        data-wow-delay="0.4s"
-                                    >
-
-                                        <h3>Travel Assistance</h3>
-
-                                        <ul>
-                                            <li>
-                                                Personalised travel planning
-                                                and itinerary guidance.
-                                            </li>
-
-                                            <li>
-                                                Assistance with travel
-                                                arrangements and enquiries.
-                                            </li>
-                                        </ul>
-
-                                    </div>
-
-                                </div>
-
-                                <!-- PACKAGE IMAGE -->
-                                <div class="case-study-enrty-image">
-
-                                    {% if package.main_image %}
-
-                                    <figure class="image-anime reveal">
-                                        <img
-                                            src="{{ package.main_image.url }}"
-                                            alt="{{ package.name }} travel experience"
-                                            loading="lazy"
-                                        >
-                                    </figure>
-
-                                    {% endif %}
-
-                                </div>
-
-                            </div>
-                            <!-- CONTENT AND IMAGE END -->
-
                         </div>
-                        <!-- TRAVEL EXPERIENCE END -->
-
                     </div>
-                    <!-- PACKAGE DESCRIPTION END -->
+                    {% endif %}
 
-
-                    <!-- FAQ SECTION -->
-                    <div class="page-single-faqs">
-
-                        <div class="section-title">
-
-                            <h2 class="wow fadeInUp" data-cursor="-opaque">
-                                Frequently Asked Questions
-                            </h2>
-
+                    <div class="dy-cta-card rv rv-left" style="--d:.1s">
+                        <div class="dy-cta-icon"><i class="fa-solid fa-plane-departure"></i></div>
+                        <h3>Plan your journey with Deutsche Yathras</h3>
+                        <a href="#" class="dy-btn open-book-trip"
+                           data-package-id="{{ package.id }}"
+                           data-package-name="{{ package.name }}"
+                           data-package-slug="{{ package.slug }}">
+                            Book Now <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <div class="dy-cta-more">
+                            <i class="fa-solid fa-headset"></i>
+                            <div>
+                                <small>Have questions?</small>
+                                <a href="{% url 'contact' %}?package={{ package.slug|urlencode }}">Enquire Now</a>
+                            </div>
                         </div>
-
-                        <div
-                            class="faq-accordion page-faq-accordion"
-                            id="faqaccordion"
-                        >
-
-                            <!-- FAQ 1 -->
-                            <div class="accordion-item wow fadeInUp">
-
-                                <h2 class="accordion-header" id="heading1">
-
-                                    <button
-                                        class="accordion-button"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse1"
-                                        aria-expanded="true"
-                                        aria-controls="collapse1"
-                                    >
-                                        Can I customise this travel package?
-                                    </button>
-
-                                </h2>
-
-                                <div
-                                    id="collapse1"
-                                    class="accordion-collapse collapse show"
-                                    aria-labelledby="heading1"
-                                    data-bs-parent="#faqaccordion"
-                                >
-
-                                    <div class="accordion-body">
-
-                                        <p>
-                                            Yes. Contact Deutsche Yathras
-                                            to discuss your travel dates,
-                                            preferred accommodation,
-                                            activities, and other
-                                            personal requirements.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- FAQ 2 -->
-                            <div
-                                class="accordion-item wow fadeInUp"
-                                data-wow-delay="0.2s"
-                            >
-
-                                <h2 class="accordion-header" id="heading2">
-
-                                    <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse2"
-                                        aria-expanded="false"
-                                        aria-controls="collapse2"
-                                    >
-                                        What is included in this package?
-                                    </button>
-
-                                </h2>
-
-                                <div
-                                    id="collapse2"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="heading2"
-                                    data-bs-parent="#faqaccordion"
-                                >
-
-                                    <div class="accordion-body">
-
-                                        <p>
-                                            Please refer to the package
-                                            inclusions listed above.
-                                            Our team can provide a
-                                            detailed quotation explaining
-                                            what is included and excluded.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- FAQ 3 -->
-                            <div
-                                class="accordion-item wow fadeInUp"
-                                data-wow-delay="0.4s"
-                            >
-
-                                <h2 class="accordion-header" id="heading3">
-
-                                    <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse3"
-                                        aria-expanded="false"
-                                        aria-controls="collapse3"
-                                    >
-                                        Do you provide tourist visa assistance?
-                                    </button>
-
-                                </h2>
-
-                                <div
-                                    id="collapse3"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="heading3"
-                                    data-bs-parent="#faqaccordion"
-                                >
-
-                                    <div class="accordion-body">
-
-                                        <p>
-                                            We offer tourist visa guidance
-                                            for supported destinations.
-                                            Visa requirements and approval
-                                            depend on the destination and
-                                            relevant immigration authorities.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- FAQ 4 -->
-                            <div
-                                class="accordion-item wow fadeInUp"
-                                data-wow-delay="0.6s"
-                            >
-
-                                <h2 class="accordion-header" id="heading4">
-
-                                    <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse4"
-                                        aria-expanded="false"
-                                        aria-controls="collapse4"
-                                    >
-                                        How do I book this holiday package?
-                                    </button>
-
-                                </h2>
-
-                                <div
-                                    id="collapse4"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="heading4"
-                                    data-bs-parent="#faqaccordion"
-                                >
-
-                                    <div class="accordion-body">
-
-                                        <p>
-                                            Click the Enquire Now button
-                                            and contact our travel team.
-                                            We can discuss availability,
-                                            travel dates, pricing, and
-                                            the next steps for booking.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- FAQ 5 -->
-                            <div
-                                class="accordion-item wow fadeInUp"
-                                data-wow-delay="0.8s"
-                            >
-
-                                <h2 class="accordion-header" id="heading5">
-
-                                    <button
-                                        class="accordion-button collapsed"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#collapse5"
-                                        aria-expanded="false"
-                                        aria-controls="collapse5"
-                                    >
-                                        Is travel insurance included?
-                                    </button>
-
-                                </h2>
-
-                                <div
-                                    id="collapse5"
-                                    class="accordion-collapse collapse"
-                                    aria-labelledby="heading5"
-                                    data-bs-parent="#faqaccordion"
-                                >
-
-                                    <div class="accordion-body">
-
-                                        <p>
-                                            Travel insurance depends on
-                                            the selected package and
-                                            quotation. Please confirm
-                                            coverage and policy details
-                                            with our team before booking.
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
                     </div>
-                    <!-- FAQ SECTION END -->
 
-                </div>
-
+                </aside>
             </div>
-            <!-- RIGHT CONTENT END -->
 
         </div>
     </div>
-</div>
-<!-- Page Package Details End -->
+</section>
 
+<!-- ============ BAND 2: highlights, inclusions ============ -->
+{% if package.highlights_list or package.inclusions_list %}
+<section class="dy-sec dy-sec-2">
+    <div class="dy-wrap">
 
-<!-- SCROLLING TICKER -->
-<div class="our-scrolling-ticker">
+        {% if package.highlights_list or package.inclusions_list %}
+        <div class="dy-lists{% if not package.highlights_list or not package.inclusions_list %} one{% endif %}">
+            {% if package.highlights_list %}
+            <div class="rv rv-left">
+                <div class="dy-eyebrow"><i class="fa-solid fa-crown"></i>Highlights</div>
+                <h3 class="dy-label">What you will love</h3>
+                <ul class="dy-checks">
+                    {% for h in package.highlights_list %}<li>{{ h|striptags }}</li>{% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-    <div class="scrolling-ticker-box">
-
-        <div class="scrolling-content">
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Explore The World
-            </span>
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Unforgettable Journeys
-            </span>
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Curated Holiday Packages
-            </span>
-
+            {% if package.inclusions_list %}
+            <div class="rv rv-right" style="--d:.1s">
+                <div class="dy-eyebrow"><i class="fa-solid fa-crown"></i>Inclusions</div>
+                <h3 class="dy-label">What is included</h3>
+                <ul class="dy-checks">
+                    {% for i in package.inclusions_list %}<li>{{ i|striptags }}</li>{% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
-
-        <div class="scrolling-content">
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Explore The World
-            </span>
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Unforgettable Journeys
-            </span>
-
-            <span>
-                <img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">
-                Curated Holiday Packages
-            </span>
-
-        </div>
+        {% endif %}
 
     </div>
+</section>
+{% endif %}
 
 </div>
-<!-- SCROLLING TICKER END -->
+<!-- ===== /dy-flow ===== -->
+{% endblock %}
 
+
+{% block extra_js %}
+<!-- Scroll reveal -->
+<script>
+(function () {
+    var items = document.querySelectorAll('.rv');
+    if (!items.length || !('IntersectionObserver' in window)) return;
+    document.body.classList.add('rv-ready');
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+            if (en.isIntersecting) en.target.classList.add('in'); else en.target.classList.remove('in');
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+})();
+</script>
+
+<!-- Book Now -> booking popup (same logic as the Packages page) -->
+<script>
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.open-book-trip');
+    if (!btn) return;
+
+    var id   = btn.dataset.packageId   || '';
+    var name = btn.dataset.packageName || '';
+
+    // adjust these selectors to match the field names in your booking popup
+    var idField   = document.querySelector('#bookTripModal [name="package"], [name="package_id"], #book-trip-package-id');
+    var nameField = document.querySelector('#bookTripModal [name="package_name"], #book-trip-package-name');
+    var title     = document.querySelector('#book-trip-package-title');
+
+    if (idField)   idField.value = id;
+    if (nameField) nameField.value = name;
+    if (title)     title.textContent = name;
+});
+</script>
 {% endblock %}

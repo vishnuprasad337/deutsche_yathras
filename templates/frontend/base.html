@@ -10,13 +10,15 @@
 	<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
 	<meta name="author" content="Awaiken">
 	<!-- Page Title -->
-	<title>{% block title %}Dermal - Dermatologist & Cosmetology Clinic{% endblock %}</title>
+	<title>{% block title %}Deutsche Yathras - Your Trusted Travel Partner in Europe{% endblock %}</title>
 	<!-- Favicon Icon -->
-	<link rel="shortcut icon" type="image/x-icon" href="{% static 'frontend/assets/images/favicon.png' %}">
+	<link rel="icon" type="image/x-icon" href="{% static 'frontend/favicon (4).ico' %}">
+	<link rel="icon" type="image/png" sizes="512x512" href="{% static 'frontend/favicon (1).png' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'frontend/apple-touch-icon (2).png' %}">
 	<!-- Google Fonts Css-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Marcellus&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<!-- Bootstrap Css -->
 	<link href="{% static 'frontend/assets/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
 	<!-- SlickNav Css -->
@@ -35,9 +37,511 @@
 	<link rel="stylesheet" href="{% static 'frontend/assets/css/twentytwenty.css' %}">
 	<!-- Main Custom Css -->
 	<link href="{% static 'frontend/assets/css/custom.css' %}" rel="stylesheet" media="screen">
+
+	<!-- Book Trip Modal Css -->
+	<style>
+		#bookTripModal,
+		#thankYouModal { z-index: 99999; }
+		.modal-backdrop { z-index: 99998; }
+
+		/* ---------- Booking modal ---------- */
+		#bookTripModal .modal-content {
+			border: none;
+			border-radius: 24px;
+			overflow: hidden;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+		}
+		#bookTripModal .modal-header {
+			background: var(--primary-color, #265c4f);
+			color: #fff;
+			padding: 22px 30px;
+			border: none;
+		}
+		#bookTripModal .modal-title {
+			color: #fff;
+			font-size: 26px;
+			margin: 0;
+		}
+		#bookTripModal .modal-header .btn-close {
+			filter: invert(1);
+			opacity: 1;
+			box-shadow: none;
+		}
+		#bookTripModal .modal-body { padding: 30px; }
+		#bookTripModal .form-label {
+			font-weight: 500;
+			margin-bottom: 6px;
+			font-size: 14px;
+		}
+		#bookTripModal .form-control,
+		#bookTripModal .form-select {
+			border: 1px solid #dfe5e2;
+			border-radius: 12px;
+			padding: 12px 16px;
+			font-size: 15px;
+			box-shadow: none;
+		}
+		#bookTripModal .form-control:focus,
+		#bookTripModal .form-select:focus {
+			border-color: var(--primary-color, #265c4f);
+		}
+		#bookTripModal textarea.form-control { min-height: 100px; resize: none; }
+		#bookTripModal .book-trip-alert {
+			display: none;
+			border-radius: 12px;
+			padding: 12px 16px;
+			margin-bottom: 18px;
+			font-size: 14px;
+		}
+		#bookTripModal .book-trip-alert.error { display: block; background: #fdecea; color: #a12622; }
+		#bookTripModal .btn-default:disabled { opacity: .7; cursor: not-allowed; }
+
+		/* ---------- Thank you modal ---------- */
+		#thankYouModal .modal-content {
+			border: none;
+			border-radius: 24px;
+			overflow: hidden;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+			text-align: center;
+		}
+		#thankYouModal .thank-you-body {
+			padding: 50px 40px 40px;
+		}
+		#thankYouModal .thank-you-icon {
+			width: 90px;
+			height: 90px;
+			margin: 0 auto 24px;
+			border-radius: 50%;
+			background: var(--primary-color, #265c4f);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			animation: thankYouPop .5s ease;
+		}
+		#thankYouModal .thank-you-icon svg {
+			width: 44px;
+			height: 44px;
+			stroke: #fff;
+			fill: none;
+			stroke-width: 3;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+		#thankYouModal .thank-you-title {
+			font-size: 32px;
+			margin-bottom: 12px;
+		}
+		#thankYouModal .thank-you-text {
+			font-size: 16px;
+			margin-bottom: 28px;
+		}
+		@keyframes thankYouPop {
+			0%   { transform: scale(.4); opacity: 0; }
+			70%  { transform: scale(1.1); opacity: 1; }
+			100% { transform: scale(1); }
+		}
+	</style>
+
+	<!-- Page specific CSS (only ONE of these blocks is allowed) -->
 	{% block extra_css %}{% endblock %}
+
+	<!-- Navbar: transparent on the hero, white after scrolling past it.
+	     Loaded AFTER page css so it wins. -->
+	<style>
+		/* ---------- pinned to the top, never slides away ---------- */
+		header.main-header {
+			position: fixed !important;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: 1000;
+			background: transparent !important;
+			border-bottom: none !important;
+		}
+
+		header.main-header .header-sticky,
+		header.main-header .header-sticky.hide,
+		header.main-header .header-sticky.active {
+			transform: none !important;
+			visibility: visible !important;
+		}
+
+		/* ---------- STATE 1: transparent (top of page / over the hero) ---------- */
+		header.main-header .header-sticky,
+		header.main-header .header-sticky.active {
+			position: relative !important;
+			top: 0;
+			left: 0;
+			right: 0;
+			width: calc(100% - 40px);
+			max-width: 1140px;
+			margin: 16px auto;
+			background: rgba(255, 255, 255, 0.08) !important;
+			border: 1px solid rgba(255, 255, 255, 0.28);
+			border-radius: 26px;
+			box-shadow: none !important;
+			-webkit-backdrop-filter: blur(8px);
+			        backdrop-filter: blur(8px);
+			transition: background .35s ease, border-color .35s ease, box-shadow .35s ease;
+		}
+
+		header.main-header .main-menu .nav-link,
+		header.main-header .main-menu ul li a {
+			color: #ffffff !important;
+			white-space: nowrap;
+			transition: color .3s ease;
+		}
+
+		header.main-header .main-menu ul li a:hover,
+		header.main-header .main-menu ul li a:focus,
+		header.main-header .main-menu ul li a.active {
+			color: #f5a623 !important;
+		}
+
+		/* navbar height follows the logo (CHANGED: padding 24px -> 12px,
+		   so a bigger logo doesn't make the bar too tall) */
+		header.main-header .navbar {
+			padding-top: 12px !important;
+			padding-bottom: 12px !important;
+		}
+		header.main-header .navbar-brand {
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+			margin-top: 0 !important;
+			margin-bottom: 0 !important;
+		}
+
+		/* logo: white over the hero, blue after scrolling */
+		header.main-header .navbar-brand {
+			width: auto !important;
+			max-width: none !important;
+			flex: 0 0 auto;
+			padding: 0;
+			margin-right: 30px;
+		}
+		header.main-header .navbar-brand img {
+			height: 72px !important;
+			width: auto !important;
+			max-width: none !important;
+			display: block;
+		}
+		header.main-header .navbar-brand .logo-blue { display: none !important; }
+
+		header.main-header .header-btn .btn-default {
+			background: #f4813f !important;
+			color: #ffffff !important;
+			white-space: nowrap;
+		}
+
+		header.main-header .header-btn .btn-default:hover {
+			background: #ea7330 !important;
+		}
+
+		/* ---------- Book Trip button shown in the bar on mobile ---------- */
+		/* hidden on desktop (desktop already has .header-btn inside the menu) */
+		header.main-header .header-btn-mobile {
+			display: none;
+		}
+
+		/* mobile menu (transparent state) */
+		header.main-header .slicknav_icon .slicknav_icon-bar {
+			background-color: #ffffff !important;
+		}
+
+		header.main-header .slicknav_menu,
+		header.main-header .slicknav_nav {
+			background: rgba(12, 28, 24, 0.92) !important;
+		}
+
+		header.main-header .slicknav_nav a {
+			color: #ffffff !important;
+		}
+
+		/* ---------- STATE 2: WHITE (after scrolling past the hero) ---------- */
+		header.main-header.is-solid .header-sticky,
+		header.main-header.is-solid .header-sticky.active {
+			margin: 12px auto;
+			background: #ffffff !important;
+			border-color: transparent;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14) !important;
+			-webkit-backdrop-filter: none;
+			        backdrop-filter: none;
+		}
+
+		header.main-header.is-solid .main-menu .nav-link,
+		header.main-header.is-solid .main-menu ul li a {
+			color: #123e34 !important;
+		}
+
+		header.main-header.is-solid .main-menu ul li a:hover,
+		header.main-header.is-solid .main-menu ul li a:focus,
+		header.main-header.is-solid .main-menu ul li a.active {
+			color: #b58b4b !important;
+		}
+		header.main-header.is-solid .navbar-brand .logo-white { display: none !important; }
+		header.main-header.is-solid .navbar-brand .logo-blue  { display: block !important; }
+
+		/* mobile menu (white state) */
+		header.main-header.is-solid .slicknav_icon .slicknav_icon-bar {
+			background-color: #123e34 !important;
+		}
+
+		header.main-header.is-solid .slicknav_menu,
+		header.main-header.is-solid .slicknav_nav {
+			background: #ffffff !important;
+		}
+
+		header.main-header.is-solid .slicknav_nav a {
+			color: #123e34 !important;
+		}
+
+		/* ---------- tablet / phone ---------- */
+		@media (max-width: 991px) {
+			header.main-header .header-sticky,
+			header.main-header .header-sticky.active {
+				width: calc(100% - 24px);
+				max-width: none;
+				margin: 12px auto;
+				border-radius: 20px;
+			}
+
+			/* show the Book Trip button next to the hamburger */
+			header.main-header .header-btn-mobile {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				margin-left: auto;      /* pushes it (and the hamburger) to the right */
+				margin-right: 12px;
+				padding: 10px 20px;
+				border-radius: 50px;
+				background: #f4813f !important;
+				color: #ffffff !important;
+				font-size: 14px;
+				font-weight: 700;
+				line-height: 1.2;
+				white-space: nowrap;
+				text-decoration: none;
+				transition: background .3s ease, transform .3s ease;
+			}
+
+			header.main-header .header-btn-mobile:hover {
+				background: #ea7330 !important;
+				color: #ffffff !important;
+			}
+		}
+
+		@media (max-width: 575px) {
+			header.main-header .header-btn-mobile {
+				margin-right: 8px;
+				padding: 9px 16px;
+				font-size: 13px;
+			}
+		}
+	</style>
+
+	<!-- Footer: navy blue + landmarks image. Loaded last so it wins. -->
+	<style>
+	.footer-main {
+		--ft-navy: #14305e;   /* footer colour */
+		--ft-teal: #1a5f6e;   /* colour of the wave at the bottom of the image */
+		--ft-overlap: clamp(60px, 9vw, 160px);   /* how far the image rises over the section above */
+
+		position: relative;          /* no z-index, so blending still works */
+		display: flow-root;
+		padding: 0 !important;
+		overflow: visible !important;
+		background: var(--ft-sky, #e8f5fd) !important;   /* sky colour behind the image */
+		background-image: none !important;
+	}
+
+	/* the picture: its white sky multiplies into the sky colour behind it,
+	   so it blends with the section above and nothing is cut off */
+	.footer-main .footer-landmarks {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-top: calc(var(--ft-overlap) * -1);   /* pulls the image up over the previous section */
+		mix-blend-mode: multiply;
+		pointer-events: none;
+		user-select: none;
+	}
+	/* navy content area; fades from the image's teal wave into navy */
+	.footer-main .footer-body {
+		padding: 50px 0 10px;
+		background: linear-gradient(to bottom, var(--ft-teal) 0, var(--ft-navy) 150px);
+	}
+
+	/* text colours on navy */
+	.footer-main,
+	.footer-main p,
+	.footer-main li,
+	.footer-main a,
+	.footer-main h3,
+	.footer-main span {
+		color: #ffffff;
+	}
+
+	.footer-main a:hover {
+		color: #f5a623;
+	}
+
+	.footer-main .footer-copyright {
+		border-top: 1px solid rgba(255, 255, 255, 0.18);
+	}
+
+	.footer-main .footer-newsletters-form .form-control {
+		background: rgba(255, 255, 255, 0.08);
+		border-color: rgba(255, 255, 255, 0.25);
+		color: #ffffff;
+	}
+
+	.footer-main .footer-newsletters-form .form-control::placeholder {
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	/* ---------- FULL WIDTH FOOTER (no curve, no side gaps) ---------- */
+	.footer-main,
+	.footer-main.bg-section,
+	.footer-main.dark-section {
+		width: 100% !important;
+		max-width: 100% !important;
+		margin: 0 !important;
+		border-radius: 0 !important;
+	}
+
+	.footer-main .footer-landmarks,
+	.footer-main .footer-body {
+		border-radius: 0 !important;
+	}
+	/* footer logo size */
+	.footer-main .footer-logo img {
+		height: 120px !important;
+		width: auto !important;
+		max-width: 100% !important;
+	}
+	@media (max-width: 575px) {
+		.footer-main .footer-logo img { height: 90px !important; }
+	}
+
+	/* ---------- ALL BUTTONS ORANGE ---------- */
+	.btn-default,
+	a.btn-default,
+	button.btn-default,
+	.btn-default.btn-highlighted {
+		background: #f4813f !important;
+		color: #ffffff !important;
+		border-color: #f4813f !important;
+	}
+	.btn-default:hover,
+	a.btn-default:hover,
+	button.btn-default:hover,
+	.btn-default.btn-highlighted:hover {
+		background: #ea7330 !important;
+		color: #ffffff !important;
+	}
+	.btn-default::after {
+		background: #ea7330 !important;
+	}
+
+	/* ---------- LOGO IN THE CENTRE OF THE MENU (desktop) ---------- */
+	@media (min-width: 992px) {
+		/* hide the left logo on desktop */
+		header.main-header .navbar-brand { display: none !important; }
+
+		header.main-header .nav-menu-wrapper {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+		}
+
+		header.main-header .nav-logo-center {
+			display: flex;
+			align-items: center;
+			margin: 0 22px;
+		}
+
+		header.main-header .main-menu ul li.nav-logo-center a {
+			padding: 0 !important;
+			display: block;
+		}
+
+		/* CHANGED: bigger centre logo (was 72px).
+		   Change this one number to make it larger or smaller. */
+		header.main-header .nav-logo-center img {
+			height: 90px !important;
+			width: auto !important;
+			max-width: none !important;
+			display: block;
+		}
+
+		header.main-header .nav-logo-center .logo-blue { display: none; }
+
+		/* white bar after scrolling: blue logo */
+		header.main-header.is-solid .nav-logo-center .logo-white { display: none; }
+		header.main-header.is-solid .nav-logo-center .logo-blue  { display: block; }
+	}
+
+	/* phones and tablets: hide the centre logo, keep the normal one */
+	@media (max-width: 991px) {
+		header.main-header .nav-logo-center { display: none !important; }
+	}
+	</style>
+	<!-- SECTION TITLES: logo blue (#016BD0, taken from the logo). Loaded after custom.css so it wins. -->
+	<style>
+:root {
+    --dy-title-blue: #046BF2;   /* was #016BD0 */
+    --dy-navy: #00367E;
+}
+		html body .section-title h2,
+		html body .dy-h2 {
+			color: var(--dy-blue) !important;
+		}
+
+		/* keep titles white where the section background is dark or a photo */
+		html body .dark-section .section-title h2,
+		html body .dark-section .dy-h2,
+		html body .dy-cta h2 {
+			color: #ffffff !important;
+		}
+	</style>
+	<!-- GLOBAL FONT: Poppins everywhere (keeps Font Awesome icons working) -->
+	<style>
+		:root { --dy-body-font: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif; }
+
+		html body,
+		body *:not(i):not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands):not([class^="fa-"]):not([class*=" fa-"]):not(svg):not(svg *) {
+			font-family: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif !important;
+		}
+
+		/* slightly lighter headings (was 900) */
+		html body h1,
+		html body h2,
+		html body .dy-h2,
+		html body .dy-page-hero-title,
+		html body .dy-cta h2 {
+			font-weight: 600 !important;
+		}
+
+		/* accent words (were Kaushan Script) stay distinct.
+		   Placed AFTER the heading rule so the 600 weight wins. */
+		html body .dy-page-hero-title em,
+		html body .dy-cta h2 em {
+			font-style: italic !important;
+			font-weight: 600 !important;
+		}
+
+		/* Poppins is wider than Playfair, so loosen the tight heading spacing */
+		.dy-h2,
+		.dy-page-hero-title,
+		.dy-cta h2,
+		.dy-blog-body h3 {
+			letter-spacing: -.01em !important;
+		}
+	</style>
 </head>
 <body>
+
 
 	<!-- Preloader Start -->
 	<div class="preloader">
@@ -54,10 +558,14 @@
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
 					<!-- Logo Start -->
-					<a class="navbar-brand" href="index.html">
-						<img src="{% static 'frontend/assets/images/logo.svg' %}" alt="Logo">
+					<a class="navbar-brand" href="{% url 'home' %}">
+						<img class="logo-white" src="{% static 'frontend/logo-2d.png' %}" alt="Deutsche Yathras" height="72" decoding="async">
+						<img class="logo-blue" src="{% static 'frontend/logo-3dd.png' %}" alt="Deutsche Yathras" height="72" loading="lazy" decoding="async">
 					</a>
 					<!-- Logo End -->
+
+					<!-- Book Trip button in the bar (mobile / tablet only) -->
+					<a href="#" class="header-btn-mobile open-book-trip">Book Trip</a>
 
 					<!-- Main Menu Start -->
 					<div class="collapse navbar-collapse main-menu">
@@ -65,19 +573,27 @@
 							<ul class="navbar-nav mr-auto" id="menu">
 								<li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
 								<li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
-								<li class="nav-item"><a class="nav-link" href="{% url 'services' %}">Services</a></li>
 								<li class="nav-item"><a class="nav-link" href="{% url 'packages' %}">Packages</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'destinations' %}">Destinations</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
-								<li class="nav-item"><a class="nav-link" href="{% url 'contact'%}">Contact Us</a></li>
-								<li class="nav-item highlighted-menu"><a class="nav-link" href="{% url 'booking'}">Book Appointment</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'destinations' %}">Destinations</a></li>
+
+								<li class="nav-item nav-logo-center">
+									<a href="{% url 'home' %}">
+										<img class="logo-white" src="{% static 'frontend/logo-2d.png' %}" alt="Deutsche Yathras" height="90" decoding="async">
+										<img class="logo-blue" src="{% static 'frontend/logo-3dd.png' %}" alt="Deutsche Yathras" height="90" loading="lazy" decoding="async">
+									</a>
+								</li>
+
+								<li class="nav-item"><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'gallery' %}">Gallery</a></li>
+								<li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+								<!-- the "Book Trip" list item was removed from here,
+								     so it no longer appears in the mobile dropdown -->
 							</ul>
 						</div>
 
-						<!-- Header Btn Start -->
+						<!-- Header Btn Start (desktop) -->
 						<div class="header-btn">
-							<a href="{% url 'booking' %}" class="btn-default">Book Appointment</a>
+							<a href="#" class="btn-default open-book-trip">Book Trip</a>
 						</div>
 						<!-- Header Btn End -->
 					</div>
@@ -95,110 +611,206 @@
 
 	<!-- Footer Main Start -->
 	<footer class="footer-main bg-section dark-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-4">
-					<!-- About Footer start -->
-					<div class="about-footer">
-						<div class="footer-logo">
-							<img src="{% static 'frontend/assets/images/footer-logo.svg' %}" alt="">
-						</div>
 
-						<div class="about-footer-content">
-							<p>With a passion for skin health, Dermal combines the latest technologies.</p>
-						</div>
+		<!-- Landmarks image -->
+		<img class="footer-landmarks" src="{% static 'frontend/euro1.png' %}" alt="" aria-hidden="true">
+		<div class="footer-body">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4">
+						<!-- About Footer start -->
+						<div class="about-footer">
+							<div class="footer-logo">
+								<img src="{% static 'frontend/logo-2d.png' %}" alt="Deutsche Yathras">
+							</div>
 
-						<!-- Footer Newsletters Form Start -->
-						<div class="footer-newsletters-form">
-							<form id="newslettersForm" action="#" method="POST">
-								{% csrf_token %}
-								<div class="form-group">
-									<input type="email" name="mail" class="form-control" id="mail" placeholder="Enter your email" required>
-									<button type="submit"><img src="{% static 'frontend/assets/images/arrow-white.svg' %}" alt=""></button>
+							<div class="about-footer-content">
+								<p>With a passion for skin health, Dermal combines the latest technologies.</p>
+							</div>
+
+							<!-- Footer Newsletters Form Start -->
+							<div class="footer-newsletters-form">
+								<form id="newslettersForm" action="#" method="POST">
+									{% csrf_token %}
+									<div class="form-group">
+										<input type="email" name="mail" class="form-control" id="mail" placeholder="Enter your email" required>
+										<button type="submit"><img src="{% static 'frontend/assets/images/arrow-white.svg' %}" alt=""></button>
+									</div>
+								</form>
+							</div>
+							<!-- Footer Newsletters Form End -->
+						</div>
+						<!-- About Footer End -->
+					</div>
+
+					<div class="col-lg-3 col-md-5">
+						<div class="footer-links">
+							<h3>contact us</h3>
+
+							<div class="footer-contact-item">
+								<div class="icon-box">
+									<img src="{% static 'frontend/assets/images/icon-phone.svg' %}" alt="">
 								</div>
-							</form>
-						</div>
-						<!-- Footer Newsletters Form End -->
-					</div>
-					<!-- About Footer End -->
-				</div>
-
-				<div class="col-lg-3 col-md-5">
-					<div class="footer-links">
-						<h3>contact us</h3>
-
-						<div class="footer-contact-item">
-							<div class="icon-box">
-								<img src="{% static 'frontend/assets/images/icon-phone.svg' %}" alt="">
+								<div class="footer-contact-content">
+									<h3>For more information</h3>
+									<p><a href="tel:+7025550122">(702) 555-0122</a></p>
+								</div>
 							</div>
-							<div class="footer-contact-content">
-								<h3>For more information</h3>
-								<p><a href="tel:+7025550122">(702) 555-0122</a></p>
-							</div>
-						</div>
 
-						<div class="footer-contact-item">
-							<div class="icon-box">
-								<img src="{% static 'frontend/assets/images/icon-headphone.svg' %}" alt="">
-							</div>
-							<div class="footer-contact-content">
-								<h3>Emergency toll free no</h3>
-								<p><a href="tel:+2195550114">(219) 555-0114</a></p>
+							<div class="footer-contact-item">
+								<div class="icon-box">
+									<img src="{% static 'frontend/assets/images/icon-headphone.svg' %}" alt="">
+								</div>
+								<div class="footer-contact-content">
+									<h3>Emergency toll free no</h3>
+									<p><a href="tel:+2195550114">(219) 555-0114</a></p>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="col-lg-3 col-md-4">
-					<div class="footer-links">
-						<h3>get in touch</h3>
+					<div class="col-lg-3 col-md-4">
+						<div class="footer-links">
+							<h3>get in touch</h3>
 
-						<div class="footer-contact-info-item">
-							<h3>Location</h3>
-							<p>6391 Elgin St. Santa Ana Celina, Delaware 10299</p>
-						</div>
+							<div class="footer-contact-info-item">
+								<h3>Location</h3>
+								<p>6391 Elgin St. Santa Ana Celina, Delaware 10299</p>
+							</div>
 
-						<div class="footer-contact-info-item">
-							<h3>Email</h3>
-							<p><a href="mailto:info@domain.com">info@domain.com</a></p>
+							<div class="footer-contact-info-item">
+								<h3>Email</h3>
+								<p><a href="mailto:info@domain.com">info@domain.com</a></p>
+							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="col-lg-2 col-md-3">
-					<div class="footer-links">
-						<h3>quick link</h3>
-						<ul>
-							<li><a href="{% url 'home' %}">Home</a></li>
-							<li><a href="{% url 'about' %}">About us</a></li>
-							<li><a href="{% url 'services' %}">our services</a></li>
-							<li><a href="https://html.awaikenthemes.com/dermal/projects.html">Client Reviews</a></li>
-						</ul>
-					</div>
-				</div>
-
-				<div class="col-lg-12">
-					<!-- Footer Copyright Section Start -->
-					<div class="footer-copyright">
-						<div class="footer-copyright-text">
-							<p>Copyright © 2025  All Rights Reserved.</p>
-						</div>
-
-						<div class="footer-social-links">
-							<span>Follow us on social</span>
+					<div class="col-lg-2 col-md-3">
+						<div class="footer-links">
+							<h3>quick link</h3>
 							<ul>
-								<li><a href="#"><i class="fa-brands fa-dribbble"></i></a></li>
-								<li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-								<li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+								<li><a href="{% url 'home' %}">Home</a></li>
+								<li><a href="{% url 'about' %}">About us</a></li>
+								<li><a href="{% url 'services' %}">our services</a></li>
+								<li><a href="https://html.awaikenthemes.com/dermal/projects.html">Client Reviews</a></li>
 							</ul>
 						</div>
 					</div>
-					<!-- Footer Copyright Section End -->
+
+					<div class="col-lg-12">
+						<!-- Footer Copyright Section Start -->
+						<div class="footer-copyright">
+							<div class="footer-copyright-text">
+								<p>Copyright © 2025  All Rights Reserved.</p>
+							</div>
+
+							<div class="footer-social-links">
+								<span>Follow us on social</span>
+								<ul>
+									<li><a href="#"><i class="fa-brands fa-dribbble"></i></a></li>
+									<li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
+									<li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+								</ul>
+							</div>
+						</div>
+						<!-- Footer Copyright Section End -->
+					</div>
 				</div>
 			</div>
 		</div>
+
 	</footer>
 	<!-- Footer Main End -->
+
+	<!-- Book Trip Modal Start -->
+	<div class="modal fade" id="bookTripModal" tabindex="-1" aria-labelledby="bookTripModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="bookTripModalLabel">Book Your Trip</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+
+				<div class="modal-body">
+					<div class="book-trip-alert" id="bookTripAlert"></div>
+
+					<form id="bookTripForm" action="{% url 'booking' %}" method="POST" novalidate>
+						{% csrf_token %}
+						<div class="row g-3">
+							<div class="col-md-6">
+								<label class="form-label" for="bt_name">Full Name *</label>
+								<input type="text" class="form-control" id="bt_name" name="name" placeholder="Your full name" required>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_email">Email *</label>
+								<input type="email" class="form-control" id="bt_email" name="email" placeholder="you@example.com" required>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_phone">Phone *</label>
+								<input type="tel" class="form-control" id="bt_phone" name="phone" placeholder="Phone number" required>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_package">Package *</label>
+								<select class="form-select" id="bt_package" name="package" required>
+									<option value="">Select a package</option>
+									{% for p in booking_packages %}
+										<option value="{{ p.pk }}">{{ p }}</option>
+									{% endfor %}
+								</select>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_start_date">Start Date *</label>
+								<input type="date" class="form-control" id="bt_start_date" name="start_date" required>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_end_date">End Date *</label>
+								<input type="date" class="form-control" id="bt_end_date" name="end_date" required>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label" for="bt_travelers">Number of Travelers *</label>
+								<input type="number" class="form-control" id="bt_travelers" name="travelers" min="1" value="1" required>
+							</div>
+
+							<div class="col-12">
+								<label class="form-label" for="bt_message">Message</label>
+								<textarea class="form-control" id="bt_message" name="message" placeholder="Tell us more about your trip (optional)"></textarea>
+							</div>
+
+							<div class="col-12">
+								<button type="submit" class="btn-default" id="bookTripSubmit">Submit Enquiry</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Book Trip Modal End -->
+
+	<!-- Thank You Modal Start -->
+	<div class="modal fade" id="thankYouModal" tabindex="-1" aria-labelledby="thankYouTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="thank-you-body">
+					<div class="thank-you-icon">
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<polyline points="5 12.5 10 17.5 19 7.5"></polyline>
+						</svg>
+					</div>
+					<h3 class="thank-you-title" id="thankYouTitle">Thank You!</h3>
+					<p class="thank-you-text" id="thankYouText">Your enquiry has been received. We will contact you shortly.</p>
+					<button type="button" class="btn-default" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Thank You Modal End -->
 
 	<!-- Jquery Library File -->
 	<script src="{% static 'frontend/assets/js/jquery-3.7.1.min.js' %}"></script>
@@ -235,6 +847,133 @@
 	<!-- Main Custom js file -->
 	<script src="{% static 'frontend/assets/js/function.js' %}"></script>
 	<script src="https://demo.awaikenthemes.com/assets/js/theme-panel-dynamic.js"></script>
+
+	<!-- Navbar: turn white after scrolling past the hero -->
+	<script>
+		(function () {
+			var header = document.querySelector('header.main-header');
+			if (!header) return;
+
+			var hero = document.querySelector('.hero');
+
+			function check() {
+				var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+				// with a hero: switch when the hero is almost scrolled away
+				// without a hero (inner pages): switch after a small scroll
+				var limit = hero
+					? hero.offsetHeight - header.offsetHeight - 20
+					: 40;
+
+				header.classList.toggle('is-solid', y > limit);
+			}
+
+			window.addEventListener('scroll', check, { passive: true });
+			window.addEventListener('resize', check);
+			window.addEventListener('load', check);
+			check();
+		})();
+	</script>
+
+	<!-- Book Trip Modal Js -->
+	<script>
+		(function () {
+			var modalEl = document.getElementById('bookTripModal');
+			var thanksEl = document.getElementById('thankYouModal');
+			var thanksText = document.getElementById('thankYouText');
+			var form = document.getElementById('bookTripForm');
+			var alertBox = document.getElementById('bookTripAlert');
+			var submitBtn = document.getElementById('bookTripSubmit');
+			var startInput = document.getElementById('bt_start_date');
+			var endInput = document.getElementById('bt_end_date');
+
+			// Move both modals to <body> root so header/sticky styles never affect them
+			document.body.appendChild(modalEl);
+			document.body.appendChild(thanksEl);
+
+			// Date limits: start can't be in the past, end can't be before start
+			var today = new Date().toISOString().split('T')[0];
+			startInput.setAttribute('min', today);
+			endInput.setAttribute('min', today);
+
+			startInput.addEventListener('change', function () {
+				if (startInput.value) {
+					endInput.setAttribute('min', startInput.value);
+					if (endInput.value && endInput.value < startInput.value) {
+						endInput.value = '';
+					}
+				}
+			});
+
+			function showError(text) {
+				alertBox.className = 'book-trip-alert error';
+				alertBox.textContent = text;
+			}
+
+			function clearAlert() {
+				alertBox.className = 'book-trip-alert';
+				alertBox.textContent = '';
+			}
+
+			// Open modal from any "Book Trip" button
+			$(document).on('click', '.open-book-trip', function (e) {
+				e.preventDefault();
+				clearAlert();
+				bootstrap.Modal.getOrCreateInstance(modalEl).show();
+			});
+
+			// Close booking modal, then open the thank you modal
+			function showThankYou(message) {
+				thanksText.textContent = message || 'Your enquiry has been received. We will contact you shortly.';
+
+				modalEl.addEventListener('hidden.bs.modal', function () {
+					bootstrap.Modal.getOrCreateInstance(thanksEl).show();
+				}, { once: true });
+
+				bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+			}
+
+			// Submit through AJAX (no page redirect)
+			form.addEventListener('submit', function (e) {
+				e.preventDefault();
+				clearAlert();
+
+				if (!form.checkValidity()) {
+					form.reportValidity();
+					return;
+				}
+
+				submitBtn.disabled = true;
+				var originalText = submitBtn.textContent;
+				submitBtn.textContent = 'Sending...';
+
+				fetch(form.action, {
+					method: 'POST',
+					body: new FormData(form),
+					headers: { 'X-Requested-With': 'XMLHttpRequest' },
+					credentials: 'same-origin'
+				})
+				.then(function (res) { return res.json(); })
+				.then(function (data) {
+					if (data.success) {
+						form.reset();
+						document.getElementById('bt_travelers').value = 1;
+						endInput.setAttribute('min', today);
+						showThankYou(data.message);
+					} else {
+						showError(data.message || 'Something went wrong. Please try again.');
+					}
+				})
+				.catch(function () {
+					showError('Network error. Please try again.');
+				})
+				.finally(function () {
+					submitBtn.disabled = false;
+					submitBtn.textContent = originalText;
+				});
+			});
+		})();
+	</script>
 	{% block extra_js %}{% endblock %}
 </body>
 </html>

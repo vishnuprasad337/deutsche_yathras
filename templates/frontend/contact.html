@@ -1,181 +1,549 @@
 {% extends 'frontend/base.html' %}
 {% load static %}
 
-{% block title %}Contact Us - Dermal - Dermatologist & Cosmetology Clinic{% endblock %}
+{% block title %}Contact Us - Deutsche Yathras{% endblock %}
+
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
+
+/* ==========================================
+   SHARED (same palette as Home + About + Packages)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
+
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:inline;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;border:0;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;cursor:pointer;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-page-hero-title em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-crumbs{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
+}
+
+/* ==========================================
+   1) CONTACT SECTION  (sky + drifting clouds)
+========================================== */
+.dy-contact{position:relative;overflow:hidden;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e8f6ff);}
+.dy-contact *{box-sizing:border-box;}
+.dy-contact::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-contact-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+.dy-contact .dy-wrap{position:relative;z-index:2;}
+
+.dy-contact-head{max-width:760px;margin:0 auto 55px;text-align:center;}
+.dy-contact-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+
+/* info cards */
+.dy-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin-bottom:50px;}
+.dy-info-card{display:flex;align-items:flex-start;gap:18px;height:100%;padding:28px 26px;background:#fff;
+    border-radius:30px;box-shadow:0 10px 30px rgba(20,48,94,.08);transition:transform .35s,box-shadow .35s;}
+.dy-info-card:hover{transform:translateY(-8px);box-shadow:0 20px 44px rgba(20,48,94,.16);}
+.dy-info-icon{flex:0 0 56px;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-navy);color:#fff;font-size:20px;transition:background .3s,transform .4s;}
+.dy-info-card:hover .dy-info-icon{background:var(--dy-orange);transform:rotate(-8deg) scale(1.08);}
+.dy-info-text{min-width:0;}
+.dy-info-card h3{margin:2px 0 6px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;
+    font-weight:700 !important;font-size:24px;line-height:1.2;letter-spacing:-.3px;}
+.dy-info-card p{margin:0;color:#6b7280;font-size:15px;line-height:1.7;}
+.dy-info-card a{color:var(--dy-navy);font-weight:700;text-decoration:none;word-break:break-word;transition:color .25s;}
+.dy-info-card a:hover{color:var(--dy-orange);}
+
+/* ---- MAP + FORM SIDE BY SIDE ---- */
+.dy-split{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:stretch;}
+
+/* map card (left) */
+.dy-map-card{display:flex;flex-direction:column;min-width:0;padding:16px;background:#fff;border-radius:30px;
+    box-shadow:0 10px 30px rgba(20,48,94,.08);}
+.dy-map-frame{position:relative;flex:1;min-height:480px;border-radius:22px;overflow:hidden;background:#cfe6f6;}
+.dy-map-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;}
+.dy-map-bar{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:16px 10px 6px;}
+.dy-map-address{display:flex;align-items:flex-start;gap:12px;min-width:0;color:var(--dy-navy);font-size:15px;font-weight:600;line-height:1.5;}
+.dy-map-address i{margin-top:3px;color:var(--dy-orange);font-size:18px;}
+
+/* SMALL map button (compact pill, left aligned) */
+.dy-map-btn{align-self:flex-start;gap:10px;padding:9px 18px;font-size:13px;
+    box-shadow:0 6px 14px rgba(244,129,63,.3);}
+.dy-map-btn:hover{transform:translateY(-2px);}
+
+/* form card (right) */
+.dy-form-card{min-width:0;padding:40px 38px 42px;background:#fff;border-radius:30px;
+    box-shadow:0 10px 30px rgba(20,48,94,.08);}
+.dy-form-card h3{margin:0 0 6px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;
+    font-weight:800 !important;font-size:clamp(28px,2.4vw,36px);line-height:1.15;letter-spacing:-.02em;}
+.dy-form-sub{margin:0 0 24px;color:#5b6b85;font-size:16px;line-height:1.6;}
+
+.dy-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.dy-grid .full{grid-column:1/-1;}
+.dy-field label{display:flex;align-items:center;gap:8px;margin-bottom:7px;color:var(--dy-navy);font-size:13px;font-weight:700;letter-spacing:.3px;}
+.dy-field label i{color:var(--dy-orange);font-size:13px;}
+.dy-field label small{margin-left:auto;padding:2px 10px;border-radius:20px;background:#eef3fa;color:#6b7280;font-size:11px;font-weight:600;}
+.dy-field input,.dy-field textarea{width:100%;padding:14px 18px;border:1.5px solid #dbe3ef;border-radius:16px;
+    background:#f7faff;color:#1f2937;font-size:15px;transition:border-color .25s,background .25s,box-shadow .25s;}
+.dy-field input::placeholder,.dy-field textarea::placeholder{color:#9aa6b8;}
+.dy-field input:focus,.dy-field textarea:focus{outline:none;background:#fff;border-color:var(--dy-navy);
+    box-shadow:0 0 0 4px rgba(20,48,94,.12);}
+.dy-field textarea{min-height:130px;resize:vertical;}
+
+/* honeypot (hidden spam trap) */
+.dy-hp{position:absolute;left:-9999px;opacity:0;height:0;width:0;}
+
+.dy-recaptcha{margin-top:20px;}
+.dy-submit{margin-top:22px;}
+.dy-submit:disabled,.dy-submit.is-locked{opacity:.6;cursor:not-allowed;pointer-events:none;}
+.dy-submit.is-sending{cursor:wait;}
+
+.dy-status{display:none;margin-top:14px;font-size:14.5px;font-weight:500;}
+.dy-status.err{display:block;color:#c62828;}
+.dy-status.ok{display:block;color:#1a7f37;}
+
+/* success popup */
+.dy-modal{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;
+    background:rgba(10,24,48,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.dy-modal.open{display:flex;}
+.dy-modal-box{width:100%;max-width:440px;padding:44px 36px 36px;background:#fff;border-radius:28px;text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);animation:dyPop .45s ease;}
+.dy-modal-icon{width:84px;height:84px;margin:0 auto 22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-navy);color:#fff;font-size:34px;}
+.dy-modal-box h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:800;font-size:30px;}
+.dy-modal-box p{margin:0 0 26px;color:#5b6b85;font-size:16px;line-height:1.6;}
+@keyframes dyPop{0%{transform:scale(.5);opacity:0;}70%{transform:scale(1.05);opacity:1;}100%{transform:scale(1);}}
+
+@media(max-width:1199px){
+    .dy-info-grid{gap:22px;}
+    .dy-split{gap:22px;}
+    .dy-form-card{padding:32px 26px 34px;}
+    .dy-grid{grid-template-columns:1fr;}   /* narrow column: one field per row */
+}
+@media(max-width:991px){
+    .dy-contact{padding:70px 0 80px;}
+    .dy-info-grid{grid-template-columns:1fr;gap:18px;}
+    .dy-contact-plane{max-width:24%;}
+
+    /* stack: form first, map second */
+    .dy-split{grid-template-columns:1fr;gap:26px;}
+    .dy-form-card{order:1;}
+    .dy-map-card{order:2;}
+    .dy-map-frame{flex:none;height:340px;min-height:0;}
+    .dy-grid{grid-template-columns:1fr 1fr;}   /* full width again: two columns */
+}
+@media(max-width:640px){
+    .dy-contact-plane{display:none;}
+    .dy-grid{grid-template-columns:1fr;gap:14px;}
+    .dy-form-card{padding:28px 18px 30px;border-radius:24px;}
+    .dy-info-card{padding:22px 18px;gap:14px;border-radius:24px;}
+    .dy-info-icon{flex-basis:48px;width:48px;height:48px;font-size:18px;}
+    .dy-field input,.dy-field textarea{font-size:16px;}   /* 16px stops iOS zoom on focus */
+    .dy-submit{width:100%;justify-content:space-between;}
+    .dy-map-card{padding:12px;border-radius:24px;}
+    .dy-map-frame{height:280px;border-radius:18px;}
+    .dy-map-bar{padding:14px 4px 4px;}
+}
+@media(max-width:400px){
+    .dy-recaptcha .g-recaptcha{transform:scale(.85);transform-origin:0 0;}
+}
+
+/* ==========================================
+   2) NAVY BANNER
+========================================== */
+.dy-cta{position:relative;overflow:hidden;isolation:isolate;padding:30px 0 100px;
+    background:linear-gradient(180deg,#e8f6ff,#e8f5fd);}
+.dy-cta *{box-sizing:border-box;}
+.dy-cta-box{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-cta-box::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-cta-box::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-cta h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-cta h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-cta p{margin:0;max-width:520px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-cta-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+@media(max-width:991px){
+    .dy-cta{padding:10px 0 70px;}
+    .dy-cta-box{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-cta-btns{justify-content:flex-start;}
+}
+
+@media(prefers-reduced-motion:reduce){
+    .dy-contact::before,.dy-contact-plane,.dy-modal-box{animation:none !important;}
+    .dy-info-card,.dy-info-icon,.dy-btn,.dy-btn-ghost{transition:none !important;}
+}
+/* traveler image (left of map, desktop only) */
+/* traveler image (left of map, desktop only) */
+/* traveler image (left of map, desktop only) */
+.dy-traveler{display:none;}
+@media(min-width:1780px){
+    .dy-split{position:relative;left:130px;}
+    .dy-traveler{display:block;position:absolute;bottom:0;
+        right:calc(100% - 178px);width:600px;z-index:0;pointer-events:none;}
+    .dy-traveler img{display:block;width:100%;height:auto;
+        filter:drop-shadow(0 14px 22px rgba(20,48,94,.18));}
+    .dy-map-card{position:relative;z-index:1;}
+}
+</style>
+{% endblock %}
+
 
 {% block content %}
 
-    <!-- Page Header Start -->
-    <div class="page-header bg-section dark-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="page-header-box">
-                        <h1 class="text-anime-style-3" data-cursor="-opaque">Contact us</h1>
-                        <nav class="wow fadeInUp">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'home' %}">home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">contact us</li>
-                            </ol>
-                        </nav>
-                    </div>
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-page-hero" aria-label="Contact Deutsche Yathras">
+    <img src="{% static 'frontend/hero.webp' %}" alt="Contact Deutsche Yathras">
+
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">Contact <em>Us</em></h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Contact Us</span>
+        </nav>
+    </div>
+</section>
+
+
+<!-- ============ 1) INFO CARDS + MAP & FORM SIDE BY SIDE ============ -->
+<section class="dy-contact" id="contact">
+
+    <img class="dy-contact-plane" src="{% static 'frontend/assets/images/home/airplane.png' %}" alt="" aria-hidden="true" loading="lazy">
+
+    <div class="dy-wrap">
+
+        <div class="dy-contact-head">
+            <span class="dy-eyebrow is-center">Get in Touch</span>
+            <h2 class="dy-h2">We'd Love to <span class="acc">Hear From You</span></h2>
+            <p>Planning your next journey? Call us, send an email, or leave a message and our team will get back to you shortly.</p>
+        </div>
+
+        <!-- INFO CARDS -->
+        <div class="dy-info-grid">
+            <div class="dy-info-card">
+                <div class="dy-info-icon"><i class="fa-solid fa-phone-volume" aria-hidden="true"></i></div>
+                <div class="dy-info-text">
+                    <h3>Call Us</h3>
+                    <p><a href="tel:{{ info.phone_link }}">{{ info.phone }}</a></p>
+                </div>
+            </div>
+
+            <div class="dy-info-card">
+                <div class="dy-info-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></div>
+                <div class="dy-info-text">
+                    <h3>Visit Us</h3>
+                    <p>{% for line in info.address_lines %}{{ line }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</p>
+                </div>
+            </div>
+
+            <div class="dy-info-card">
+                <div class="dy-info-icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+                <div class="dy-info-text">
+                    <h3>Email Us</h3>
+                    <p><a href="mailto:{{ info.email }}">{{ info.email }}</a></p>
                 </div>
             </div>
         </div>
+
+        <!-- MAP (left) + FORM (right) -->
+        <div class="dy-split">
+           <!-- TRAVELER IMAGE -->
+    <div class="dy-traveler" aria-hidden="true">
+        <img src="{% static 'frontend/travel.png' %}" alt="" loading="lazy">
     </div>
-    <!-- Page Header End -->
+            <!-- MAP -->
+            <div class="dy-map-card">
+                <div class="dy-map-frame">
+                    <iframe src="{{ info.map_embed }}"
+                            title="Deutsche Yathras location map"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="dy-map-bar">
+                    <div class="dy-map-address">
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        <span>{% for line in info.address_lines %}{{ line }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                    </div>
+                    <a href="{{ info.map_link }}" target="_blank" rel="noopener noreferrer" class="dy-btn dy-map-btn">
+                        Open in Google Maps <i class="fa-solid fa-location-arrow" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
 
-    <!-- Page Contact Us Start -->
-    <div class="page-contact-us">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="contact-us-image">
-                        <div class="contact-us-img">
-                            <figure class="image-anime">
-                                <img src="{% static 'frontend/assets/images/contact-us-image.jpg' %}" alt="">
-                            </figure>
+            <!-- FORM -->
+            <div class="dy-form-card">
+                <h3>Send Us a Message</h3>
+                <p class="dy-form-sub">Share a few details and we will get back to you.</p>
+
+                <form id="contactForm" method="POST" action="{% url 'contact' %}" novalidate>
+                    {% csrf_token %}
+
+                    <!-- honeypot -->
+                    <div class="dy-hp" aria-hidden="true">
+                        <label>Website</label>
+                        <input type="text" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
+                    <div class="dy-grid">
+                        <div class="dy-field">
+                            <label for="cxFirst"><i class="fa-solid fa-user" aria-hidden="true"></i> First Name</label>
+                            <input type="text" id="cxFirst" name="first_name" maxlength="100" placeholder="Your first name" autocomplete="given-name" required>
                         </div>
-
-                        <div class="opeaning-hour-box wow fadeInUp">
-                            <div class="icon-box">
-                                <img src="{% static 'frontend/assets/images/icon-calender.svg' %}" alt="">
-                            </div>
-                            <div class="opeaning-hour-content">
-                                <h3>Opening hours</h3>
-                                <p>Mon - Sat : 10:00 to 07:00 pm</p>
-                                <p>Sunday : Closed</p>
-                            </div>
+                        <div class="dy-field">
+                            <label for="cxLast"><i class="fa-solid fa-user" aria-hidden="true"></i> Last Name</label>
+                            <input type="text" id="cxLast" name="last_name" maxlength="100" placeholder="Your last name" autocomplete="family-name" required>
+                        </div>
+                        <div class="dy-field">
+                            <label for="cxEmail"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Email <small>optional</small></label>
+                            <input type="email" id="cxEmail" name="email" maxlength="254" placeholder="you@example.com" autocomplete="email">
+                        </div>
+                        <div class="dy-field">
+                            <label for="cxPhone"><i class="fa-solid fa-phone" aria-hidden="true"></i> Phone</label>
+                            <input type="tel" id="cxPhone" name="phone" maxlength="25" placeholder="Your phone number" autocomplete="tel" required>
+                        </div>
+                        <div class="dy-field full">
+                            <label for="cxMessage"><i class="fa-solid fa-comment" aria-hidden="true"></i> Message <small>optional</small></label>
+                            <textarea id="cxMessage" name="message" rows="4" maxlength="2000" placeholder="Tell us how we can help..."></textarea>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-lg-7">
-                    <div class="contact-us-content">
-                        <div class="section-title">
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Get in touch with us</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">Have questions or need assistance? Reach out to us for expert guidance, personalized solutions, and exceptional support. We're here to help!</p>
-                        </div>
-
-                        <!-- Contact Form Start -->
-                        <div class="contact-form">
-                            <form id="contactForm" action="#" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.4s">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="fname" class="form-control" id="fname" placeholder="First Name" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="lname" class="form-control" id="lname" placeholder="Last Name" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="E-mail Address" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone No." required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-12 mb-5">
-                                        <textarea name="message" class="form-control" id="message" rows="4" placeholder="Write Message"></textarea>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn-default"><span>send message</span></button>
-                                        <div id="msgSubmit" class="h3 hidden"></div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Contact Form End -->
+                    <div class="dy-recaptcha">
+                        {% if recaptcha_site_key %}
+                            <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+                        {% else %}
+                            <p style="color:#c62828;font-size:14px;margin:0;">
+                                reCAPTCHA is not configured. Set RECAPTCHA_SITE_KEY in settings.py.
+                            </p>
+                        {% endif %}
                     </div>
-                </div>
+
+                    <button type="submit" class="dy-btn dy-submit" id="cxSubmit">
+                        <span class="cx-submit-text">Send Message</span>
+                        <i class="fa-solid fa-paper-plane cx-submit-icon" aria-hidden="true"></i>
+                    </button>
+                    <div class="dy-status" id="cxStatus" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+
+        </div><!-- /dy-split -->
+
+    </div>
+</section>
+
+
+<!-- ============ 2) NAVY BANNER ============ -->
+<section class="dy-cta">
+    <div class="dy-wrap">
+        <div class="dy-cta-box">
+            <div>
+                <h2>Ready to start your <em>next journey?</em></h2>
+                <p>Browse our holiday packages or tell us your dates and interests, and our travel advisors will build a personalised itinerary.</p>
+            </div>
+
+            <div class="dy-cta-btns">
+                <a href="#" class="dy-btn open-book-trip">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'packages' %}" class="dy-btn-ghost">View Packages</a>
             </div>
         </div>
     </div>
-    <!-- Page Contact Us End -->
+</section>
 
-    <!-- Contact Info Section Start -->
-    <div class="contact-info">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="contact-info-item wow fadeInUp">
-                        <div class="icon-box">
-                            <img src="{% static 'frontend/assets/images/icon-phone.svg' %}" alt="">
-                        </div>
-                        <div class="contact-info-content">
-                            <h3>phone</h3>
-                            <p><a href="tel:091123456789">+91 123 456 789</a></p>
-                            <p><a href="tel:091123456987">+91 123 456 987</a></p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="contact-info-item wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="icon-box">
-                            <img src="{% static 'frontend/assets/images/icon-location.svg' %}" alt="">
-                        </div>
-                        <div class="contact-info-content">
-                            <h3>address</h3>
-                            <p>1234 Elm Street, Los Angeles, CA 90001, USA</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="contact-info-item wow fadeInUp" data-wow-delay="0.4s">
-                        <div class="icon-box">
-                            <img src="{% static 'frontend/assets/images/icon-mail.svg' %}" alt="">
-                        </div>
-                        <div class="contact-info-content">
-                            <h3>email</h3>
-                            <p><a href="mailto:support@gmail.com">support@gmail.com</a></p>
-                            <p><a href="mailto:domainlname@gmail.com">domainlname@gmail.com</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Contact success popup -->
+<div class="dy-modal" id="contactSuccess" aria-hidden="true">
+    <div class="dy-modal-box" role="dialog" aria-modal="true" aria-labelledby="cxSuccessTitle">
+        <div class="dy-modal-icon"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
+        <h3 id="cxSuccessTitle">Message Sent!</h3>
+        <p>Thank you for contacting us. We have received your message and will get back to you soon.</p>
+        <button type="button" class="dy-btn" id="cxSuccessClose">OK</button>
     </div>
-    <!-- Contact Info Section End -->
+</div>
 
-    <!-- Google Map Start -->
-    <div class="google-map bg-section">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="google-map-iframe">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96737.10562045308!2d-74.08535042841811!3d40.739265258395164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1703158537552!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Google Map End -->
+{% endblock %}
 
-    <!-- Scrolling Ticker Section Start -->
-    <div class="our-scrolling-ticker">
-        <div class="scrolling-ticker-box">
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
 
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
-        </div>
-    </div>
-    <!-- Scrolling Ticker Section End -->
+{% block extra_js %}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+(function () {
+    /* ---------- Elements ---------- */
+    var form = document.getElementById('contactForm');
+    var statusEl = document.getElementById('cxStatus');
+    var btn = document.getElementById('cxSubmit');
+    var btnText = btn ? btn.querySelector('.cx-submit-text') : null;
+    var btnIcon = btn ? btn.querySelector('.cx-submit-icon') : null;
+    var successModal = document.getElementById('contactSuccess');
+    var successClose = document.getElementById('cxSuccessClose');
+    if (!form || !btn) return;
 
+    // keep the popup at the <body> root so the fixed header never covers it
+    document.body.appendChild(successModal);
+
+    var sending = false;   // blocks double submits
+
+    /* ---------- Send button states ---------- */
+    function setButton(state) {
+        // state: 'ready' | 'sending' | 'locked'
+        btn.disabled = state !== 'ready';
+        btn.classList.toggle('is-sending', state === 'sending');
+        btn.classList.toggle('is-locked', state === 'locked');
+
+        if (btnText) {
+            btnText.textContent =
+                state === 'sending' ? 'Sending...' :
+                state === 'locked'  ? 'Message Sent' : 'Send Message';
+        }
+        if (btnIcon) {
+            btnIcon.className =
+                state === 'sending' ? 'fa-solid fa-spinner fa-spin cx-submit-icon' :
+                state === 'locked'  ? 'fa-solid fa-check cx-submit-icon' :
+                                      'fa-solid fa-paper-plane cx-submit-icon';
+        }
+    }
+
+    function setStatus(msg, type) {
+        statusEl.textContent = msg || '';
+        statusEl.className = 'dy-status' + (type ? ' ' + type : '');
+    }
+    function resetCaptcha() {
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+    }
+
+    /* ---------- Success popup ---------- */
+    function openSuccess() {
+        successModal.classList.add('open');
+        successModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        successClose.focus();
+    }
+    function closeSuccess() {
+        if (!successModal.classList.contains('open')) return;
+        successModal.classList.remove('open');
+        successModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setButton('ready');     // button works again only after the popup is closed
+    }
+
+    successClose.addEventListener('click', closeSuccess);
+    successModal.addEventListener('click', function (e) {
+        if (e.target === successModal) closeSuccess();   // click outside the box
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSuccess();
+    });
+
+    /* ---------- Submit ---------- */
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (sending || btn.disabled) return;
+
+        var first = form.elements['first_name'].value.trim();
+        var last = form.elements['last_name'].value.trim();
+        var phone = form.elements['phone'].value.trim();
+
+        if (!first || !last || !phone) {
+            setStatus('Please enter your first name, last name and phone number.', 'err');
+            return;
+        }
+
+        if (typeof grecaptcha !== 'undefined' && !grecaptcha.getResponse()) {
+            setStatus('Please tick "I\'m not a robot".', 'err');
+            return;
+        }
+
+        sending = true;
+        setButton('sending');
+        setStatus('');
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            credentials: 'same-origin'
+        })
+        .then(function (r) {
+            return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+        })
+        .then(function (res) {
+            resetCaptcha();   // a token can only be used once
+            sending = false;
+
+            if (res.ok && res.d.ok) {
+                form.reset();
+                setStatus('');
+                setButton('locked');   // stays locked while the popup is open
+                openSuccess();
+            } else {
+                setButton('ready');
+                setStatus(res.d.error || 'Something went wrong. Please try again.', 'err');
+            }
+        })
+        .catch(function () {
+            resetCaptcha();
+            sending = false;
+            setButton('ready');
+            setStatus('Network error. Please try again or call us directly.', 'err');
+        });
+    });
+})();
+</script>
 {% endblock %}

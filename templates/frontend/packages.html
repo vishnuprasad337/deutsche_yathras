@@ -1,749 +1,364 @@
 {% extends 'frontend/base.html' %}
 {% load static %}
-
-{% block title %}Packages - Dermal - Dermatologist & Cosmetology Clinic{% endblock %}
-
+{% load image_tags %}
+{% block title %}Packages - Deutsche Yathras{% endblock %}
 
 {% block extra_css %}
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
 
 /* ==========================================
-   DEUTSCHE YATHRAS PACKAGE CARDS
-   ORIGINAL + TRAVILA STYLE
+   SHARED (same palette as Home + About)
 ========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
 
-.dy-packages-section {
-    padding: 85px 0 110px;
-    background: #fffaf9;
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:inline;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-page-hero-title em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-crumbs{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
 }
 
-.dy-packages-heading {
-    margin-bottom: 32px;
+/* ==========================================
+   1) PACKAGE LISTING  (sky + drifting clouds)
+========================================== */
+.dy-pkgs{position:relative;overflow:hidden;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e8f6ff);}
+.dy-pkgs *{box-sizing:border-box;}
+.dy-pkgs::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-pkgs-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+.dy-pkgs .dy-wrap{position:relative;z-index:2;}
+
+.dy-pkgs-head{max-width:760px;margin:0 auto 55px;text-align:center;}
+.dy-pkgs-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+
+/* filter pills */
+.dy-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:50px;}
+.dy-filter{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;
+    background:#fff;border:1px solid rgba(20,48,94,.12);color:var(--dy-navy);font-size:14px;font-weight:700;
+    text-decoration:none;box-shadow:0 6px 18px rgba(20,48,94,.06);
+    transition:background .3s,color .3s,border-color .3s,transform .3s;}
+.dy-filter:hover{transform:translateY(-3px);border-color:var(--dy-navy);color:var(--dy-navy);}
+.dy-filter.active{background:var(--dy-navy);border-color:var(--dy-navy);color:#fff;}
+.dy-filter:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* grid */
+.dy-pkg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;}
+
+/* card (same design as the home page cards) */
+.dy-pkg-card{display:flex;flex-direction:column;height:100%;padding:16px;background:#fff;border-radius:30px;
+    box-shadow:0 10px 30px rgba(20,48,94,.08);transition:transform .35s,box-shadow .35s;}
+.dy-pkg-card:hover{transform:translateY(-8px);box-shadow:0 20px 44px rgba(20,48,94,.16);}
+.dy-pkg-image{position:relative;display:block;flex-shrink:0;height:260px;border-radius:22px;overflow:hidden;background:#cfe6f6;}
+.dy-pkg-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s;}
+.dy-pkg-card:hover .dy-pkg-image img{transform:scale(1.07);}
+.dy-pkg-badge{position:absolute;top:16px;left:16px;z-index:2;padding:8px 16px;border-radius:50px;
+    background:#fff;color:var(--dy-navy);font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.1);}
+.dy-pkg-badge.is-hot{background:var(--dy-orange);color:#fff;}
+.dy-pkg-body{display:flex;flex-direction:column;flex:1;min-width:0;padding:18px 10px 6px;}
+.dy-pkg-location{display:inline-flex;align-items:center;gap:8px;color:#5b6b85;font-size:15px;line-height:1.4;}
+.dy-pkg-location i{color:#2d5bd0;font-size:14px;}
+.dy-pkg-body h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 8px;
+    font-family:"Playfair Display",Georgia,serif !important;font-weight:700 !important;color:var(--dy-navy);
+    font-size:clamp(24px,2vw,30px);line-height:1.2;letter-spacing:-.3px;}
+.dy-pkg-body h3 a{color:inherit;text-decoration:none;}
+.dy-pkg-body h3 a:hover{color:var(--dy-coral);}
+.dy-pkg-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    margin:0 0 18px;color:#6b7280;font-size:15px;line-height:1.65;}
+.dy-pkg-info{margin-top:auto;padding:18px 22px;background:#f2f2f2;border-radius:20px;}
+.dy-pkg-info-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin-bottom:14px;padding-bottom:14px;
+    border-bottom:1px dashed #c4c8ce;color:var(--dy-navy);font-size:15px;font-weight:600;}
+.dy-pkg-info-top i{margin-right:6px;color:var(--dy-coral);}
+.dy-pkg-info-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.dy-pkg-price{display:flex;flex-direction:column;min-width:0;}
+.dy-pkg-price small{display:block;color:#6b7280;font-size:13px;letter-spacing:.02em;}
+.dy-pkg-price strong{color:var(--dy-navy);font-size:26px;font-weight:700;line-height:1.2;}
+.dy-pkg-price strong.is-request{font-size:18px;}
+.dy-pkg-currency{margin-right:2px;font-size:.7em;vertical-align:.1em;}
+
+/* action buttons: Explore More + Book Now */
+.dy-pkg-actions{display:flex;gap:10px;margin-top:14px;}
+.dy-pkg-enquire,.dy-pkg-book{flex:1 1 0;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:14px 16px;border-radius:50px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;
+    white-space:nowrap;cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s;}
+.dy-pkg-enquire{background:var(--dy-navy);}
+.dy-pkg-enquire:hover{background:#0e2347;color:#fff;transform:translateY(-2px);}
+.dy-pkg-book{background:var(--dy-orange);box-shadow:0 8px 18px rgba(244,129,63,.3);}
+.dy-pkg-book:hover{background:#ea7330;color:#fff;transform:translateY(-2px);}
+.dy-pkg-enquire:focus-visible,.dy-pkg-book:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* empty state */
+.dy-pkg-empty{grid-column:1/-1;padding:70px 24px;text-align:center;background:rgba(255,255,255,.85);border-radius:30px;}
+.dy-pkg-empty>i{margin-bottom:18px;color:var(--dy-orange);font-size:44px;}
+.dy-pkg-empty h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:28px;}
+.dy-pkg-empty p{max-width:460px;margin:0 auto 26px;color:#5b6b85;line-height:1.7;}
+
+@media(max-width:1199px){.dy-pkg-grid{gap:22px;}.dy-pkg-info{padding:16px 18px;}.dy-pkg-price strong{font-size:22px;}}
+@media(max-width:991px){
+    .dy-pkgs{padding:70px 0 80px;}
+    .dy-pkg-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .dy-pkgs-plane{max-width:24%;}
+}
+@media(max-width:640px){
+    .dy-pkg-grid{grid-template-columns:1fr;}
+    .dy-pkgs-plane{display:none;}
+    .dy-filter{padding:10px 16px;font-size:13px;}
+    .dy-filters{gap:9px;margin-bottom:34px;}
+}
+@media(max-width:400px){
+    .dy-pkg-actions{flex-direction:column;}
 }
 
-.dy-packages-eyebrow {
-    display: block;
-    margin-bottom: 12px;
-    color: #b38b50;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
+/* ==========================================
+   2) CUSTOM TRIP BANNER
+========================================== */
+.dy-cta{position:relative;overflow:hidden;isolation:isolate;padding:30px 0 100px;
+    background:linear-gradient(180deg,#e8f6ff,#e8f5fd);}
+.dy-cta *{box-sizing:border-box;}
+.dy-cta-box{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-cta-box::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-cta-box::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-cta h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-cta h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-cta p{margin:0;max-width:520px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-cta-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+@media(max-width:991px){
+    .dy-cta{padding:10px 0 70px;}
+    .dy-cta-box{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-cta-btns{justify-content:flex-start;}
 }
 
-.dy-packages-heading h2 {
-    color: #194d42;
-    font-size: clamp(30px, 3.5vw, 46px);
-    line-height: 1.2;
-    margin-bottom: 12px;
+@media(prefers-reduced-motion:reduce){
+    .dy-pkgs::before,.dy-pkgs-plane{animation:none !important;}
+    .dy-pkg-card,.dy-pkg-image img,.dy-filter,.dy-btn,.dy-btn-ghost,.dy-pkg-enquire,.dy-pkg-book{transition:none !important;}
 }
-
-.dy-packages-heading p {
-    max-width: 650px;
-    color: #71817c;
-    line-height: 1.8;
-}
-
-/* FILTER BUTTONS */
-
-.dy-package-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 40px;
-}
-
-.dy-filter-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 11px 22px;
-    border: 1px solid #e3e8e5;
-    border-radius: 50px;
-    background: #ffffff;
-    color: #194d42;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.dy-filter-btn:hover,
-.dy-filter-btn.active {
-    background: #194d42;
-    border-color: #194d42;
-    color: #ffffff;
-}
-
-/* CARD */
-
-.dy-packages-section .dy-package-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border: 1px solid #e8ece9;
-    border-radius: 28px;
-    background: #ffffff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.035);
-    transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease;
-}
-
-.dy-packages-section .dy-package-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 22px 45px rgba(25, 77, 66, 0.12);
-}
-
-/* IMAGE - KEEP ORIGINAL ROUNDED STYLE */
-
-.dy-packages-section .dy-package-image {
-    position: relative;
-    width: 100%;
-    height: 285px;
-    overflow: hidden;
-    border-radius: 28px 28px 0 0;
-}
-
-.dy-packages-section .dy-package-image figure {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    border-radius: inherit;
-}
-
-.dy-packages-section .dy-package-image figure img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s ease;
-}
-
-.dy-packages-section .dy-package-card:hover
-.dy-package-image figure img {
-    transform: scale(1.07);
-}
-
-/* BADGE */
-
-.dy-package-badge {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 3;
-    padding: 9px 17px;
-    border-radius: 50px;
-    background: #ffffff;
-    color: #194d42;
-    font-size: 13px;
-    font-weight: 700;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-
-/* ORIGINAL CIRCULAR ARROW */
-
-.dy-packages-section .dy-package-arrow {
-    position: absolute;
-    right: 18px;
-    bottom: 18px;
-    z-index: 3;
-    width: 52px;
-    height: 52px;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-}
-
-.dy-packages-section .dy-package-arrow a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: #194d42;
-}
-
-.dy-packages-section .dy-package-arrow img {
-    width: 19px;
-    height: 19px;
-    object-fit: contain;
-}
-
-/* CONTENT */
-
-.dy-packages-section .dy-package-content {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    padding: 26px 25px 28px;
-    background: #ffffff;
-}
-
-.dy-packages-section .dy-package-content h3 {
-    margin: 0 0 14px;
-    font-size: 23px;
-    font-weight: 700;
-    line-height: 1.35;
-    text-transform: none;
-}
-
-.dy-packages-section .dy-package-content h3 a {
-    color: #194d42;
-    text-decoration: none;
-}
-
-.dy-packages-section .dy-package-content h3 a:hover {
-    color: #b38b50;
-}
-
-/* DURATION */
-
-.dy-package-meta {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 15px;
-}
-
-.dy-package-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #7b8883;
-    font-size: 14px;
-}
-
-.dy-package-meta i {
-    color: #b38b50;
-}
-
-/* DESCRIPTION */
-
-.dy-package-description {
-    color: #71817c;
-    font-size: 14px;
-    line-height: 1.75;
-    margin: 0 0 24px;
-}
-
-/* PRICE AND CTA */
-
-.dy-package-footer {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 14px;
-    margin-top: auto;
-    padding-top: 20px;
-    border-top: 1px solid #eef0ee;
-}
-
-.dy-package-price {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.dy-price-label {
-    color: #85918c;
-    font-size: 12px;
-}
-
-.dy-package-price strong {
-    color: #194d42;
-    font-size: 24px;
-    line-height: 1.2;
-    font-weight: 800;
-}
-
-.dy-package-book-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-shrink: 0;
-    padding: 12px 16px;
-    border-radius: 50px;
-    background: #f4f6f5;
-    color: #194d42;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.dy-package-book-btn:hover {
-    background: #194d42;
-    color: #ffffff;
-}
-
-.dy-package-book-btn i {
-    font-size: 12px;
-}
-
-/* EMPTY STATE */
-
-.dy-package-empty {
-    padding: 75px 20px;
-    text-align: center;
-}
-
-.dy-package-empty > i {
-    color: #b38b50;
-    font-size: 42px;
-    margin-bottom: 20px;
-}
-
-.dy-package-empty h3 {
-    color: #194d42;
-    margin-bottom: 12px;
-}
-
-.dy-package-empty p {
-    color: #71817c;
-    margin-bottom: 25px;
-}
-
-/* TABLET */
-
-@media (max-width: 991px) {
-    .dy-packages-section {
-        padding: 65px 0 80px;
-    }
-
-    .dy-packages-section .dy-package-image {
-        height: 260px;
-    }
-
-    .dy-packages-section .dy-package-content {
-        padding: 23px 20px;
-    }
-
-    .dy-packages-section .dy-package-content h3 {
-        font-size: 21px;
-    }
-}
-
-/* MOBILE */
-
-@media (max-width: 767px) {
-    .dy-packages-section {
-        padding: 50px 0 65px;
-    }
-
-    .dy-package-filters {
-        gap: 9px;
-        margin-bottom: 30px;
-    }
-
-    .dy-filter-btn {
-        padding: 10px 15px;
-        font-size: 12px;
-    }
-
-    .dy-packages-section .dy-package-image {
-        height: 270px;
-    }
-
-    .dy-packages-section .dy-package-content h3 {
-        font-size: 21px;
-    }
-
-    .dy-package-price strong {
-        font-size: 21px;
-    }
-}
-
-@media (max-width: 380px) {
-    .dy-package-footer {
-        flex-wrap: wrap;
-        align-items: center;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dy-packages-section .dy-package-card,
-    .dy-packages-section .dy-package-image img,
-    .dy-package-book-btn {
-        transition: none;
-    }
-}
-
 </style>
 {% endblock %}
+
+
 {% block content %}
 
-    <!-- Page Header Start -->
-    <div class="page-header bg-section dark-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="page-header-box">
-                        <h1 class="text-anime-style-3" data-cursor="-opaque">Packages</h1>
-                        <nav class="wow fadeInUp">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'home' %}">home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">packages</li>
-                            </ol>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-page-hero" aria-label="Deutsche Yathras packages">
+    <img src="{% static 'frontend/hero.webp' %}" alt="Travel packages by Deutsche Yathras">
+
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">Our <em>Packages</em></h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Packages</span>
+        </nav>
     </div>
-    <!-- Page Header End -->
+</section>
 
-    <!-- Page Packages Start (uses the case-study CSS classes) -->
-    
-<!-- ==========================================
-     DEUTSCHE YATHRAS PACKAGE LISTING
-========================================== -->
 
-<section class="page-case-study dy-packages-section">
+<!-- ============ 1) PACKAGE LISTING ============ -->
+<section class="dy-pkgs" id="packages">
 
-    <div class="container">
+    <img class="dy-pkgs-plane" src="{% static 'frontend/assets/images/home/airplane.png' %}" alt="" aria-hidden="true" loading="lazy">
 
-        <!-- SECTION INTRO -->
-        <div class="dy-packages-heading">
+    <div class="dy-wrap">
 
-            <div>
-                <span class="dy-packages-eyebrow">
-                    EXPLORE THE WORLD
-                </span>
-
-                <h2>Discover Your Next Journey</h2>
-
-                <p>
-                    Explore carefully curated holiday packages
-                    and find the perfect escape for your next adventure.
-                </p>
-            </div>
-
+        <div class="dy-pkgs-head">
+            <span class="dy-eyebrow is-center">Explore the World</span>
+            <h2 class="dy-h2">Discover Your Next <span class="acc">Journey</span></h2>
+            <p>Explore carefully curated holiday packages and find the perfect escape for your next adventure.</p>
         </div>
 
-        <!-- PACKAGE FILTERS -->
-        <div class="dy-package-filters">
-
-            <a
-                href="{% url 'packages' %}"
-                class="dy-filter-btn {% if selected_type == 'all' %}active{% endif %}"
-            >
-                All Packages
-            </a>
-
-            <a
-                href="{% url 'packages' %}?type=international"
-                class="dy-filter-btn {% if selected_type == 'international' %}active{% endif %}"
-            >
-                International
-            </a>
-
-            <a
-                href="{% url 'packages' %}?type=domestic"
-                class="dy-filter-btn {% if selected_type == 'domestic' %}active{% endif %}"
-            >
-                Domestic
-            </a>
-
-            <a
-                href="{% url 'packages' %}?type=hot_selling"
-                class="dy-filter-btn {% if selected_type == 'hot_selling' %}active{% endif %}"
-            >
-                Hot Selling
-            </a>
-
-        </div>
-
-        <!-- PACKAGE CARDS -->
-        <div class="row g-4">
+        <!-- CARDS -->
+        <div class="dy-pkg-grid">
 
             {% for package in packages %}
+            <article class="dy-pkg-card">
 
-            <div class="col-lg-4 col-md-6">
+                <a href="{% url 'package_detail' slug=package.slug %}" class="dy-pkg-image" aria-label="View details for {{ package.name }}">
+    {% if package.main_image %}
+    {% with sset=package.main_image|srcset %}
+    <img src="{{ package.main_image.url }}"
+         {% if sset %}srcset="{{ sset }}" sizes="(max-width: 640px) 100vw, (max-width: 991px) 50vw, 33vw"{% endif %}
+         alt="{{ package.name }}"
+         width="600" height="260"
+         loading="lazy"
+         decoding="async">
+    {% endwith %}
+    {% else %}
+    <img src="{% static 'frontend/assets/images/home/package-placeholder.jpg' %}"
+         alt="Travel destination"
+         width="600" height="260"
+         loading="lazy"
+         decoding="async">
+    {% endif %}
+</a>
 
-                <article class="case-study-item dy-package-card wow fadeInUp">
+                <div class="dy-pkg-body">
 
-                    <!-- IMAGE -->
-                    <div class="case-study-image dy-package-image">
+                    <h3><a href="{% url 'package_detail' slug=package.slug %}">{{ package.name }}</a></h3>
 
-                        <figure>
+                    <p class="dy-pkg-desc">{{ package.description|striptags|truncatewords:20 }}</p>
 
-                            {% if package.main_image %}
-
-                            <img
-                                src="{{ package.main_image.url }}"
-                                alt="{{ package.name }}"
-                                loading="lazy"
-                            >
-
-                            {% else %}
-
-                            <img
-                                src="{% static 'frontend/assets/images/home/package-placeholder.jpg' %}"
-                                alt="Travel destination"
-                                loading="lazy"
-                            >
-
-                            {% endif %}
-
-                        </figure>
-
-                        <!-- CATEGORY BADGE -->
-                        <div class="dy-package-badge">
-
-                            {% if package.package_type == 'hot_selling' %}
-                                Hot Selling
-                            {% elif package.package_type == 'international' %}
-                                International
-                            {% else %}
-                                Domestic
-                            {% endif %}
-
-                        </div>
-
-                        <!-- ORIGINAL STYLE ARROW -->
-                        <div class="case-study-btn dy-package-arrow">
-
-                            <a
-                                href="{% url 'package_detail' slug=package.slug %}"
-                                aria-label="View details for {{ package.name }}"
-                            >
-                                <img
-                                    src="{% static 'frontend/assets/images/arrow-white.svg' %}"
-                                    alt=""
-                                >
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                    <!-- CONTENT -->
-                    <div class="case-study-content dy-package-content">
-
-                        <h3>
-                            <a href="{% url 'contact' %}?package={{ package.slug|urlencode }}">
-                                {{ package.name }}
-                            </a>
-                        </h3>
-
-                        <!-- DURATION -->
+                    <div class="dy-pkg-info">
                         {% if package.duration %}
-                        <div class="dy-package-meta">
-
-                            <span>
-                                <i class="fa-regular fa-clock"></i>
-                                {{ package.duration }}
-                            </span>
-
+                        <div class="dy-pkg-info-top">
+                            <span><i class="fa-regular fa-clock" aria-hidden="true"></i>{{ package.duration }}</span>
                         </div>
                         {% endif %}
 
-                        <!-- DESCRIPTION -->
-                        <p class="dy-package-description">
-                            {{ package.description|striptags|truncatewords:20 }}
-                        </p>
-
-                        <!-- PRICE AND BUTTON -->
-                        <div class="dy-package-footer">
-
-                            <div class="dy-package-price">
-
+                        <div class="dy-pkg-info-bottom">
+                            <div class="dy-pkg-price">
                                 {% if package.price_from %}
-
-                                    <span class="dy-price-label">
-                                        Starting from
-                                    </span>
-
+                                    <small>Package price</small>
                                     <strong>
-                                        ₹{{ package.price_from|floatformat:0 }}
+                                        <span class="dy-pkg-currency">₹</span>{{ package.price_from|floatformat:"0g" }}
                                     </strong>
-
                                 {% else %}
-
-                                    <span class="dy-price-label">
-                                        Customised Pricing
-                                    </span>
-
-                                    <strong>On Request</strong>
-
+                                    <small>Customised pricing</small>
+                                    <strong class="is-request">Price on Request</strong>
                                 {% endif %}
-
                             </div>
+                        </div><!-- /dy-pkg-info-bottom -->
+                    </div><!-- /dy-pkg-info -->
 
-                            <a
-                                href="{% url 'contact' %}?package={{ package.slug|urlencode }}"
-                                class="dy-package-book-btn"
-                            >
-                                Enquire Now
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                            </a>
-
-                        </div>
-
+                    <div class="dy-pkg-actions">
+                        <a href="{% url 'package_detail' slug=package.slug %}" class="dy-pkg-enquire">
+                            Explore More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                        <a href="#"
+                           class="dy-pkg-book open-book-trip"
+                           data-package-id="{{ package.id }}"
+                           data-package-name="{{ package.name }}"
+                           data-package-slug="{{ package.slug }}"
+                           aria-label="Book {{ package.name }}">
+                            Book Now <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                        </a>
                     </div>
 
-                </article>
+                </div><!-- /dy-pkg-body -->
 
-            </div>
+            </article>
 
             {% empty %}
 
-            <div class="col-12">
-
-                <div class="dy-package-empty">
-
-                    <i class="fa-solid fa-suitcase-rolling"></i>
-
-                    <h3>No packages available</h3>
-
-                    <p>
-                        No travel packages are currently listed
-                        in this category. Explore another category
-                        or check back soon.
-                    </p>
-
-                    <a href="{% url 'packages' %}" class="dy-filter-btn active">
-                        View All Packages
-                    </a>
-
-                </div>
-
+            <div class="dy-pkg-empty">
+                <i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i>
+                <h3>No packages available</h3>
+                <p>No travel packages are listed in this category yet. Try another category or check back soon.</p>
+                <a href="{% url 'packages' %}" class="dy-btn">View All Packages <i class="fa-solid fa-arrow-right"></i></a>
             </div>
 
             {% endfor %}
 
         </div>
-
     </div>
-
 </section>
 
-<!-- ==========================================
-     PACKAGE LISTING END
-========================================== -->
 
-    <!-- Page Packages End -->
+<!-- ============ 2) CUSTOM TRIP BANNER ============ -->
+<section class="dy-cta">
+    <div class="dy-wrap">
+        <div class="dy-cta-box">
+            <div>
+                <h2>Can't find the right trip? We'll <em>plan it for you</em></h2>
+                <p>Tell us your dates, budget and interests, and our travel advisors will build a personalised itinerary.</p>
+            </div>
 
-    <!-- Book Appointment Start -->
-    <div class="book-appointment bg-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 order-lg-1 order-2">
-                    <div class="book-appointment-content">
-                        <div class="booking-contact-list">
-                            <div class="booking-contact-item wow fadeInUp">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-location-white.svg' %}" alt="">
-                                </div>
-                                <div class="booking-contact-content">
-                                    <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-                                </div>
-                            </div>
-
-                            <div class="booking-contact-item wow fadeInUp" data-wow-delay="0.2s">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-phone-white.svg' %}" alt="">
-                                </div>
-                                <div class="booking-contact-content">
-                                    <p><a href="tel:684555012">(684) 555-012</a></p>
-                                    <p><a href="tel:704555127">(704) 555-127</a></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="google-map-iframe">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96737.10562045308!2d-74.08535042841811!3d40.739265258395164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1703158537552!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-7 order-lg-2 order-1">
-                    <div class="booking-form-box">
-                        <div class="section-title section-title-center">
-                            <h3 class="wow fadeInUp">Book a appointment</h3>
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Reach out to us today!</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">It's time to take control of your skin health! Booking your appointment is easy and fast. Choose a time that works for you and our dermatology experts will be ready.</p>
-                        </div>
-
-                        <div class="book-appointment-form wow fadeInUp" data-wow-delay="0.4s">
-                            <form id="appointmentForm" action="#" method="POST" data-toggle="validator">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="name" class="form-control" id="name" placeholder="Full Name Here" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone Number" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="Email Address" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <select name="services" class="form-control form-select" id="services" required>
-                                            <option value="" disabled selected>select service</option>
-                                            <option value="general_dental_care">Dermal fillers</option>
-                                            <option value="dental_implants">chemical peels</option>
-                                            <option value="cosmetic_dentistry">Acne treatment</option>
-                                            <option value="teeth_whitening">Skin tightening</option>
-                                            <option value="pediatric_dental_care">Scar revision</option>
-                                            <option value="advanced_oral_care">Wrinkle reduction</option>
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="date" name="date" class="form-control" id="date" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="time" name="time" class="form-control" id="time" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-12 mb-5">
-                                        <textarea name="message" class="form-control" id="message" rows="4" placeholder="Description here about service or your problem..."></textarea>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn-default"><span>send message</span></button>
-                                        <div id="msgSubmit" class="h3 hidden"></div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            <div class="dy-cta-btns">
+                <a href="#" class="dy-btn open-book-trip">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'contact' %}" class="dy-btn-ghost">Contact Us</a>
             </div>
         </div>
     </div>
-    <!-- Book Appointment End -->
+</section>
 
-    <!-- Scrolling Ticker Section Start -->
-    <div class="our-scrolling-ticker">
-        <div class="scrolling-ticker-box">
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
+{% endblock %}
 
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
-        </div>
-    </div>
-    <!-- Scrolling Ticker Section End -->
 
+{% block extra_js %}
+<script>
+/* Connects each "Book Now" button to the booking popup.
+   It fills the popup's package field with the clicked package.
+   The CTA banner button has no data attributes, so it clears the field (general enquiry). */
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.open-book-trip');
+    if (!btn) return;
+
+    var id   = btn.dataset.packageId   || '';
+    var name = btn.dataset.packageName || '';
+
+    // adjust these selectors to match the field names in your booking popup
+    var idField   = document.querySelector('#bookTripModal [name="package"], [name="package_id"], #book-trip-package-id');
+    var nameField = document.querySelector('#bookTripModal [name="package_name"], #book-trip-package-name');
+    var title     = document.querySelector('#book-trip-package-title');
+
+    if (idField)   idField.value = id;
+    if (nameField) nameField.value = name;
+    if (title)     title.textContent = name;
+});
+</script>
 {% endblock %}

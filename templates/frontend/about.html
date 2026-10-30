@@ -1,1521 +1,1448 @@
 {% extends 'frontend/base.html' %}
 {% load static %}
+{% load image_tags %}
+{% block title %}About Us - Deutsche Yathras{% endblock %}
 
-{% block title %}About Us - Dermal - Dermatologist & Cosmetology Clinic{% endblock %}
-
-{%block extra_css%}
+{% block extra_css %}
 <style>
-    
-/* ABOUT SECTION TRAVEL ICONS */
-
-.about-counter-item .icon-box i {
-    font-size: 36px;
-    line-height: 1;
+/* ==========================================
+   SHARED (same palette as the home page)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
 }
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
 
-.about-team-member > i {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-}
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:block;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
 
-
-{% comment %} mission vission css start {% endcomment %}
-
-/* Mission, Vision & Values - Equal Height */
-
-.our-mission-vision .mission-vision-list {
-    display: flex;
-    align-items: stretch;
-}
-
-.our-mission-vision .mission-vision-item {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.our-mission-vision .mission-vision-content {
-    flex: 1;
-}
-
-@media (max-width: 767px) {
-    .our-mission-vision .mission-vision-list {
-        flex-direction: column;
-    }
-}
-
-{% comment %} mission vission css end  {% endcomment %}
-
-
-{% comment %} benfit section css start {% endcomment %}
+/* small icon at the end of a title */
+.dy-title-icon{display:inline-block;width:.5em;height:.5em;margin-left:.2em;vertical-align:.05em;fill:none;stroke:#14305e;
+    stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;overflow:visible;}
+.dy-title-icon .hl{stroke:#f5a623;}
+.dy-title-accent{display:block !important;color:var(--dy-orange) !important;}
 
 /* ==========================================
-   TRAVEL BENEFIT ICONS
+   HERO IMAGE + PINNED ROUNDED NAVBAR
 ========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
 
-.our-benefit .our-benefit-item .icon-box i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    font-size: 27px;
-    color: #215247;
-    line-height: 1;
-    transition: transform 0.3s ease;
+.dy-about-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-about-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-about-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+@media(max-width:991px){.dy-about-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){.dy-about-hero{border-radius:0 0 28px 28px;}}
+
+/* ==========================================
+   1) ABOUT  (the only about section)
+========================================== */
+.dy-about{position:relative;overflow:clip;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e4f6f6);}
+.dy-about *{box-sizing:border-box;}
+.dy-about::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 18%,#000 82%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 18%,#000 82%,transparent 100%);
+    animation:dyClouds 160s linear infinite;}
+@keyframes dyClouds{to{background-position:900px 0;}}
+.dy-about-layout{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:center;}
+
+.dy-about-visual{position:relative;min-height:620px;}
+.dy-about-img1{position:absolute;left:0;top:0;width:64%;height:540px;border-radius:38px;overflow:hidden;
+    box-shadow:0 22px 50px rgba(20,48,94,.2);}
+.dy-about-img2{position:absolute;right:0;bottom:0;width:66%;height:300px;border-radius:30px;overflow:hidden;
+    border:10px solid #fff;box-shadow:0 22px 50px rgba(20,48,94,.22);}
+.dy-about-visual img.pic{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s;}
+.dy-about-visual:hover img.pic{transform:scale(1.05);}
+.dy-about-badge{position:absolute;left:56%;top:40%;z-index:3;width:128px;height:128px;border-radius:50%;
+    background:#fff;padding:6px;box-shadow:0 14px 34px rgba(20,48,94,.25);}
+.dy-about-badge img{width:100%;height:100%;display:block;animation:dySpin 18s linear infinite;}
+@keyframes dySpin{to{transform:rotate(360deg);}}
+.dy-about-dots{position:absolute;left:-30px;bottom:30px;z-index:0;width:140px;height:140px;
+    background-image:radial-gradient(#f5a623 2px,transparent 2.5px);background-size:16px 16px;opacity:.7;}
+
+.dy-about-content p.lead{margin:0 0 28px;color:#3d4f6e;font-size:17px;line-height:1.75;max-width:600px;}
+.dy-about-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:28px;}
+.dy-about-point{display:flex;gap:14px;align-items:flex-start;padding:18px;background:rgba(255,255,255,.85);
+    border-radius:22px;box-shadow:0 8px 22px rgba(20,48,94,.08);transition:transform .3s,box-shadow .3s;}
+.dy-about-point:hover{transform:translateY(-5px);box-shadow:0 16px 32px rgba(20,48,94,.14);}
+.dy-about-point-icon{flex:none;display:flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:50%;font-size:19px;}
+.dy-about-point-icon.is-orange{background:#fde3d3;color:var(--dy-orange);}
+.dy-about-point-icon.is-blue{background:#d9e7fa;color:#3d6fb7;}
+.dy-about-point h3{margin:0 0 5px;color:var(--dy-navy);font-size:18px;font-weight:700;}
+.dy-about-point p{margin:0;color:#4d5e78;font-size:14px;line-height:1.6;}
+.dy-about-list{list-style:none;margin:0 0 34px;padding:0;display:grid;gap:12px;}
+.dy-about-list li{display:flex;align-items:center;gap:12px;color:#17323d;font-size:16px;font-weight:500;}
+.dy-about-list li i{color:var(--dy-orange);font-size:18px;}
+
+.dy-about-stats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+    margin-top:70px;padding:22px 20px;border-radius:60px;background:rgba(255,255,255,.92);
+    box-shadow:0 18px 44px rgba(20,48,94,.14);}
+.dy-about-stat{display:flex;align-items:center;justify-content:center;gap:14px;padding:0 12px;}
+.dy-about-stat+.dy-about-stat{border-left:1px solid rgba(20,48,94,.15);}
+.dy-about-stat>i{font-size:28px;}
+.dy-about-stat .c-blue{color:#3d6fb7;}.dy-about-stat .c-green{color:#3f9a5a;}
+.dy-about-stat .c-orange{color:var(--dy-orange);}.dy-about-stat .c-purple{color:#6b4fc9;}
+.dy-about-stat strong{display:block;color:var(--dy-navy);font-size:clamp(20px,1.8vw,26px);font-weight:800;line-height:1.1;}
+.dy-about-stat small{display:block;margin-top:3px;color:#4d5e78;font-size:13px;font-weight:500;}
+
+@media(max-width:1199px){.dy-about-layout{gap:40px;}.dy-about-visual{min-height:560px;}.dy-about-img1{height:480px;}}
+@media(max-width:991px){
+    .dy-about{padding:70px 0 80px;}
+    .dy-about-layout{grid-template-columns:1fr;}
+    .dy-about-visual{min-height:520px;max-width:560px;width:100%;margin:0 auto;}
+    .dy-about-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 0;border-radius:30px;margin-top:50px;}
+    .dy-about-stat:nth-child(3){border-left:0;}
+    .dy-about-stat{justify-content:flex-start;padding-left:20px;}
+}
+@media(max-width:575px){
+    .dy-about-visual{min-height:430px;}
+    .dy-about-img1{height:350px;}.dy-about-img2{height:210px;border-width:7px;}
+    .dy-about-badge{width:96px;height:96px;}
+    .dy-about-points{grid-template-columns:1fr;}
 }
 
-.our-benefit .our-benefit-item:hover .icon-box i {
-    transform: scale(1.12);
+/* ==========================================
+   2) SERVICES  (stacked cards: each one slides up over the last)
+========================================== */
+/* overflow:clip (not hidden) so position:sticky keeps working */
+.dy-svc{position:relative;overflow:clip;isolation:isolate;padding:80px 0 0;background:#e8f6ff;}
+.dy-svc *{box-sizing:border-box;}
+.dy-svc::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.7;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 88%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 12%,#000 88%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-svc-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+.dy-svc .dy-wrap{position:relative;z-index:2;}
+.dy-svc-head{position:relative;z-index:5;max-width:760px;margin:0 auto;text-align:center;}
+.dy-svc-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+.dy-h2-oneline .acc{display:inline;}
+
+.dy-svc-scrollhint{display:inline-flex;flex-direction:column;align-items:center;gap:8px;margin-top:16px;
+    color:var(--dy-navy);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:.7;}
+.dy-svc-scrollhint span{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;
+    border:1.5px solid rgba(20,48,94,.35);font-size:13px;animation:dyBob 1.8s ease-in-out infinite;}
+@keyframes dyBob{50%{transform:translateY(6px);}}
+
+/* the stack: each service is a full-width panel in the section's own colour.
+   No box, no border, no shadow, so it reads as part of the section.  */
+.dy-stack{position:relative;width:100vw;margin-left:calc(50% - 50vw);margin-top:-100px;}
+.dy-stack-card{--acc:var(--dy-orange);
+    position:sticky;top:0;
+    display:grid;grid-template-columns:1.05fr 1fr;gap:80px;align-items:center;
+    min-height:100vh;margin:0;border-radius:0;border:0;
+    padding:110px clamp(64px,5vw,100px) 50px;
+    color:var(--dy-navy);overflow:hidden;isolation:isolate;
+    background:var(--dy-clouds) 0 0/900px 560px repeat,#e8f6ff;}
+
+.dy-stack-text{position:relative;z-index:2;min-width:0;}
+.dy-stack-tag{display:inline-block;margin-bottom:18px;color:rgba(20,48,94,.6);font-size:14px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-stack-tag b{color:var(--acc);font-weight:700;}
+.dy-stack-card h3{margin:0 0 22px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(38px,4.6vw,76px);line-height:1.04;letter-spacing:-.03em;}
+.dy-stack-card h3 em{display:block;font-style:normal;color:var(--acc);}
+.dy-stack-card p.desc{margin:0 0 36px;max-width:560px;color:#4d5e78;font-size:19px;line-height:1.75;}
+.dy-stack-btns{display:flex;flex-wrap:wrap;gap:16px;}
+.dy-stack-btns .dy-btn{padding:18px 34px;font-size:16px;background:var(--acc);box-shadow:0 14px 28px rgba(20,48,94,.2);color:#fff;}
+.dy-stack-btns .dy-btn:hover{background:var(--dy-navy);color:#fff;}
+.dy-stack-ghost{display:inline-flex;align-items:center;gap:12px;padding:16px 30px;border-radius:50px;
+    border:1.5px solid rgba(20,48,94,.35);background:rgba(255,255,255,.55);color:var(--dy-navy);font-size:16px;font-weight:700;text-decoration:none;
+    transition:background .3s,color .3s,border-color .3s,transform .3s;}
+.dy-stack-ghost:hover{background:var(--dy-navy);border-color:var(--dy-navy);color:#fff;transform:translateY(-3px);}
+
+/* right panel */
+.dy-stack-visual{position:relative;z-index:2;min-width:0;}
+.dy-stack-num{position:absolute;right:-6px;top:-90px;z-index:0;color:rgba(20,48,94,.07);font-family:"Playfair Display",Georgia,serif;
+    font-weight:900;font-size:clamp(140px,15vw,240px);line-height:1;pointer-events:none;}
+.dy-stack-panel{position:relative;z-index:1;padding:30px;border-radius:32px;background:rgba(255,255,255,.72);
+    border:1px solid rgba(20,48,94,.1);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    box-shadow:0 16px 36px rgba(20,48,94,.1);}
+.dy-stack-panel-top{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px dashed rgba(20,48,94,.22);}
+.dy-stack-icon{flex:none;display:flex;align-items:center;justify-content:center;width:74px;height:74px;border-radius:50%;
+    background:var(--dy-navy);color:#fff;font-size:28px;box-shadow:0 10px 22px rgba(20,48,94,.25);}
+.dy-stack-panel-top strong{display:block;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-size:26px;font-weight:700;line-height:1.2;}
+.dy-stack-panel-top small{display:block;margin-top:5px;color:var(--acc);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+.dy-stack-rows{list-style:none;margin:0;padding:0;display:grid;gap:12px;}
+.dy-stack-rows li{display:flex;align-items:center;gap:16px;padding:15px 20px;border-radius:18px;background:#fff;
+    box-shadow:0 6px 16px rgba(20,48,94,.07);color:var(--dy-navy);font-size:17px;font-weight:600;transition:box-shadow .3s,transform .3s;}
+.dy-stack-rows li:hover{box-shadow:0 12px 24px rgba(20,48,94,.14);transform:translateX(6px);}
+.dy-stack-rows li i{flex:none;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;
+    background:var(--acc);color:#fff;font-size:13px;}
+
+/* side dots (like the reference) */
+.dy-stack-dots{position:fixed;right:22px;top:50%;z-index:60;display:flex;flex-direction:column;gap:10px;padding:12px 8px;
+    border-radius:30px;background:rgba(255,255,255,.75);box-shadow:0 8px 22px rgba(20,48,94,.15);
+    transform:translateY(-50%) translateX(30px);opacity:0;pointer-events:none;transition:opacity .4s,transform .4s;}
+.dy-stack-dots.is-visible{opacity:1;pointer-events:auto;transform:translateY(-50%);}
+.dy-stack-dot{width:9px;height:9px;padding:0;border:0;border-radius:9px;background:rgba(20,48,94,.25);cursor:pointer;transition:height .3s,background .3s;}
+.dy-stack-dot.is-on{height:26px;background:var(--dy-orange);}
+.dy-stack-dot:focus-visible{outline:2px solid var(--dy-gold);outline-offset:3px;}
+
+@media(max-width:1199px){.dy-stack-card{gap:44px;}}
+@media(max-width:991px){
+    .dy-svc{padding:70px 0 0;}
+    .dy-svc-plane{max-width:24%;}
+    .dy-stack{margin-top:30px;}
+    .dy-stack-card{position:relative;top:auto;grid-template-columns:1fr;gap:28px;padding:60px 34px;min-height:0;}
+    .dy-stack-num{top:-30px;font-size:110px;}
+}
+/* on phones the services become a swipeable carousel */
+.dy-stack-mdots{display:none;}
+@media(max-width:767px){
+    .dy-svc{padding-bottom:50px;}
+    .dy-svc-plane{display:none;}
+    .dy-stack-dots{display:none;}
+
+    .dy-stack{display:flex;align-items:stretch;gap:16px;width:100vw;margin:26px 0 0 calc(50% - 50vw);
+        padding:8px 20px 26px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-left:20px;
+        -webkit-overflow-scrolling:touch;scrollbar-width:none;overscroll-behavior-x:contain;}
+    .dy-stack::-webkit-scrollbar{display:none;}
+
+    .dy-stack-card{flex:0 0 86vw;max-width:420px;scroll-snap-align:start;scroll-snap-stop:always;
+        grid-template-columns:1fr;gap:22px;padding:30px 22px;min-height:0;border-radius:28px;
+        border:1.5px solid rgba(255,255,255,.95);
+        background:var(--dy-clouds) 0 0/600px 373px repeat,linear-gradient(135deg,#eaf7ff 0%,#dcefff 100%);
+        box-shadow:0 14px 34px rgba(20,48,94,.14);}
+    .dy-stack-card h3{font-size:clamp(30px,8.5vw,40px);margin-bottom:14px;}
+    .dy-stack-card p.desc{font-size:15.5px;margin-bottom:22px;}
+    .dy-stack-btns{gap:10px;}
+    .dy-stack-btns .dy-btn{padding:14px 22px;font-size:14px;}
+    .dy-stack-ghost{padding:12px 20px;font-size:14px;}
+    .dy-stack-num{top:-24px;right:-4px;font-size:96px;}
+    .dy-stack-panel{padding:18px;border-radius:22px;}
+    .dy-stack-panel-top{gap:14px;margin-bottom:16px;padding-bottom:16px;}
+    .dy-stack-icon{width:54px;height:54px;font-size:20px;}
+    .dy-stack-panel-top strong{font-size:20px;}
+    .dy-stack-rows{gap:10px;}
+    .dy-stack-rows li{padding:12px 14px;font-size:14.5px;gap:12px;}
+    .dy-stack-rows li i{width:26px;height:26px;font-size:11px;}
+
+    .dy-stack-mdots{display:flex;justify-content:center;gap:8px;margin-top:4px;}
+    .dy-stack-mdot{width:9px;height:9px;padding:0;border:0;border-radius:9px;background:rgba(20,48,94,.25);transition:width .3s,background .3s;}
+    .dy-stack-mdot.is-on{width:26px;background:var(--dy-orange);}
 }
 
-/* Improve longer travel descriptions */
-
-.our-benefit .our-benefit-item-content h3 {
-    line-height: 1.35;
+/* ==========================================
+   3) PACKAGES  (same as home page: pinned row, 3 cards + 4th peeking)
+========================================== */
+.dy-packages-section{--pk-gap:28px;--pk-navy:#14305e;--pk-blue:#e4f6fb;--pk-accent:#f4906e;
+    --pk-card:min(82vw,340px);position:relative;width:100%;background:linear-gradient(180deg,#e8f5fd 0%,#e8f6ff 100%) !important;overflow-x:clip;}
+.dy-packages-section *,.dy-packages-section *::before,.dy-packages-section *::after{box-sizing:border-box;}
+.dy-packages-pin{position:relative;isolation:isolate;padding:70px 0 80px;}
+.dy-packages-pin::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.75;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 84%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 84%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-packages-container{width:min(calc(100% - 48px),1320px);margin:0 auto 38px;}
+.dy-packages-header{display:flex;align-items:center;justify-content:space-between;gap:30px;}
+.dy-packages-heading p{margin:0;color:#5b6b85;font-size:16px;line-height:1.6;}
+.dy-packages-view{display:inline-flex;align-items:center;justify-content:center;gap:13px;flex-shrink:0;padding:15px 24px;background:var(--pk-navy);color:#fff;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;transition:background .3s,transform .3s;}
+.dy-packages-view:hover{background:var(--pk-accent);color:#fff;transform:translateY(-3px);}
+.dy-packages-viewport{width:100%;margin:0;padding:10px 0 40px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:24px;scrollbar-width:none;}
+.dy-packages-viewport::-webkit-scrollbar{display:none;}
+.dy-packages-track{display:flex;gap:18px;width:max-content;padding:0 24px;}
+.dy-pkg-slide{flex:0 0 var(--pk-card);scroll-snap-align:start;display:flex;}
+.dy-packages-progress{display:none;}
+.dy-pkg-card{display:flex;flex-direction:column;width:100%;padding:14px;background:#fff;border-radius:28px;box-shadow:0 10px 30px rgba(20,48,94,.08);transition:transform .35s,box-shadow .35s;}
+.dy-pkg-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(20,48,94,.14);}
+.dy-pkg-image{display:block;flex-shrink:0;height:clamp(200px,30vh,290px);border-radius:20px;overflow:hidden;background:#cfe6f6;}
+.dy-pkg-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s;}
+.dy-pkg-card:hover .dy-pkg-image img{transform:scale(1.06);}
+.dy-pkg-body{display:flex;flex-direction:column;flex:1;min-width:0;padding:16px 8px 4px;}
+.dy-pkg-location{display:inline-flex;align-items:center;gap:8px;color:#5b6b85;font-size:15px;line-height:1.4;}
+.dy-pkg-location i{color:#2d5bd0;font-size:14px;}
+.dy-pkg-body h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 8px;
+    font-family:"Playfair Display",Georgia,serif !important;font-weight:700 !important;color:var(--pk-navy);font-size:clamp(24px,2vw,30px);line-height:1.2;letter-spacing:-.3px;}
+.dy-pkg-body h3 a{color:inherit;text-decoration:none;}.dy-pkg-body h3 a:hover{color:var(--pk-accent);}
+.dy-pkg-desc{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0 0 18px;color:#6b7280;font-size:15px;line-height:1.65;}
+.dy-pkg-info{margin-top:auto;padding:18px 22px;background:#f2f2f2;border-radius:20px;}
+.dy-pkg-info-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed #c4c8ce;color:var(--pk-navy);font-size:15px;font-weight:600;}
+.dy-pkg-info-top i{margin-right:6px;color:var(--pk-accent);}
+.dy-pkg-info-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.dy-pkg-price{display:flex;flex-direction:column;min-width:0;}
+.dy-pkg-price strong{color:var(--pk-navy);font-size:24px;font-weight:700;line-height:1.2;}
+.dy-pkg-price strong.dy-pkg-request{font-size:16px;}
+.dy-pkg-price small{color:#6b7280;font-size:14px;}
+.dy-pkg-explore{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;color:var(--pk-navy);font-size:14px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:color .3s;}
+.dy-pkg-explore span{transition:transform .3s;}
+.dy-pkg-explore:hover{color:var(--pk-accent);}.dy-pkg-explore:hover span{transform:translate(3px,-3px);}
+.dy-packages-empty{width:min(calc(100% - 48px),1320px);margin:0 auto;padding:50px 20px;text-align:center;}
+@media(max-width:767px){
+    .dy-packages-pin{padding:50px 0 60px;}
+    .dy-packages-container{width:calc(100% - 32px);margin-bottom:26px;}
+    .dy-packages-viewport{scroll-padding-left:16px;}.dy-packages-track{padding:0 16px;}
+    .dy-packages-header{flex-direction:column;align-items:flex-start;gap:18px;}
+}
+@media(min-width:992px) and (prefers-reduced-motion:no-preference){
+    .dy-packages-section{--pk-gap:28px;--pk-left:clamp(60px,12vw,240px);--pk-peek:clamp(60px,7vw,130px);
+        --pk-card:calc((100vw - 15px - var(--pk-left) - var(--pk-peek) - (2 * var(--pk-gap))) / 3);}
+    .dy-packages-container{width:auto;margin-left:var(--pk-left);margin-right:60px;}
+    .dy-packages-viewport{width:calc(100% - var(--pk-left));margin-left:var(--pk-left);overflow:hidden;scroll-snap-type:none;}
+    .dy-packages-track{gap:var(--pk-gap);width:max-content;padding:0 60px 0 0;will-change:transform;}
+    .dy-packages-section.is-pinned .dy-packages-pin{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:30px 0;overflow:hidden;}
+    .dy-packages-section.is-pinned .dy-packages-container{margin-bottom:22px;}
+    .dy-packages-section.is-pinned .dy-packages-viewport{padding-bottom:14px;}
+}
+@media(min-width:992px) and (max-width:1199px){
+    .dy-packages-section{--pk-gap:20px;--pk-left:40px;--pk-peek:50px;}
+    .dy-pkg-card{padding:12px;}.dy-pkg-info{padding:14px 16px;}.dy-pkg-price strong{font-size:20px;}.dy-pkg-explore{font-size:12px;}
+}
+@media(min-width:1200px){
+    .dy-pkg-card{padding:16px;border-radius:30px;}
+    .dy-pkg-image{height:clamp(190px,31vh,320px);border-radius:22px;}
+    .dy-pkg-body{padding:18px 10px 6px;}
+    .dy-pkg-body h3{font-size:clamp(26px,2.1vw,33px);}
+    .dy-pkg-desc{font-size:16px;}
+    .dy-pkg-info{padding:20px 24px;}.dy-pkg-price strong{font-size:26px;}.dy-pkg-explore{font-size:15px;}
 }
 
-.our-benefit .our-benefit-item-content p {
-    line-height: 1.7;
+/* ==========================================
+   4) TESTIMONIALS  (same as home page)
+========================================== */
+.tv-testimonials{--tv-ink:#0b2457;--tv-ink-soft:#3c4f73;--tv-accent:#f5b301;--tv-top:#e8f5fd;--tv-bottom:#e8f5fd;
+    position:relative;overflow:hidden;margin-top:-1px;padding:90px 0 72px;color:var(--tv-ink);
+    background:linear-gradient(180deg,var(--tv-top) 0%,#d6eafc 24%,#d2e7fb 76%,var(--tv-bottom) 100%);}
+.tv-testimonials::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+    animation:dyClouds 160s linear infinite;}
+.tv-couple{position:absolute;left:1.5vw;bottom:0;z-index:1;width:clamp(220px,23vw,460px);height:auto;display:block;pointer-events:none;user-select:none;filter:drop-shadow(0 20px 20px rgba(30,70,140,.2));}
+.tv-planeimg{position:absolute;right:-5%;bottom:calc(100% - 56px);z-index:0;width:84%;height:auto;display:block;pointer-events:none;user-select:none;animation:tvFly 7s ease-in-out infinite;}
+@keyframes tvFly{0%,100%{transform:translate(0,0) rotate(0);}50%{transform:translate(10px,-10px) rotate(-1deg);}}
+.tv-outer{position:relative;z-index:2;width:auto;max-width:1240px;margin:0 4vw 0 25vw;box-sizing:border-box;}
+.tv-head{text-align:center;margin-bottom:40px;}
+.tv-kicker{display:inline-flex;align-items:center;gap:14px;font-size:13px;letter-spacing:.14em;font-weight:600;color:var(--tv-ink-soft);}
+.tv-kicker::after{content:"";width:48px;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--tv-accent) 45%,rgba(11,36,87,.25) 45%);}
+.tv-title{margin:10px 0 0;font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;font-size:clamp(32px,3.8vw,60px) !important;line-height:1.06 !important;letter-spacing:-.025em !important;color:var(--dy-navy) !important;}
+.tv-lead{margin:14px auto 0;max-width:520px;font-size:clamp(15px,1.15vw,18px);line-height:1.6;color:var(--tv-ink-soft);}
+.tv-rev{--shift:24px;--tv-delay:6s;}
+.tv-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:center;}
+.tv-photo{position:relative;z-index:1;min-width:0;}
+.tv-cardcol{position:relative;min-width:0;}
+.tv-frame{position:relative;width:100%;aspect-ratio:16/11.5;border-radius:24px;overflow:hidden;background:#cfe2f7;box-shadow:0 16px 34px rgba(30,70,140,.18);}
+.tv-pic{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 1s ease;}
+.tv-pic.is-on{opacity:1;}
+.tv-pic.is-on,.tv-pic.is-prev{animation:tvKen 9s ease-out forwards;}
+.tv-pic.is-prev{opacity:0;}
+@keyframes tvKen{from{transform:scale(1);}to{transform:scale(1.09);}}
+.tv-google{position:absolute;right:10px;bottom:10px;z-index:2;padding:8px 14px;border-radius:10px;background:#fff;text-align:center;box-shadow:0 8px 18px rgba(20,60,130,.22);}
+.tv-google b{display:block;font:700 13px/1 Arial,sans-serif;letter-spacing:-.2px;}
+.tv-google .g1{color:#4285f4}.tv-google .g2{color:#ea4335}.tv-google .g3{color:#fbbc05}.tv-google .g4{color:#4285f4}.tv-google .g5{color:#34a853}.tv-google .g6{color:#ea4335}
+.tv-google span{display:inline-flex;align-items:center;gap:5px;margin-top:3px;font-size:11px;font-weight:700;color:#222;}
+.tv-google em{font-style:normal;color:#fbbc05;font-size:8px;letter-spacing:1px;}
+.tv-thumbs{display:flex;gap:10px;margin-top:12px;padding:4px;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;}
+.tv-thumbs::-webkit-scrollbar{display:none;}
+.tv-thumb{flex:0 0 calc((100% - 30px) / 4);aspect-ratio:16/10;padding:0;cursor:pointer;overflow:hidden;border-radius:10px;border:2px solid transparent;background:#cfe2f7;opacity:.75;transition:opacity .35s,border-color .35s,transform .45s cubic-bezier(.22,.8,.3,1),box-shadow .35s;}
+.tv-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.tv-thumb:hover{opacity:1;}
+.tv-thumb.is-on{opacity:1;border-color:var(--tv-accent);transform:translateY(-3px);box-shadow:0 8px 16px rgba(11,36,87,.2);}
+.tv-thumb:focus-visible{outline:3px solid var(--tv-accent);outline-offset:2px;}
+.tv-card{position:relative;z-index:1;min-width:0;padding:34px 36px 30px 30px;background:rgba(255,255,255,.97);border-radius:24px;box-shadow:0 16px 34px rgba(30,70,140,.14);touch-action:pan-y;user-select:none;}
+.tv-slides{display:grid;}
+.tv-slide{grid-area:1/1;margin:0;min-width:0;display:flex;flex-direction:column;visibility:hidden;pointer-events:none;}
+.tv-slide.is-on,.tv-slide.is-leave{visibility:visible;}
+.tv-slide.is-on{pointer-events:auto;}
+.tv-slide>*{opacity:0;transform:translateX(var(--shift));transition:opacity .45s ease,transform .6s cubic-bezier(.22,.8,.3,1);transition-delay:0s;}
+.tv-slide.is-on>*{opacity:1;transform:none;transition-delay:calc(var(--i,0) * .09s + .12s);}
+.tv-slide.is-leave>*{opacity:0;transform:translateX(calc(var(--shift) * -1));transition-duration:.35s;transition-delay:0s;}
+.tv-who{display:flex;align-items:center;gap:18px;padding-right:70px;}
+.tv-avatar{flex:none;width:70px;height:70px;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 6px 14px rgba(20,60,130,.25);background:#fff;}
+.tv-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.tv-name{margin:0;font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:clamp(21px,1.95vw,32px);line-height:1.1;color:var(--tv-ink);}
+.tv-place{display:block;margin-top:4px;font-size:13.5px;color:#5b6b8c;}
+.tv-stars{display:inline-flex;gap:3px;margin-top:7px;color:var(--tv-accent);font-size:14px;}
+.tv-qmark{position:absolute;top:10px;right:26px;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:118px;line-height:1;color:#cfe0f8;pointer-events:none;}
+.tv-slide>.tv-qmark{transform:translateX(var(--shift)) scale(.8);}
+.tv-slide.is-on>.tv-qmark{transform:none;}
+.tv-text{margin:18px 0 0;font-family:"Open Sans",Arial,sans-serif !important;font-size:clamp(14px,1.18vw,18px);line-height:1.7;color:#34476b;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
+.tv-progress{display:flex;align-items:center;gap:16px;margin-top:18px;}
+.tv-track{position:relative;flex:1;height:3px;border-radius:3px;background:rgba(11,47,115,.14);}
+.tv-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:var(--tv-accent);}
+.tv-fill::after{content:"";position:absolute;right:-5px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--tv-accent);border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.2);}
+.tv-fill.run{animation:tvFill var(--tv-delay) linear forwards;}
+.tv-paused .tv-fill{animation-play-state:paused;}
+@keyframes tvFill{to{width:100%;}}
+.tv-count{font-size:13px;font-weight:600;color:var(--tv-ink);white-space:nowrap;}
+.tv-controls{display:flex;align-items:center;gap:12px;margin-top:18px;}
+.tv-controls button{width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:13px;border:1.5px solid rgba(11,47,115,.3);background:#fff;color:var(--tv-ink);transition:background .25s,color .25s,border-color .25s,transform .25s;}
+.tv-controls .tv-next{background:var(--tv-ink);border-color:var(--tv-ink);color:#fff;}
+.tv-controls button:hover{transform:scale(1.08);}
+.tv-controls .tv-prev:hover{background:var(--tv-ink);border-color:var(--tv-ink);color:#fff;}
+.tv-controls .tv-next:hover{background:var(--tv-accent);border-color:var(--tv-accent);color:var(--tv-ink);}
+@media(max-width:991px){
+    .tv-testimonials{padding:70px 0 0;}
+    .tv-outer{width:92%;max-width:none;margin:0 auto;}
+    .tv-stage{grid-template-columns:1fr;gap:20px;}
+    .tv-head{margin-bottom:26px;}
+    .tv-card{padding:30px 26px 26px;}
+    .tv-avatar{width:66px;height:66px;}
+    .tv-text{font-size:16px;}
+    .tv-cardcol{margin-top:clamp(60px,13vw,110px);}
+    .tv-planeimg{width:66%;right:-2%;bottom:calc(100% - 36px);}
+    .tv-couple{position:relative;left:auto;bottom:auto;display:block;width:clamp(240px,46vw,360px);margin:26px auto 0;}
+}
+@media(max-width:575px){
+    .tv-planeimg{width:78%;}
+    .tv-thumb{flex-basis:calc((100% - 16px) / 3);}
+    .tv-qmark{font-size:84px;}
+}
+@media(prefers-reduced-motion:reduce){
+    .tv-slide>*,.tv-thumb,.tv-pic,.tv-controls button,.dy-stack-dots{transition:none !important;}
+    .tv-fill,.tv-planeimg,.tv-testimonials::before,.tv-pic.is-on,.tv-pic.is-prev,.dy-about::before,.dy-svc::before,.dy-packages-pin::before,.dy-about-badge img,.dy-svc-plane,.dy-svc-scrollhint span{animation:none !important;}
+    .dy-stack-card{transform:none !important;}
 }
 
-{% comment %} benfit section css end  {% endcomment %}
+/* ==========================================
+   5) FAQ  (same as home page)
+========================================== */
+.our-faqs.dy-faq-sky{--faq-green:#14305e;--faq-text:#14233f;position:relative !important;padding:100px 0;overflow:clip;isolation:isolate;
+    background:linear-gradient(180deg,#e8f5fd 0%,#d6eafc 24%,#d2e7fb 76%,#e8f5fd 100%) !important;}
+.our-faqs.dy-faq-sky::before{content:"" !important;display:block !important;position:absolute !important;inset:0 !important;z-index:0 !important;pointer-events:none !important;
+    background-image:var(--dy-clouds) !important;background-size:900px 560px !important;background-repeat:repeat !important;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 82%,transparent 100%);
+    animation:dyClouds 160s linear infinite;}
+.our-faqs.dy-faq-sky::after{content:none !important;display:none !important;}
+.our-faqs.dy-faq-sky>.container{position:relative !important;z-index:2 !important;}
+.our-faqs.dy-faq-sky .container,.our-faqs.dy-faq-sky .row{background:transparent !important;}
+.our-faqs-content{position:sticky;top:120px;}
+.our-faqs .faq-lead{color:#5b6670;font-size:17px;line-height:1.7;max-width:380px;margin:0;}
+.faq-reviews{display:inline-block;margin-top:40px;padding:16px 20px;border-radius:12px;background:rgba(255,255,255,.65);}
+.faq-reviews .g-title{font-weight:600;font-size:16px;color:#222;}
+.faq-reviews .g-title b:nth-child(1){color:#4285f4}.faq-reviews .g-title b:nth-child(2){color:#ea4335}.faq-reviews .g-title b:nth-child(3){color:#fbbc05}
+.faq-reviews .g-title b:nth-child(4){color:#4285f4}.faq-reviews .g-title b:nth-child(5){color:#34a853}.faq-reviews .g-title b:nth-child(6){color:#ea4335}
+.faq-reviews .g-rate{margin-top:6px;font-weight:700;color:#222;}
+.faq-reviews .g-rate .stars{color:#fbbc05;letter-spacing:2px;margin:0 6px;}
+.faq-reviews .g-rate .count{color:#888;font-weight:500;}
+.faq-accordion{counter-reset:faq;}
+.faq-accordion .accordion-item{counter-increment:faq;background:rgba(255,255,255,.75) !important;border:none !important;border-radius:18px !important;margin-bottom:16px;box-shadow:0 6px 18px rgba(40,80,130,.1);overflow:hidden;padding:0 !important;transition:background .3s;}
+.faq-accordion .accordion-header{margin:0 !important;padding:0 !important;}
+.faq-accordion .accordion-collapse{margin:0 !important;padding:0 !important;background:var(--faq-green);}
+.faq-accordion .accordion-item .accordion-button{position:relative;display:flex !important;align-items:center !important;background:transparent !important;box-shadow:none !important;
+    padding:26px 80px 26px 26px !important;font-family:"DM Sans",sans-serif !important;font-size:17px !important;font-weight:600 !important;color:var(--faq-text) !important;border-radius:0 !important;margin:0 !important;min-height:0 !important;}
+.faq-accordion .accordion-item .accordion-button::before{content:counter(faq) ".";margin-right:12px;font-weight:700;color:var(--faq-green) !important;position:static !important;}
+.faq-accordion .accordion-item .accordion-button::after{content:"+" !important;background-image:none !important;position:absolute !important;top:50% !important;right:24px !important;left:auto !important;bottom:auto !important;width:38px !important;height:38px !important;margin:0 !important;
+    transform:translateY(-50%) !important;display:flex !important;align-items:center;justify-content:center;border-radius:50% !important;background-color:rgba(20,48,94,.12) !important;color:var(--faq-green) !important;font-size:26px !important;line-height:1 !important;}
+.faq-accordion .accordion-item:has(.accordion-button:not(.collapsed)){background:var(--faq-green) !important;}
+.faq-accordion .accordion-item .accordion-button:not(.collapsed){color:#fff !important;padding-bottom:14px !important;}
+.faq-accordion .accordion-item .accordion-button:not(.collapsed)::before{color:#fff !important;}
+.faq-accordion .accordion-item .accordion-button:not(.collapsed)::after{content:"\2212" !important;background-color:rgba(255,255,255,.25) !important;color:#fff !important;transform:translateY(-50%) !important;}
+.faq-accordion .accordion-body{padding:0 80px 28px 56px !important;}
+.faq-accordion .accordion-body p{margin:0 !important;color:rgba(255,255,255,.95) !important;font-family:"DM Sans",sans-serif !important;font-size:15px !important;line-height:1.8 !important;}
+@media(max-width:991px){.our-faqs.dy-faq-sky{padding:60px 0;}.our-faqs-content{position:static;margin-bottom:40px;}}
+@media(max-width:575px){
+    .our-faqs.dy-faq-sky::before{background-size:600px 373px !important;}
+    .faq-accordion .accordion-item .accordion-button{padding:20px 64px 20px 18px !important;font-size:15px !important;}
+    .faq-accordion .accordion-item .accordion-button::after{right:16px !important;width:34px !important;height:34px !important;}
+    .faq-accordion .accordion-body{padding:0 20px 22px 18px !important;}
+}
+
+/* hero title */
+.dy-about-hero-content{
+    position:absolute;inset:0;z-index:3;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:110px 20px 30px;text-align:center;color:#fff;
+}
+.dy-about-hero-eyebrow{
+    display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;
+}
+.dy-about-hero-eyebrow::after{
+    content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);
+}
+.dy-about-hero-title{
+    margin:0 0 18px;color:#fff;
+    font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;
+    text-shadow:0 6px 24px rgba(0,0,0,.35);
+}
+.dy-about-hero-title em{
+    font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);
+}
+.dy-about-crumbs{
+    display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    color:#fff;font-size:14px;font-weight:600;
+}
+.dy-about-crumbs a{color:#fff;text-decoration:none;}
+.dy-about-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:575px){
+    .dy-about-hero-content{padding-top:100px;}
+    .dy-about-crumbs{font-size:13px;padding:8px 18px;}
+}
+
+/* packages section: force the same sky colour as the other sections */
+.dy-packages-section,
+.dy-packages-section .dy-packages-pin{background-color:#e8f6ff !important;}
+
+/* ==========================================
+   MATCH HOME PAGE PALETTE
+   Change only --dy-title-blue:
+   #046BF2 = home page blue, #018ED2 = original blue
+========================================== */
+:root{
+    --dy-title-blue: #046BF2;
+    --dy-navy: var(--dy-title-blue);
+    --dy-blue: var(--dy-title-blue);
+}
+
+.dy-packages-section{ --pk-navy: var(--dy-title-blue); }
+.tv-testimonials{ --tv-ink: var(--dy-title-blue); }
+.our-faqs.dy-faq-sky{ --faq-green: var(--dy-title-blue); --faq-text: var(--dy-title-blue); }
+
+/* every title and blue text */
+.dy-h2,
+.tv-title,
+.dy-stack-card h3,
+.dy-stack-panel-top strong,
+.dy-stack-rows li,
+.dy-about-point h3,
+.dy-about-stat strong,
+.dy-eyebrow,
+.dy-svc-scrollhint,
+.dy-pkg-body h3,
+.dy-pkg-price strong,
+.dy-pkg-info-top,
+.dy-pkg-explore{
+    color: var(--dy-title-blue) !important;
+}
+
+/* orange accent words stay orange */
+.dy-h2 .acc,
+.dy-title-accent,
+.dy-stack-card h3 em{
+    color: #f4813f !important;
+}
+
+/* small icons and circles */
+.dy-title-icon{ stroke: var(--dy-title-blue); }
+.dy-stack-icon{ background: var(--dy-title-blue) !important; }
+.dy-stack-num{ color: rgba(4,107,242,.12) !important; }
+
+/* all buttons orange (same as home) */
+.dy-packages-view,
+.dy-stack-btns .dy-btn{
+    background: #f4813f !important;
+    border-color: #f4813f !important;
+    color: #fff !important;
+}
+.dy-packages-view:hover,
+.dy-stack-btns .dy-btn:hover{
+    background: #ea7330 !important;
+    border-color: #ea7330 !important;
+    color: #fff !important;
+}
+.dy-stack-ghost{
+    border-color: #f4813f !important;
+    color: #f4813f !important;
+}
+.dy-stack-ghost:hover{
+    background: #f4813f !important;
+    border-color: #f4813f !important;
+    color: #fff !important;
+}
+
+/* testimonial arrows */
+.tv-controls .tv-next{ background:#f4813f !important; border-color:#f4813f !important; color:#fff !important; }
+.tv-controls .tv-next:hover,
+.tv-controls .tv-prev:hover{ background:#ea7330 !important; border-color:#ea7330 !important; color:#fff !important; }
+.tv-controls .tv-prev{ border-color:#f4813f !important; color:#f4813f !important; }
+
+/* services: plain sky colour, no clouds (same as home) */
+.dy-svc::before{ content:none !important; display:none !important; animation:none !important; }
+.dy-stack-card{ background:#e8f6ff !important; }
+@media(max-width:767px){
+    .dy-stack-card{ background:linear-gradient(135deg,#eaf7ff 0%,#dcefff 100%) !important; }
+}
 </style>
 {% endblock %}
 
+
 {% block content %}
 
-    <!-- Page Header Start -->
-    <div class="page-header bg-section dark-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="page-header-box">
-                        <h1 class="text-anime-style-3" data-cursor="-opaque">About us</h1>
-                        <nav class="wow fadeInUp">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{% url 'home' %}">home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">about us</li>
-                            </ol>
-                        </nav>
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-about-hero" aria-label="About Deutsche Yathras">
+    <picture>
+        <source media="(max-width: 767px)" srcset="{% static 'frontend/hero-768.webp' %}">
+        <img src="{% static 'frontend/hero.webp' %}" alt="Travellers exploring the world with Deutsche Yathras" fetchpriority="high" decoding="async">
+    </picture>
+
+    <div class="dy-about-hero-content">
+        <span class="dy-about-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-about-hero-title">About <em>Us</em></h1>
+        <nav class="dy-about-crumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>About Us</span>
+        </nav>
+    </div>
+</section>
+
+
+<!-- ============ 1) ABOUT (only one about section) ============ -->
+<section class="dy-about" id="about">
+    <div class="dy-wrap">
+
+        <div class="dy-about-layout">
+
+            <!-- LEFT: photo collage -->
+            <div class="dy-about-visual">
+                <span class="dy-about-dots" aria-hidden="true"></span>
+
+                <div class="dy-about-img1">
+                    <img class="pic" src="{% static 'frontend/assets/images/about/image-1.webp' %}" alt="Explore beautiful travel destinations" loading="lazy" decoding="async">
+                </div>
+                <div class="dy-about-img2">
+                    <img class="pic" src="{% static 'frontend/assets/images/about/image-2.webp' %}" alt="Unforgettable holiday experiences" loading="lazy" decoding="async">
+                </div>
+
+            </div>
+
+            <!-- RIGHT: content -->
+            <div class="dy-about-content">
+                <span class="dy-eyebrow">About Deutsche Yathras</span>
+                <h2 class="dy-h2">Your Trusted Partner for
+                    <span class="acc">Unforgettable Travel<svg class="dy-title-icon" viewBox="0 0 24 24" aria-hidden="true" style="stroke:#f4813f"><path d="M12 20s-7-4.4-9-9.2C1.8 7.6 3.8 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.2 0 5.2 3.1 4 6.3C19 15.6 12 20 12 20z"/></svg></span>
+                </h2>
+
+                <p class="lead">
+                    At Deutsche Yathras, we believe travel is about discovering cultures, creating
+                    lasting memories and experiencing the world in extraordinary ways. From curated
+                    holiday packages to personalised planning and visa assistance, we make every
+                    journey seamless, comfortable and memorable.
+                </p>
+
+                <div class="dy-about-points">
+                    <div class="dy-about-point">
+                        <span class="dy-about-point-icon is-orange" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></span>
+                        <div>
+                            <h3>Our Mission</h3>
+                            <p>To craft personalised, seamless and unforgettable journeys that inspire discovery and lifelong memories.</p>
+                        </div>
+                    </div>
+                    <div class="dy-about-point">
+                        <span class="dy-about-point-icon is-blue" aria-hidden="true"><i class="fa-solid fa-mountain-sun"></i></span>
+                        <div>
+                            <h3>Our Vision</h3>
+                            <p>To become a globally trusted travel house defined by authenticity, outstanding service and lasting trust.</p>
+                        </div>
                     </div>
                 </div>
+
+                <ul class="dy-about-list">
+                    <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i>Tailor-Made Holiday Packages for Every Traveller</li>
+                    <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i>Expert Visa Guidance and Complete Travel Assistance</li>
+                    <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i>Seamless Bookings and Personalised Customer Support</li>
+                </ul>
+
+                <a href="{% url 'contact' %}" class="dy-btn">Plan Your Journey <i class="fa-solid fa-arrow-right"></i></a>
             </div>
         </div>
-    </div>
-    <!-- Page Header End -->
 
-    <!-- About Us Section Start -->
-    
-<!-- ==========================================
-     ABOUT US SECTION START
-     DEUTSCHE YATHRAS
-========================================== -->
-
-<div class="about-us">
-    <div class="container">
-        <div class="row align-items-center">
-
-            <!-- LEFT SIDE IMAGES -->
-            <div class="col-lg-6">
-                <div class="about-us-image">
-
-                    <div class="about-img-1">
-                        <figure class="image-anime reveal">
-                            <img
-                                src="{% static 'frontend/assets/images/about/image-1.webp' %}"
-                                alt="Explore beautiful travel destinations with Deutsche Yathras"
-                            >
-                        </figure>
-                    </div>
-
-                    <div class="about-img-2">
-                        <figure class="image-anime reveal">
-                            <img
-                                src="{% static 'frontend/assets/images/about/image-2.jpg' %}"
-                                alt="Discover unforgettable holiday experiences"
-                            >
-                        </figure>
-                    </div>
-
-                    <!-- CONTACT CIRCLE -->
-                    <div class="contact-us-circle">
-                        <a href="{% url 'contact' %}">
-                            <img
-                                src="{% static 'frontend/assets/images/contact-us-circle.svg' %}"
-                                alt="Contact Deutsche Yathras"
-                            >
-                        </a>
-                    </div>
-
-                </div>
+        <!-- STATS BAR -->
+        <div class="dy-about-stats">
+            <div class="dy-about-stat">
+                <i class="fa-solid fa-earth-europe c-blue" aria-hidden="true"></i>
+                <div><strong>Global</strong><small>Travel Destinations</small></div>
             </div>
+            <div class="dy-about-stat">
+                <i class="fa-solid fa-suitcase-rolling c-green" aria-hidden="true"></i>
+                <div><strong>Custom</strong><small>Holiday Packages</small></div>
+            </div>
+            <div class="dy-about-stat">
+                <i class="fa-solid fa-passport c-orange" aria-hidden="true"></i>
+                <div><strong>Visa</strong><small>Guidance &amp; Assistance</small></div>
+            </div>
+            <div class="dy-about-stat">
+                <i class="fa-solid fa-headset c-purple" aria-hidden="true"></i>
+                <div><strong>24/7</strong><small>Customer Support</small></div>
+            </div>
+        </div>
 
-            <!-- RIGHT SIDE CONTENT -->
-            <div class="col-lg-6">
-                <div class="about-us-content">
+    </div>
+</section>
 
-                    <!-- SECTION HEADING -->
-                    <div class="section-title">
 
-                        <h3 class="wow fadeInUp">
-                            About Deutsche Yathras
-                        </h3>
+<!-- ============ 2) SERVICES (stacked cards, slide up on scroll) ============ -->
+<section class="dy-svc" id="services">
 
-                        <h2
-                            class="text-anime-style-3"
-                            data-cursor="-opaque"
-                        >
-                            Your Trusted Partner for
-                            Unforgettable Travel Experiences
-                        </h2>
+    <img class="dy-svc-plane" src="{% static 'frontend/assets/images/home/airplane.webp' %}" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
-                        <p
-                            class="wow fadeInUp"
-                            data-wow-delay="0.2s"
-                        >
-                            At Deutsche Yathras, we believe that
-                            travel is more than just visiting new
-                            places — it's about discovering cultures,
-                            creating lasting memories, and experiencing
-                            the world in extraordinary ways.
+    <div class="dy-wrap">
 
-                            From carefully curated holiday packages
-                            to personalised travel planning and visa
-                            assistance, we make every journey
-                            seamless, comfortable, and memorable.
-                        </p>
+        <div class="dy-svc-head">
+            <span class="dy-eyebrow is-center">Our Travel Services</span>
+            <h2 class="dy-h2 dy-h2-oneline">What We <span class="acc">Offer</span></h2>
+            <p>We create unforgettable travel experiences with complete support from planning to your return.</p>
+            <div class="dy-svc-scrollhint" aria-hidden="true">Scroll <span><i class="fa-solid fa-arrow-down"></i></span></div>
+        </div>
 
+        <div class="dy-stack" id="dyStack">
+
+            <!-- 01 -->
+            <article class="dy-stack-card c1" style="--i:0">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>01</b></span>
+                    <h3>Curated Holiday <em>Packages</em></h3>
+                    <p class="desc">Europe, UAE, Asia, Africa and beyond &mdash; from idyllic beach holidays to mountain adventures and cultural escapes.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="Curated Holiday Packages">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'packages' %}" class="dy-stack-ghost">View Packages <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">01</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-earth-europe" aria-hidden="true"></i></span>
+                            <div><strong>Holiday Packages</strong><small>Worldwide</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>Europe &amp; UAE holidays</li>
+                            <li><i class="fa-solid fa-check"></i>Asia &amp; Africa escapes</li>
+                            <li><i class="fa-solid fa-check"></i>Beach, mountain &amp; cultural trips</li>
+                            <li><i class="fa-solid fa-check"></i>Family, couple &amp; group travel</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                    <!-- ABOUT BODY -->
-                    <div class="about-us-body">
+            <!-- 02 -->
+            <article class="dy-stack-card c2" style="--i:1">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>02</b></span>
+                    <h3>Complete Visa <em>Support</em></h3>
+                    <p class="desc">UAE tourist visas and visas for destinations like Armenia, Kenya, Turkey, Thailand and more.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="Complete Visa Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'contact' %}" class="dy-stack-ghost">Visa Enquiry <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">02</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-passport" aria-hidden="true"></i></span>
+                            <div><strong>Visa Assistance</strong><small>Guidance &amp; documents</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>UAE tourist visas</li>
+                            <li><i class="fa-solid fa-check"></i>Armenia &amp; Kenya visas</li>
+                            <li><i class="fa-solid fa-check"></i>Turkey &amp; Thailand visas</li>
+                            <li><i class="fa-solid fa-check"></i>Documentation guidance</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                        <div class="about-body-content">
+            <!-- 03 -->
+            <article class="dy-stack-card c3" style="--i:2">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>03</b></span>
+                    <h3>Personalised <em>Itineraries</em></h3>
+                    <p class="desc">Customisable trip plans based on your preferences, budget and travel style.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="Personalised Itineraries">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'contact' %}" class="dy-stack-ghost">Plan My Trip <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">03</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-route" aria-hidden="true"></i></span>
+                            <div><strong>Trip Planning</strong><small>Made for you</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>Based on your preferences</li>
+                            <li><i class="fa-solid fa-check"></i>Fits your budget</li>
+                            <li><i class="fa-solid fa-check"></i>Matches your travel style</li>
+                            <li><i class="fa-solid fa-check"></i>Planned by travel advisors</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                            <!-- HIGHLIGHTS -->
-                            <div
-                                class="about-body-list wow fadeInUp"
-                                data-wow-delay="0.4s"
-                            >
-                                <ul>
+            <!-- 04 -->
+            <article class="dy-stack-card c4" style="--i:3">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>04</b></span>
+                    <h3>All-in-One Booking <em>Support</em></h3>
+                    <p class="desc">Flights, hotels, transfers, guided tours and local experiences handled end-to-end by our travel advisors.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="All-in-One Booking Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'packages' %}" class="dy-stack-ghost">View Packages <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">04</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i></span>
+                            <div><strong>Booking Support</strong><small>End to end</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>Flights &amp; hotels</li>
+                            <li><i class="fa-solid fa-check"></i>Transfers</li>
+                            <li><i class="fa-solid fa-check"></i>Guided tours</li>
+                            <li><i class="fa-solid fa-check"></i>Local experiences</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                                    <li>
-                                        Tailor-Made Holiday Packages
-                                        for Every Traveller
-                                    </li>
+            <!-- 05 : Airport pickup (replaces Travel Insurance & Assistance) -->
+            <article class="dy-stack-card c5" style="--i:4">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>05</b></span>
+                    <h3>Airport Pickup in <em>Frankfurt</em></h3>
+                    <p class="desc">Private car pickup from Frankfurt Airport, Germany, for one or two passengers, with larger vehicles available for bigger groups.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="Airport Pickup in Frankfurt">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'contact' %}" class="dy-stack-ghost">Ask a Question <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">05</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-car-side" aria-hidden="true"></i></span>
+                            <div><strong>Airport Transfer</strong><small>Frankfurt, Germany</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>Pickup from Frankfurt Airport</li>
+                            <li><i class="fa-solid fa-check"></i>Private car for 1&ndash;2 passengers</li>
+                            <li><i class="fa-solid fa-check"></i>Larger vehicles for groups</li>
+                            <li><i class="fa-solid fa-check"></i>Arranged by our travel advisors</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                                    <li>
-                                        Expert Visa Guidance and
-                                        Complete Travel Assistance
-                                    </li>
+            <!-- 06 -->
+            <article class="dy-stack-card c6" style="--i:5">
+                <div class="dy-stack-text">
+                    <span class="dy-stack-tag">Service <b>06</b></span>
+                    <h3>Reliable Customer <em>Support</em></h3>
+                    <p class="desc">From planning to post-trip queries, we're here for you 24/7.</p>
+                    <div class="dy-stack-btns">
+                        <a href="#" class="dy-btn open-book-trip" data-service-name="Reliable Customer Support">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="{% url 'contact' %}" class="dy-stack-ghost">Contact Us <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="dy-stack-visual">
+                    <span class="dy-stack-num" aria-hidden="true">06</span>
+                    <div class="dy-stack-panel">
+                        <div class="dy-stack-panel-top">
+                            <span class="dy-stack-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></span>
+                            <div><strong>Customer Care</strong><small>Always available</small></div>
+                        </div>
+                        <ul class="dy-stack-rows">
+                            <li><i class="fa-solid fa-check"></i>Support 24/7</li>
+                            <li><i class="fa-solid fa-check"></i>Help while planning</li>
+                            <li><i class="fa-solid fa-check"></i>Post-trip queries</li>
+                            <li><i class="fa-solid fa-check"></i>Dedicated travel advisors</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
 
-                                    <li>
-                                        Seamless Bookings and
-                                        Personalised Customer Support
-                                    </li>
+        </div>
 
-                                </ul>
-                            </div>
+        <div class="dy-stack-mdots" id="dyStackMDots" aria-hidden="true">
+            <button type="button" class="dy-stack-mdot is-on" tabindex="-1"></button>
+            <button type="button" class="dy-stack-mdot" tabindex="-1"></button>
+            <button type="button" class="dy-stack-mdot" tabindex="-1"></button>
+            <button type="button" class="dy-stack-mdot" tabindex="-1"></button>
+            <button type="button" class="dy-stack-mdot" tabindex="-1"></button>
+            <button type="button" class="dy-stack-mdot" tabindex="-1"></button>
+        </div>
+    </div>
 
-                            <!-- BUTTONS -->
-                            <div
-                                class="about-body-footer wow fadeInUp"
-                                data-wow-delay="0.6s"
-                            >
+    <!-- side dots -->
+    <nav class="dy-stack-dots" id="dyStackDots" aria-label="Services navigation">
+        <button type="button" class="dy-stack-dot is-on" aria-label="Curated Holiday Packages"></button>
+        <button type="button" class="dy-stack-dot" aria-label="Complete Visa Support"></button>
+        <button type="button" class="dy-stack-dot" aria-label="Personalised Itineraries"></button>
+        <button type="button" class="dy-stack-dot" aria-label="All-in-One Booking Support"></button>
+        <button type="button" class="dy-stack-dot" aria-label="Airport Pickup in Frankfurt"></button>
+        <button type="button" class="dy-stack-dot" aria-label="Reliable Customer Support"></button>
+    </nav>
+</section>
 
-                                <a
-                                    href="{% url 'contact' %}"
-                                    class="btn-default"
-                                >
-                                    Plan Your Journey
-                                </a>
 
-                                <div class="about-video-button">
-                                    <a href="#travel-highlights">
-                                        <i class="fa-solid fa-arrow-right"></i>
-                                        Explore Our Services
+<!-- ============ 3) PACKAGES (same as home) ============ -->
+<section class="dy-packages-section" id="dyPackages">
+
+    <div class="dy-packages-pin">
+
+        <div class="dy-packages-container">
+            <div class="dy-packages-header">
+                <div class="dy-packages-heading">
+                    <h2 class="dy-h2">Our Popular <span class="dy-title-accent">Tour Packages</span></h2>
+                    <p>Discover unforgettable destinations with our carefully curated travel experiences.</p>
+                </div>
+                <a href="{% url 'packages' %}" class="dy-packages-view">
+                    View All Packages <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+        {% if packages %}
+        <div class="dy-packages-viewport">
+            <div class="dy-packages-track">
+
+                {% for package in packages %}
+                <div class="dy-pkg-slide">
+                    <article class="dy-pkg-card">
+
+                        <a href="{% url 'packages' %}" class="dy-pkg-image">
+                            {% if package.main_image %}
+                            <img src="{{ package.main_image.url }}"
+                                 srcset="{{ package.main_image|srcset }}"
+                                 sizes="(max-width:991px) 340px, 33vw"
+                                 alt="{{ package.name }}" loading="lazy" decoding="async">
+                            {% endif %}
+                        </a>
+
+                        <div class="dy-pkg-body">
+                            <span class="dy-pkg-location">
+                                <i class="fa-solid fa-location-dot"></i>
+                                {{ package.get_package_type_display }}
+                            </span>
+
+                            <h3><a href="{% url 'packages' %}">{{ package.name }}</a></h3>
+
+                            <p class="dy-pkg-desc">{{ package.description|striptags|truncatewords:18 }}</p>
+
+                            <div class="dy-pkg-info">
+                                {% if package.duration %}
+                                <div class="dy-pkg-info-top">
+                                    <span><i class="fa-regular fa-clock"></i>{{ package.duration }}</span>
+                                </div>
+                                {% endif %}
+
+                                <div class="dy-pkg-info-bottom">
+                                    <div class="dy-pkg-price">
+                                        {% if package.price_from %}
+                                            <strong>₹{{ package.price_from|floatformat:0 }}</strong>
+                                            <small>/ Per Person</small>
+                                        {% else %}
+                                            <strong class="dy-pkg-request">Price on Request</strong>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{% url 'packages' %}" class="dy-pkg-explore">
+                                        Explore More <span aria-hidden="true">↗</span>
                                     </a>
                                 </div>
-
                             </div>
-
                         </div>
 
-                        <!-- TRAVEL SUPPORT BOX -->
-                        <div class="about-team-member">
-
-                            <i
-                                class="fa-solid fa-headset"
-                                aria-hidden="true"
-                                style="font-size: 42px;"
-                            ></i>
-
-                            <h2>
-                                <span class="counter">24</span>/7
-                            </h2>
-
-                            <p>
-                                Travel Assistance
-                            </p>
-
-                        </div>
-
-                    </div>
-
+                    </article>
                 </div>
+                {% endfor %}
+
             </div>
+        </div>
 
-            <!-- BOTTOM HIGHLIGHTS -->
-            <div class="col-lg-12">
+        <div class="dy-packages-progress" aria-hidden="true"><span></span></div>
 
-                <div class="about-counter-list">
+        {% else %}
+        <div class="dy-packages-empty">
+            <h3>Exciting Journeys Coming Soon</h3>
+            <p>Our upcoming travel packages will be available shortly.</p>
+        </div>
+        {% endif %}
 
-                    <!-- ITEM 01 -->
-                    <div class="about-counter-item">
+    </div>
+</section>
 
-                        <div class="icon-box">
-                            <i
-                                class="fa-solid fa-earth-europe"
-                                aria-hidden="true"
-                            ></i>
+
+<!-- ============ 4) TESTIMONIALS (same as home) ============ -->
+<div class="our-testimonials tv-testimonials">
+
+    <div class="tv-outer">
+
+        <div class="tv-head">
+            <span class="tv-kicker">TRAVELLER STORIES</span>
+            <h2 class="tv-title">What Our Travellers <span class="dy-title-accent">Say About Us<svg class="dy-title-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-8l-5 4v-4H4a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1z"/><path class="hl" d="M12 7.6l1.2 2.4 2.6.4-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.4z"/></svg></span></h2>
+            <p class="tv-lead">Real stories. Genuine experiences. Hear from our happy travellers who turned their journey into lifelong memories.</p>
+        </div>
+
+        <div class="tv-rev" data-count="{{ testimonials|length }}">
+            <div class="tv-stage" role="group" aria-roledescription="carousel" aria-label="Traveller reviews">
+
+                <!-- PHOTO + THUMBS -->
+                <div class="tv-photo">
+                    <div class="tv-frame">
+                        {% for testimonial in testimonials %}
+                        {% if testimonial.photo %}
+                        <img class="tv-pic" src="{{ testimonial.photo.url }}" alt="Trip photo from {{ testimonial.name }}" loading="lazy" decoding="async" draggable="false">
+                        {% elif testimonial.image %}
+                        <img class="tv-pic" src="{{ testimonial.image.url }}" srcset="{{ testimonial.image|srcset }}" sizes="(max-width:991px) 92vw, 40vw" alt="{{ testimonial.name }}" loading="lazy" decoding="async" draggable="false">
+                        {% else %}
+                        <img class="tv-pic" src="{% static 'frontend/tr.webp' %}" alt="Happy travellers" loading="lazy" decoding="async" draggable="false">
+                        {% endif %}
+                        {% empty %}
+                        <img class="tv-pic is-on" src="{% static 'frontend/tr.webp' %}" alt="Happy travellers" loading="lazy" decoding="async" draggable="false">
+                        {% endfor %}
+
+                        <div class="tv-google" aria-label="Google rating 4.8 out of 5">
+                            <b><span class="g1">G</span><span class="g2">o</span><span class="g3">o</span><span class="g4">g</span><span class="g5">l</span><span class="g6">e</span></b>
+                            <span>4.8 <em><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></em></span>
                         </div>
-
-                        <div class="about-counter-content">
-
-                            <h2>
-                                Global
-                            </h2>
-
-                            <p>
-                                Travel Destinations
-                            </p>
-
-                        </div>
-
                     </div>
 
-                    <!-- ITEM 02 -->
-                    <div class="about-counter-item">
-
-                        <div class="icon-box">
-                            <i
-                                class="fa-solid fa-suitcase-rolling"
-                                aria-hidden="true"
-                            ></i>
-                        </div>
-
-                        <div class="about-counter-content">
-
-                            <h2>
-                                Custom
-                            </h2>
-
-                            <p>
-                                Holiday Packages
-                            </p>
-
-                        </div>
-
+                    <div class="tv-thumbs">
+                        {% for testimonial in testimonials %}
+                        <button type="button" class="tv-thumb" aria-label="Show review by {{ testimonial.name }}">
+                            {% if testimonial.photo %}
+                            <img src="{{ testimonial.photo.url }}" alt="" loading="lazy" decoding="async" draggable="false">
+                            {% elif testimonial.image %}
+                            <img src="{{ testimonial.image.url }}" srcset="{{ testimonial.image|mobile_srcset }}" sizes="120px" alt="" loading="lazy" decoding="async" draggable="false">
+                            {% else %}
+                            <img src="{% static 'frontend/tr.webp' %}" alt="" loading="lazy" decoding="async" draggable="false">
+                            {% endif %}
+                        </button>
+                        {% endfor %}
                     </div>
+                </div>
 
-                    <!-- ITEM 03 -->
-                    <div class="about-counter-item">
+                <!-- REVIEW CARD -->
+                <div class="tv-cardcol">
+                    <img class="tv-planeimg" src="{% static 'frontend/re.webp' %}" alt="" aria-hidden="true" loading="lazy" decoding="async">
 
-                        <div class="icon-box">
-                            <i
-                                class="fa-solid fa-passport"
-                                aria-hidden="true"
-                            ></i>
+                    <div class="tv-card">
+                        <div class="tv-slides" aria-live="polite">
+                            {% for testimonial in testimonials %}
+                            <figure class="tv-slide">
+                                <span class="tv-qmark" style="--i:0" aria-hidden="true">&rdquo;</span>
+
+                                <div class="tv-who" style="--i:0">
+                                    <div class="tv-avatar">
+                                        {% if testimonial.image %}
+                                        <img src="{{ testimonial.image.url }}" srcset="{{ testimonial.image|mobile_srcset }}" sizes="70px" alt="{{ testimonial.name }}" loading="lazy" decoding="async" draggable="false">
+                                        {% else %}
+                                        <img src="{% static 'frontend/assets/images/author-1.jpg' %}" alt="{{ testimonial.name }}" loading="lazy" decoding="async" draggable="false">
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <h3 class="tv-name">{{ testimonial.name }}</h3>
+                                        <span class="tv-place">{% if testimonial.location %}{{ testimonial.location }}{% else %}Happy Traveller{% endif %}</span>
+                                        <div class="tv-stars" aria-label="5 out of 5 stars">
+                                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <blockquote class="tv-text" style="--i:2">{% with r=testimonial.review|striptags %}{% if r|slice:":1" == "“" or r|slice:":1" == '"' %}{{ r }}{% else %}&ldquo;{{ r }}&rdquo;{% endif %}{% endwith %}</blockquote>
+                            </figure>
+                            {% empty %}
+                            <figure class="tv-slide is-on">
+                                <blockquote class="tv-text">Traveller experiences and reviews will appear here soon.</blockquote>
+                            </figure>
+                            {% endfor %}
                         </div>
 
-                        <div class="about-counter-content">
-
-                            <h2>
-                                Visa
-                            </h2>
-
-                            <p>
-                                Guidance & Assistance
-                            </p>
-
+                        <div class="tv-progress" aria-hidden="true">
+                            <div class="tv-track"><span class="tv-fill"></span></div>
+                            <span class="tv-count"></span>
                         </div>
 
+                        <div class="tv-controls">
+                            <button type="button" class="tv-prev" aria-label="Previous review"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" class="tv-next" aria-label="Next review"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
                     </div>
-
-                    <!-- ITEM 04 -->
-                    <div class="about-counter-item">
-
-                        <div class="icon-box">
-                            <i
-                                class="fa-solid fa-headset"
-                                aria-hidden="true"
-                            ></i>
-                        </div>
-
-                        <div class="about-counter-content">
-
-                            <h2>
-                                <span class="counter">24</span>/7
-                            </h2>
-
-                            <p>
-                                Customer Support
-                            </p>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
             </div>
-
         </div>
     </div>
+
+    <img class="tv-couple" src="{% static 'frontend/map.webp' %}" width="920" height="1349" alt="Smiling travel couple studying a map" loading="lazy" decoding="async">
 </div>
 
-<!-- ==========================================
-     ABOUT US SECTION END
-========================================== -->
 
-    <!-- About Us Section End -->
-
-    <!-- Mission Vision Section Start -->
-    
-<!-- ==========================================
-     OUR MISSION / VISION / VALUES SECTION
-     DEUTSCHE YATHRAS
-========================================== -->
-
-<div class="our-mission-vision bg-section">
-
+<!-- ============ 5) FAQ (same as home) ============ -->
+<div class="our-faqs dy-faq-sky">
     <div class="container">
-
-        <!-- SECTION HEADING -->
-        <div class="row section-row">
-
-            <div class="col-lg-12">
-
-                <div class="section-title">
-
-                    <h3 class="wow fadeInUp">
-                        Our Mission / Vision / Values
-                    </h3>
-
-                    <h2
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Inspiring Journeys, Creating Memories,
-                        and Connecting the World
-                    </h2>
-
-                    <p
-                        class="wow fadeInUp"
-                        data-wow-delay="0.2s"
-                    >
-                        At Deutsche Yathras, our purpose goes beyond
-                        planning holidays. We aim to make travel
-                        accessible, seamless, and truly memorable
-                        through personalised experiences, dependable
-                        service, and a passion for exploration.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- MISSION / VISION / VALUES CARDS -->
         <div class="row">
 
-            <div class="col-lg-12">
+            <div class="col-lg-5">
+                <div class="our-faqs-content">
+                    <span class="dy-eyebrow">Question &amp; Answer</span>
+                    <h2 class="dy-h2">Frequently Asked <span class="acc">Questions</span></h2>
+                    <p class="faq-lead">Answers to the things travellers most often ask before booking a trip with us.</p>
 
-                <div class="mission-vision-list">
-
-                    <!-- ==================================
-                         OUR MISSION
-                    =================================== -->
-
-                    <div class="mission-vision-item wow fadeInUp">
-
-                        <div class="icon-box">
-
-                            <img
-                                src="{% static 'frontend/assets/images/icon-our-mission.svg' %}"
-                                alt="Our Mission"
-                            >
-
-                        </div>
-
-                        <div class="mission-vision-content">
-
-                            <h3>Our Mission</h3>
-
-                            <p>
-                                To simplify travel by delivering
-                                thoughtfully curated holidays,
-                                personalised itineraries, reliable
-                                visa assistance, and seamless
-                                booking services that turn every
-                                journey into an unforgettable
-                                experience.
-                            </p>
-
-                        </div>
-
+                    <div style="margin-top:30px;">
+                        <a href="{% url 'contact' %}" class="dy-btn">Ask a Question <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
 
-                    <!-- ==================================
-                         OUR VISION
-                    =================================== -->
-
-                    <div
-                        class="mission-vision-item active wow fadeInUp"
-                        data-wow-delay="0.2s"
-                    >
-
-                        <div class="icon-box">
-
-                            <img
-                                src="{% static 'frontend/assets/images/icon-our-vision.svg' %}"
-                                alt="Our Vision"
-                            >
-
-                        </div>
-
-                        <div class="mission-vision-content">
-
-                            <h3>Our Vision</h3>
-
-                            <p>
-                                To become a trusted travel partner
-                                for explorers worldwide, inspiring
-                                people to discover new destinations,
-                                embrace different cultures, and
-                                create meaningful memories through
-                                exceptional travel experiences.
-                            </p>
-
-                        </div>
-
+                    <div class="faq-reviews">
+                        <div class="g-title"><b>G</b><b>o</b><b>o</b><b>g</b><b>l</b><b>e</b> Reviews</div>
+                        <div class="g-rate">4.8 <span class="stars">★★★★★</span><span class="count">(900)</span></div>
                     </div>
-
-                    <!-- ==================================
-                         OUR VALUES
-                    =================================== -->
-
-                    <div
-                        class="mission-vision-item wow fadeInUp"
-                        data-wow-delay="0.4s"
-                    >
-
-                        <div class="icon-box">
-
-                            <img
-                                src="{% static 'frontend/assets/images/icon-our-value.svg' %}"
-                                alt="Our Values"
-                            >
-
-                        </div>
-
-                        <div class="mission-vision-content">
-
-                            <h3>Our Values</h3>
-
-                            <p>
-                                We believe in honesty, transparency,
-                                personalised attention, and customer
-                                satisfaction. Every journey is
-                                guided by our commitment to quality,
-                                dependable support, and genuine
-                                care for every traveller.
-                            </p>
-
-                        </div>
-
-                    </div>
-
                 </div>
-
             </div>
 
-        </div>
+            <div class="col-lg-7">
+                <div class="faq-accordion" id="faqaccordion">
 
-    </div>
-
-</div>
-
-<!-- ==========================================
-     MISSION / VISION / VALUES SECTION END
-========================================== -->
-
-    <!-- Mission Vision Section End -->
-
-    <!-- Who We Are Section Start -->
-    
-<!-- ==========================================
-     WHO WE ARE SECTION START
-     DEUTSCHE YATHRAS
-========================================== -->
-
-<div class="who-we-are">
-    <div class="container">
-        <div class="row align-items-center">
-
-            <!-- LEFT SIDE IMAGES -->
-            <div class="col-lg-6">
-
-                <div class="who-we-are-images">
-
-                    <!-- FIRST IMAGE -->
-                    <div class="who-we-image-box-1">
-                        <div class="who-we-img-1">
-
-                            <figure class="image-anime reveal">
-                                <img
-                                    src="{% static 'frontend/assets/images/about/image-4.webp' %}"
-                                    alt="Explore beautiful destinations with Deutsche Yathras"
-                                >
-                            </figure>
-
-                        </div>
-                    </div>
-
-                    <!-- SECOND IMAGE AND HIGHLIGHT -->
-                    <div class="who-we-image-box-1">
-
-                        <!-- TRAVEL EXPERTISE BOX -->
-                        <div class="reliable-expertise-box">
-
-                            <div class="icon-box">
-                                <img
-                                    src="{% static 'frontend/assets/images/icon-about-team-member.svg' %}"
-                                    alt=""
-                                >
-                            </div>
-
-                            <div class="reliable-expertise-content">
-
-                                <h2>
-                                    <span class="counter">24</span>/7
-                                </h2>
-
-                                <p>
-                                    Travel Assistance
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                        <!-- SECOND IMAGE -->
-                        <div class="who-we-img-2">
-
-                            <figure class="image-anime reveal">
-                                <img
-                                    src="{% static 'frontend/assets/images/about/image-3.webp' %}"
-                                    alt="Memorable holiday experiences and international travel"
-                                >
-                            </figure>
-
-                        </div>
-
-                    </div>
-
-                    <!-- CONTACT CIRCLE -->
-                    <div class="who-we-circle-img">
-
-                        <a href="{% url 'contact' %}">
-                            <img
-                                src="{% static 'frontend/assets/images/contact-us-circle.svg' %}"
-                                alt="Contact Deutsche Yathras"
-                            >
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- RIGHT SIDE CONTENT -->
-            <div class="col-lg-6">
-
-                <div class="who-we-are-content">
-
-                    <!-- SECTION HEADING -->
-                    <div class="section-title">
-
-                        <h3 class="wow fadeInUp">
-                            Who We Are
-                        </h3>
-
-                        <h2
-                            class="text-anime-style-3"
-                            data-cursor="-opaque"
-                        >
-                            Passionate About Travel,
-                            Dedicated to Your Journey
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">What kind of travel packages do you offer?</button>
                         </h2>
-
-                        <p
-                            class="wow fadeInUp"
-                            data-wow-delay="0.2s"
-                        >
-                            Deutsche Yathras is a travel agency
-                            dedicated to helping travellers explore
-                            the world with confidence and ease.
-
-                            We specialise in curated international
-                            holiday packages, complete visa
-                            assistance, personalised itineraries,
-                            and end-to-end travel arrangements.
-
-                            Whether you're planning a relaxing
-                            beach escape, a family holiday,
-                            a romantic getaway, or an exciting
-                            adventure, we help transform your
-                            travel dreams into memorable experiences.
-                        </p>
-
+                        <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>We offer holiday packages for families, couples, groups and solo travellers, covering popular domestic and international destinations.</p></div>
+                        </div>
                     </div>
 
-                    <!-- SIX KEY HIGHLIGHTS -->
-                    <div
-                        class="who-we-are-body wow fadeInUp"
-                        data-wow-delay="0.4s"
-                    >
-
-                        <ul>
-
-                            <li>
-                                Curated International Holiday Packages
-                            </li>
-
-                            <li>
-                                Expert Tourist Visa Assistance
-                            </li>
-
-                            <li>
-                                Personalised Travel Itineraries
-                            </li>
-
-                            <li>
-                                Complete Flight &amp; Hotel Bookings
-                            </li>
-
-                            <li>
-                                Travel Insurance &amp; Assistance
-                            </li>
-
-                            <li>
-                                Dedicated 24/7 Customer Support
-                            </li>
-
-                        </ul>
-
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">Can I customize a package to suit my plans?</button>
+                        </h2>
+                        <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="heading2" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>Yes. Tell us your dates, budget and interests, and we will adjust the itinerary, hotels and activities for you.</p></div>
+                        </div>
                     </div>
 
-                    <!-- CONTACT BUTTON -->
-                    <div
-                        class="who-we-are-btn wow fadeInUp"
-                        data-wow-delay="0.6s"
-                    >
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">Do you provide visa support?</button>
+                        </h2>
+                        <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="heading3" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>Yes. We guide you through tourist visa applications and documentation for many destinations, including the UAE, Turkey, Thailand and more.</p></div>
+                        </div>
+                    </div>
 
-                        <a
-                            href="{% url 'contact' %}"
-                            class="btn-default"
-                        >
-                            Plan Your Trip
-                        </a>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading4">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">What is included in a travel package?</button>
+                        </h2>
+                        <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>Inclusions differ by package. Each package page lists what is covered, such as stay, transfers, sightseeing and meals.</p></div>
+                        </div>
+                    </div>
 
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading5">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">How do I book a trip with you?</button>
+                        </h2>
+                        <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="heading5" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>Choose a package, then send an enquiry or use the Book Now option. Our team will confirm the details with you.</p></div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading6">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">What is your cancellation and refund policy?</button>
+                        </h2>
+                        <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="heading6" data-bs-parent="#faqaccordion">
+                            <div class="accordion-body"><p>Cancellation terms depend on the package and booking date. Please check the package details or contact us before you pay.</p></div>
+                        </div>
                     </div>
 
                 </div>
-
             </div>
 
         </div>
     </div>
 </div>
 
-<!-- ==========================================
-     WHO WE ARE SECTION END
-========================================== -->
-
-    <!-- Who We Are Section End -->
-
-    <!-- Our Benefit Section Start -->
-
-<!-- ==========================================
-     WHY CHOOSE US SECTION START
-     DEUTSCHE YATHRAS
-========================================== -->
-
-<div class="our-benefit bg-section dark-section">
-
-    <div class="container">
-
-        <!-- SECTION HEADING -->
-        <div class="row section-row">
-
-            <div class="col-lg-12">
-
-                <div class="section-title">
-
-                    <h3 class="wow fadeInUp">
-                        Why Choose Us
-                    </h3>
-
-                    <h2
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Your Journey, Our Passion —
-                        Travel with Confidence
-                    </h2>
-
-                    <p
-                        class="wow fadeInUp"
-                        data-wow-delay="0.2s"
-                    >
-                        Discover a world of possibilities with
-                        Deutsche Yathras. From personalised holiday
-                        planning to complete travel assistance,
-                        we make every journey smooth, memorable,
-                        and worry-free.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- BENEFITS CONTENT -->
-        <div class="row align-items-center">
-
-            <!-- ==================================
-                 LEFT SIDE - THREE BENEFITS
-            =================================== -->
-            <div class="col-lg-4 col-md-6 order-lg-1 order-md-1 order-1">
-
-                <div class="our-benefit-box-1">
-
-                    <!-- BENEFIT 01 -->
-                    <div class="our-benefit-item wow fadeInUp">
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-earth-europe"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Global Holiday Experiences</h3>
-
-                            <p>
-                                Explore carefully curated holidays
-                                across Europe, UAE, Asia, Africa
-                                and beyond, designed for every
-                                kind of traveller.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- BENEFIT 02 -->
-                    <div
-                        class="our-benefit-item wow fadeInUp"
-                        data-wow-delay="0.2s"
-                    >
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-passport"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Expert Visa Assistance</h3>
-
-                            <p>
-                                Get guidance and support for
-                                tourist visa applications,
-                                documentation, and international
-                                travel requirements.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- BENEFIT 03 -->
-                    <div
-                        class="our-benefit-item wow fadeInUp"
-                        data-wow-delay="0.4s"
-                    >
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-route"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Personalised Travel Planning</h3>
-
-                            <p>
-                                Enjoy customised itineraries
-                                thoughtfully created around your
-                                interests, travel preferences,
-                                and budget.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- ==================================
-                 CENTER IMAGE
-            =================================== -->
-            <div class="col-lg-4 order-lg-2 order-md-3 order-2">
-
-                <div class="our-benefit-image">
-
-                    <figure class="image-anime">
-
-                        <img
-                            src="{% static 'frontend/assets/images/about/image-3.webp' %}"
-                            alt="Explore beautiful destinations with Deutsche Yathras"
-                            loading="lazy"
-                        >
-
-                    </figure>
-
-                </div>
-
-            </div>
-
-            <!-- ==================================
-                 RIGHT SIDE - THREE BENEFITS
-            =================================== -->
-            <div class="col-lg-4 col-md-6 order-lg-3 order-md-2 order-3">
-
-                <div class="our-benefit-box-2">
-
-                    <!-- BENEFIT 04 -->
-                    <div class="our-benefit-item wow fadeInUp">
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-plane-departure"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Seamless Travel Bookings</h3>
-
-                            <p>
-                                From flights and hotels to
-                                transfers, guided tours, and
-                                local experiences, we take care
-                                of your travel arrangements.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- BENEFIT 05 -->
-                    <div
-                        class="our-benefit-item wow fadeInUp"
-                        data-wow-delay="0.2s"
-                    >
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-shield-heart"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Travel Insurance &amp; Assistance</h3>
-
-                            <p>
-                                Travel with greater peace of mind
-                                through insurance options and
-                                assistance designed to support
-                                your journey.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                    <!-- BENEFIT 06 -->
-                    <div
-                        class="our-benefit-item wow fadeInUp"
-                        data-wow-delay="0.4s"
-                    >
-
-                        <div class="icon-box">
-                            <i class="fa-solid fa-headset"></i>
-                        </div>
-
-                        <div class="our-benefit-item-content">
-
-                            <h3>Dedicated Customer Support</h3>
-
-                            <p>
-                                From your first travel enquiry
-                                to post-trip questions, our team
-                                is here to guide and assist you
-                                at every step.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ==========================================
-     WHY CHOOSE US SECTION END
-========================================== -->
-
-    <!-- Our Benefit Section End -->
-
-    <!-- Our Innovation Section Start -->
-    <div class="our-innovation">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="our-innovation-content">
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">hat sets us apart</h3>
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Redefining dermatology with innovation</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">We combine the latest technology with a compassionate approach deliver exceptional skincare. Our focus is on providing effective treatments.</p>
-                        </div>
-
-                        <div class="innovation-skill-list">
-                            <div class="skills-progress-bar">
-                                <div class="skillbar" data-percent="95%">
-                                    <div class="skill-data">
-                                        <div class="skill-title">personalized care</div>
-                                        <div class="skill-no">95%</div>
-                                    </div>
-                                    <div class="skill-progress">
-                                        <div class="count-bar"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="skills-progress-bar">
-                                <div class="skillbar" data-percent="85%">
-                                    <div class="skill-data">
-                                        <div class="skill-title">advanced treatments</div>
-                                        <div class="skill-no">85%</div>
-                                    </div>
-                                    <div class="skill-progress">
-                                        <div class="count-bar"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="our-innovation-image">
-                        <div class="our-innovation-img-1">
-                            <figure class="image-anime">
-                                <img src="{% static 'frontend/assets/images/our-innovation-image-1.jpg' %}" alt="">
-                            </figure>
-                        </div>
-
-                        <div class="our-innovation-img-2">
-                            <figure class="image-anime">
-                                <img src="{% static 'frontend/assets/images/our-innovation-image-2.jpg' %}" alt="">
-                            </figure>
-                        </div>
-
-                        <div class="customer-review-box">
-                            <div class="icon-box">
-                                <i class="fa-solid fa-star"></i>
-                            </div>
-                            <div class="customer-review-box-content">
-                                <h2><span class="counter">27</span>k</h2>
-                                <p>customer reviewd</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Our Innovation Section End -->
-
-    <!-- Our Dermatology Section Start -->
-    <div class="our-dermatology bg-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="our-dermatology-image">
-                        <div class="our-dermatology-img">
-                            <figure class="image-anime">
-                                <img src="{% static 'frontend/assets/images/dermatology-image.jpg' %}" alt="">
-                            </figure>
-                        </div>
-                        <div class="dermatology-care-box">
-                            <div class="icon-box">
-                                <img src="{% static 'frontend/assets/images/icon-about-team-member.svg' %}" alt="">
-                            </div>
-                            <div class="dermatology-care-content">
-                                <h3>continuous care & follow-up</h3>
-                                <p>Your skin's health is our priority, so we provide ongoing care and</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="our-dermatology-content">
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">our benefits</h3>
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Exceptional dermatology, every step</h2>
-                        </div>
-
-                        <div class="our-dermatology-body">
-                            <div class="dermatology-item wow fadeInUp" data-wow-delay="0.2s">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-dermatology-1.svg' %}" alt="">
-                                </div>
-                                <div class="dermatology-item-content">
-                                    <h3>comprehensive services</h3>
-                                    <p>Our team offers a full spectrum of solutions tailored to meet your needs. From initial consultation to project completion.</p>
-                                </div>
-                            </div>
-
-                            <div class="dermatology-item wow fadeInUp" data-wow-delay="0.4s">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-dermatology-2.svg' %}" alt="">
-                                </div>
-                                <div class="dermatology-item-content">
-                                    <h3>high safety standards</h3>
-                                    <p>Our team offers a full spectrum of solutions tailored to meet your needs. From initial consultation to project completion.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="dermatology-btn wow fadeInUp" data-wow-delay="0.6s">
-                            <a href="contact.html" class="btn-default">contact us</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Our Dermatology Section End -->
-
-    <!-- Our Excellence Section Start -->
-    <div class="our-excellence">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="our-excellence-content">
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">dedicated to you</h3>
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Delivering excellence every aspect of skincare</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">We are committed to providing unparalleled dermatology care, combining expertise, innovation, and compassion to ensure the.</p>
-                        </div>
-
-                        <div class="our-excellence-body">
-                            <div class="excellence-item wow fadeInUp" data-wow-delay="0.4s">
-                                <div class="excellence-item-no">
-                                    <h3>1</h3>
-                                </div>
-                                <div class="excellence-item-content">
-                                    <h3>Custom Care</h3>
-                                    <p>This helps us create a customized treatment plan that aligns with your specific needs and expectations.</p>
-                                </div>
-                            </div>
-
-                            <div class="excellence-item wow fadeInUp" data-wow-delay="0.6s">
-                                <div class="excellence-item-no">
-                                    <h3>2</h3>
-                                </div>
-                                <div class="excellence-item-content">
-                                    <h3>Tailored Advice</h3>
-                                    <p>Based on your consultation, we develop a personalized treatment plan designed to address your specific skin concerns.</p>
-                                </div>
-                            </div>
-
-                            <div class="excellence-item wow fadeInUp" data-wow-delay="0.8s">
-                                <div class="excellence-item-no">
-                                    <h3>3</h3>
-                                </div>
-                                <div class="excellence-item-content">
-                                    <h3>Expert Guidance</h3>
-                                    <p>Your skin's health is our priority, so we provide ongoing care and follow-up. After your treatment, we monitor your progress</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-6">
-                    <div class="our-excellence-image">
-                        <div class="our-excellence-img">
-                            <figure class="image-anime reveal">
-                                <img src="{% static 'frontend/assets/images/excellence-image.jpg' %}" alt="">
-                            </figure>
-                        </div>
-
-                        <div class="skincare-list">
-                            <div class="skincare-item">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-skincare-1.svg' %}" alt="">
-                                </div>
-                                <div class="skincare-item-content">
-                                    <h3>skin rejuvenation</h3>
-                                    <p>From preventive care to specialized.</p>
-                                </div>
-                            </div>
-
-                            <div class="skincare-item active">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-skincare-2.svg' %}" alt="">
-                                </div>
-                                <div class="skincare-item-content">
-                                    <h3>facial contouring</h3>
-                                    <p>From preventive care to specialized.</p>
-                                </div>
-                            </div>
-
-                            <div class="skincare-item">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-skincare-3.svg' %}" alt="">
-                                </div>
-                                <div class="skincare-item-content">
-                                    <h3>youthful glow</h3>
-                                    <p>From preventive care to specialized.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Our Excellence Section End -->
-
-    <!-- Our Testimonials Section Start -->
-    <div class="our-testimonials">
-        <div class="container">
-            <div class="row section-row">
-                <div class="col-lg-12">
-                    <div class="section-title">
-                        <h3 class="wow fadeInUp">testimonials</h3>
-                        <h2 class="text-anime-style-3" data-cursor="-opaque">Real patient stories that reflect exceptional skin care</h2>
-                        <p class="wow fadeInUp" data-wow-delay="0.2s">Hear from our satisfied patients about their journey to healthier, glowing skin. Their stories reflect the care, expertise.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Testimonial Slider Start -->
-                    <div class="testimonial-slider">
-                        <div class="swiper">
-                            <div class="swiper-wrapper" data-cursor-text="Drag">
-                                <div class="swiper-slide">
-                                    <div class="testimonial-item">
-                                        <div class="testimonial-quote">
-                                            <img src="{% static 'frontend/assets/images/testimonial-quote.svg' %}" alt="">
-                                        </div>
-                                        <div class="testimonial-body">
-                                            <div class="testimonial-rating">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </div>
-                                            <div class="testimonial-content">
-                                                <p>The experts at this clinic took the time to truly understand my condition and prescribed a treatment plan that worked wonders. The combination of medical treatments.</p>
-                                            </div>
-                                            <div class="author-info">
-                                                <div class="author-image">
-                                                    <figure class="image-anime">
-                                                        <img src="{% static 'frontend/assets/images/author-1.jpg' %}" alt="">
-                                                    </figure>
-                                                </div>
-                                                <div class="author-content">
-                                                    <h3>dianne russell</h3>
-                                                    <p>eczema treatment</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="swiper-slide">
-                                    <div class="testimonial-item">
-                                        <div class="testimonial-quote">
-                                            <img src="{% static 'frontend/assets/images/testimonial-quote.svg' %}" alt="">
-                                        </div>
-                                        <div class="testimonial-body">
-                                            <div class="testimonial-rating">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </div>
-                                            <div class="testimonial-content">
-                                                <p>The experts at this clinic took the time to truly understand my condition and prescribed a treatment plan that worked wonders. The combination of medical treatments.</p>
-                                            </div>
-                                            <div class="author-info">
-                                                <div class="author-image">
-                                                    <figure class="image-anime">
-                                                        <img src="{% static 'frontend/assets/images/author-2.jpg' %}" alt="">
-                                                    </figure>
-                                                </div>
-                                                <div class="author-content">
-                                                    <h3>jenny wilson</h3>
-                                                    <p>skin expert</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="swiper-slide">
-                                    <div class="testimonial-item">
-                                        <div class="testimonial-quote">
-                                            <img src="{% static 'frontend/assets/images/testimonial-quote.svg' %}" alt="">
-                                        </div>
-                                        <div class="testimonial-body">
-                                            <div class="testimonial-rating">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </div>
-                                            <div class="testimonial-content">
-                                                <p>The experts at this clinic took the time to truly understand my condition and prescribed a treatment plan that worked wonders. The combination of medical treatments.</p>
-                                            </div>
-                                            <div class="author-info">
-                                                <div class="author-image">
-                                                    <figure class="image-anime">
-                                                        <img src="{% static 'frontend/assets/images/author-3.jpg' %}" alt="">
-                                                    </figure>
-                                                </div>
-                                                <div class="author-content">
-                                                    <h3>david julio</h3>
-                                                    <p>makeup artist</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="swiper-slide">
-                                    <div class="testimonial-item">
-                                        <div class="testimonial-quote">
-                                            <img src="{% static 'frontend/assets/images/testimonial-quote.svg' %}" alt="">
-                                        </div>
-                                        <div class="testimonial-body">
-                                            <div class="testimonial-rating">
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                            </div>
-                                            <div class="testimonial-content">
-                                                <p>The experts at this clinic took the time to truly understand my condition and prescribed a treatment plan that worked wonders. The combination of medical treatments.</p>
-                                            </div>
-                                            <div class="author-info">
-                                                <div class="author-image">
-                                                    <figure class="image-anime">
-                                                        <img src="{% static 'frontend/assets/images/author-4.jpg' %}" alt="">
-                                                    </figure>
-                                                </div>
-                                                <div class="author-content">
-                                                    <h3>jane cooper</h3>
-                                                    <p>beauty treatments</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="testimonial-pagination"></div>
-                        </div>
-                    </div>
-                    <!-- Testimonial Slider End -->
-                </div>
-
-                <div class="col-lg-12">
-                    <!-- Trusted Client Box Start -->
-                    <div class="trusted-client-box">
-                        <div class="trusted-client-title">
-                            <h3>Trusted by Leading Brands in the Industry</h3>
-                        </div>
-
-                        <div class="testimonial-company-slider">
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-1.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-2.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-1.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-2.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-1.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-1.svg' %}" alt=""></div></div>
-                                    <div class="swiper-slide"><div class="trusted-client-logo"><img src="{% static 'frontend/assets/images/client-logo-2.svg' %}" alt=""></div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Trusted Client Box End -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Our Testimonials Section End -->
-
-    <!-- Book Appointment Start -->
-    <div class="book-appointment bg-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 order-lg-1 order-2">
-                    <div class="book-appointment-content">
-                        <div class="booking-contact-list">
-                            <div class="booking-contact-item wow fadeInUp">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-location-white.svg' %}" alt="">
-                                </div>
-                                <div class="booking-contact-content">
-                                    <p>2464 Royal Ln. Mesa, New Jersey 45463</p>
-                                </div>
-                            </div>
-
-                            <div class="booking-contact-item wow fadeInUp" data-wow-delay="0.2s ">
-                                <div class="icon-box">
-                                    <img src="{% static 'frontend/assets/images/icon-phone-white.svg' %}" alt="">
-                                </div>
-                                <div class="booking-contact-content">
-                                    <p><a href="tel:684555012">(684) 555-012</a></p>
-                                    <p><a href="tel:704555127">(704) 555-127</a></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="google-map-iframe">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96737.10562045308!2d-74.08535042841811!3d40.739265258395164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1703158537552!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-7 order-lg-2 order-1">
-                    <div class="booking-form-box">
-                        <div class="section-title section-title-center">
-                            <h3 class="wow fadeInUp">Book a appointment</h3>
-                            <h2 class="text-anime-style-3" data-cursor="-opaque">Reach out to us today!</h2>
-                            <p class="wow fadeInUp" data-wow-delay="0.2s">It's time to take control of your skin health! Booking your appointment is easy and fast. Choose a time that works for you and our dermatology experts will be ready.</p>
-                        </div>
-
-                        <div class="book-appointment-form wow fadeInUp" data-wow-delay="0.4s">
-                            <form id="appointmentForm" action="#" method="POST" data-toggle="validator">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="name" class="form-control" id="name" placeholder="Full Name Here" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone Number" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="email" name="email" class="form-control" id="email" placeholder="Email Address" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <select name="services" class="form-control form-select" id="services" required>
-                                            <option value="" disabled selected>select service</option>
-                                            <option value="general_dental_care">Dermal fillers</option>
-                                            <option value="dental_implants">chemical peels</option>
-                                            <option value="cosmetic_dentistry">Acne treatment</option>
-                                            <option value="teeth_whitening">Skin tightening</option>
-                                            <option value="pediatric_dental_care">Scar revision</option>
-                                            <option value="advanced_oral_care">Wrinkle reduction</option>
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="date" name="date" class="form-control" id="date" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <input type="time" name="time" class="form-control" id="time" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-12 mb-5">
-                                        <textarea name="message" class="form-control" id="message" rows="4" placeholder="Description here about service or your problem..."></textarea>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn-default"><span>send message</span></button>
-                                        <div id="msgSubmit" class="h3 hidden"></div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Book Appointment End -->
-
-    <!-- Scrolling Ticker Section Start -->
-    <div class="our-scrolling-ticker">
-        <div class="scrolling-ticker-box">
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
-
-            <div class="scrolling-content">
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-                <span><img src="{% static 'frontend/assets/images/asterisk-icon.svg' %}" alt="">Medical experts Women's health Skin Care Cardiac care</span>
-            </div>
-        </div>
-    </div>
-    <!-- Scrolling Ticker Section End -->
-
+{% endblock %}
+
+
+{% block extra_js %}
+
+<!-- SERVICES: stacked cards (scale-down of covered cards + side dots) -->
+<script>
+(function () {
+    var stack = document.getElementById('dyStack');
+    if (!stack) return;
+
+    var section = document.getElementById('services');
+    var cards   = [].slice.call(stack.querySelectorAll('.dy-stack-card'));
+    var dots    = [].slice.call(document.querySelectorAll('#dyStackDots .dy-stack-dot'));
+    var dotNav  = document.getElementById('dyStackDots');
+    var wide    = window.matchMedia('(min-width: 768px)');
+    var reduce  = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var ticking = false;
+    var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+
+    function update() {
+        ticking = false;
+        var vh = window.innerHeight;
+        var rect = section.getBoundingClientRect();
+
+        // show dots only while the section is on screen
+        if (dotNav) dotNav.classList.toggle('is-visible', wide.matches && rect.top < vh * 0.45 && rect.bottom > vh * 0.55);
+
+        // active dot = last card whose top has reached the middle of the screen
+        var active = 0;
+        cards.forEach(function (c, i) { if (c.getBoundingClientRect().top <= vh * 0.5) active = i; });
+        dots.forEach(function (d, i) { d.classList.toggle('is-on', i === active); });
+
+    }
+
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+
+    // clicking a dot scrolls to that card
+    dots.forEach(function (d, i) {
+        d.addEventListener('click', function () {
+            var gap = parseFloat(getComputedStyle(cards[0]).marginBottom) || 0;
+            var offset = 0;
+            for (var k = 0; k < i; k++) offset += cards[k].offsetHeight + gap;
+            var listTop = stack.getBoundingClientRect().top + window.pageYOffset;
+            var stick   = parseFloat(getComputedStyle(cards[i]).top) || 0;
+            window.scrollTo({ top: listTop + offset - stick, behavior: reduce.matches ? 'auto' : 'smooth' });
+        });
+    });
+
+    // ---- phone carousel: dots follow the swipe, tap a dot to jump
+    var mdots = [].slice.call(document.querySelectorAll('#dyStackMDots .dy-stack-mdot'));
+    function carouselIndex() {
+        var step = cards[0].offsetWidth + (parseFloat(getComputedStyle(stack).columnGap) || 16);
+        return clamp(Math.round(stack.scrollLeft / step), 0, cards.length - 1);
+    }
+    stack.addEventListener('scroll', function () {
+        if (wide.matches) return;
+        var a = carouselIndex();
+        mdots.forEach(function (d, i) { d.classList.toggle('is-on', i === a); });
+    }, { passive: true });
+    mdots.forEach(function (d, i) {
+        d.addEventListener('click', function () {
+            if (wide.matches) return;
+            stack.scrollTo({ left: cards[i].offsetLeft - 20, behavior: 'smooth' });
+        });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    window.addEventListener('load', update);
+    update();
+})();
+</script>
+
+
+<!-- SERVICES: send the chosen service to the booking popup -->
+<script>
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.dy-stack-card .open-book-trip');
+    if (!btn) return;
+    var name = btn.dataset.serviceName || '';
+    // adjust these selectors to the field names in your booking popup
+    var f = document.querySelector('#bookTripModal [name="service"], #bookTripModal [name="package_name"], #book-trip-package-name');
+    var t = document.querySelector('#book-trip-package-title');
+    if (f) f.value = name;
+    if (t) t.textContent = name;
+});
+</script>
+
+<!-- PACKAGES: pinned horizontal scroll (same as home) -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const section  = document.getElementById("dyPackages");
+    if (!section) return;
+
+    const viewport = section.querySelector(".dy-packages-viewport");
+    const track    = section.querySelector(".dy-packages-track");
+    const bar      = section.querySelector(".dy-packages-progress span");
+    const slides   = Array.from(section.querySelectorAll(".dy-pkg-slide"));
+    if (!viewport || !track || !slides.length) return;
+
+    const desktop = window.matchMedia("(min-width: 992px) and (prefers-reduced-motion: no-preference)");
+    const SCROLL_RATIO = 1.15;
+    const SMOOTHING    = 0.075;
+
+    let maxShift = 0, target = 0, current = 0, running = false;
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+    function reset() {
+        section.classList.remove("is-pinned");
+        section.style.height = "";
+        track.style.transform = "";
+        if (bar) bar.style.transform = "";
+        maxShift = 0; target = 0; current = 0;
+    }
+
+    function measure() {
+        if (!desktop.matches) { reset(); return; }
+        maxShift = Math.max(0, track.scrollWidth - viewport.clientWidth);
+        if (maxShift < 4) { reset(); return; }
+        section.classList.add("is-pinned");
+        section.style.height = (window.innerHeight + maxShift * SCROLL_RATIO) + "px";
+        readScroll();
+        current = target;
+        render();
+    }
+
+    function readScroll() {
+        const rect = section.getBoundingClientRect();
+        const scrollable = section.offsetHeight - window.innerHeight;
+        if (scrollable <= 0) { target = 0; return; }
+        target = clamp(-rect.top / scrollable, 0, 1) * maxShift;
+    }
+
+    function render() {
+        track.style.transform = "translate3d(" + (-current).toFixed(2) + "px, 0, 0)";
+        if (bar && maxShift > 0) bar.style.transform = "scaleX(" + (current / maxShift).toFixed(4) + ")";
+    }
+
+    function loop() {
+        const diff = target - current;
+        if (Math.abs(diff) < 0.2) { current = target; render(); running = false; return; }
+        current += diff * SMOOTHING;
+        render();
+        requestAnimationFrame(loop);
+    }
+
+    function onScroll() {
+        if (!section.classList.contains("is-pinned")) return;
+        readScroll();
+        if (!running) { running = true; requestAnimationFrame(loop); }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    window.addEventListener("load", measure);
+    if (desktop.addEventListener) desktop.addEventListener("change", measure);
+    measure();
+});
+</script>
+
+<!-- TESTIMONIALS carousel (same as home) -->
+<script>
+(function () {
+    var root = document.querySelector('.tv-rev');
+    if (!root) return;
+
+    var stage  = root.querySelector('.tv-stage');
+    var slides = [].slice.call(root.querySelectorAll('.tv-slide'));
+    var thumbs = [].slice.call(root.querySelectorAll('.tv-thumb'));
+    var pics   = [].slice.call(root.querySelectorAll('.tv-pic'));
+    var fill   = root.querySelector('.tv-fill');
+    var count  = root.querySelector('.tv-count');
+    var thumbBox = root.querySelector('.tv-thumbs');
+    var n = slides.length, cur = 0, timer = null, leaving = null;
+    var DELAY = 6000;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    root.style.setProperty('--tv-delay', (DELAY / 1000) + 's');
+
+    if (n < 2) {
+        root.querySelector('.tv-controls').style.display = 'none';
+        root.querySelector('.tv-progress').style.display = 'none';
+        thumbBox.style.display = 'none';
+    }
+
+    function restartFill() {
+        fill.classList.remove('run');
+        void fill.offsetWidth;
+        if (!reduce && n > 1) fill.classList.add('run');
+    }
+
+    function keepThumbInView() {
+        var t = thumbs[cur];
+        if (!t) return;
+        thumbBox.scrollTo({ left: t.offsetLeft - thumbBox.clientWidth / 2 + t.offsetWidth / 2, behavior: 'smooth' });
+    }
+
+    function show(i, dir) {
+        i = (i + n) % n;
+        if (i === cur && slides[cur].classList.contains('is-on')) return;
+        root.style.setProperty('--shift', dir === 'prev' ? '-24px' : '24px');
+
+        var out = slides[cur];
+        if (leaving) leaving.classList.remove('is-leave');
+        out.classList.remove('is-on');
+        out.classList.add('is-leave');
+        leaving = out;
+        setTimeout(function () { out.classList.remove('is-leave'); if (leaving === out) leaving = null; }, reduce ? 0 : 400);
+
+        var oldPic = pics[cur];
+        if (oldPic) {
+            oldPic.classList.remove('is-on'); oldPic.classList.add('is-prev');
+            setTimeout(function () { oldPic.classList.remove('is-prev'); }, 1050);
+        }
+
+        cur = i;
+        slides[cur].classList.add('is-on');
+        if (pics[cur]) { pics[cur].classList.remove('is-prev'); void pics[cur].offsetWidth; pics[cur].classList.add('is-on'); }
+        thumbs.forEach(function (t, k) { t.classList.toggle('is-on', k === cur); });
+        count.textContent = (cur + 1) + ' / ' + n;
+        keepThumbInView();
+        restartFill();
+    }
+
+    function next() { show(cur + 1, 'next'); }
+    function prev() { show(cur - 1, 'prev'); }
+
+    function start()  { stop(); stage.classList.remove('tv-paused'); restartFill(); if (!reduce && n > 1) timer = setInterval(next, DELAY); }
+    function stop()   { if (timer) { clearInterval(timer); timer = null; } stage.classList.add('tv-paused'); }
+    function resume() { if (!timer && !reduce && n > 1) { stage.classList.remove('tv-paused'); restartFill(); timer = setInterval(next, DELAY); } }
+
+    root.querySelector('.tv-next').addEventListener('click', function () { next(); start(); });
+    root.querySelector('.tv-prev').addEventListener('click', function () { prev(); start(); });
+    thumbs.forEach(function (t, k) {
+        t.addEventListener('click', function () { show(k, k < cur ? 'prev' : 'next'); start(); });
+    });
+
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', resume);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', resume);
+    document.addEventListener('visibilitychange', function () { document.hidden ? stop() : resume(); });
+
+    var sx = null;
+    stage.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+    window.addEventListener('pointerup', function (e) {
+        if (sx === null) return;
+        var dx = e.clientX - sx; sx = null;
+        if (dx < -40) { next(); start(); } else if (dx > 40) { prev(); start(); }
+    });
+
+    root.setAttribute('tabindex', '0');
+    root.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { next(); start(); }
+        if (e.key === 'ArrowLeft')  { prev(); start(); }
+    });
+
+    if (n) {
+        slides[0].classList.add('is-on');
+        if (pics[0]) pics[0].classList.add('is-on');
+        if (thumbs[0]) thumbs[0].classList.add('is-on');
+        count.textContent = '1 / ' + n;
+        start();
+    }
+})();
+</script>
 {% endblock %}

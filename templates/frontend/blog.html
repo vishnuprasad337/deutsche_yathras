@@ -1,560 +1,297 @@
-
 {% extends 'frontend/base.html' %}
 {% load static %}
 
-{% block title %}
-Travel Blog & Stories | Deutsche Yathras
-{% endblock %}
+{% block title %}Travel Blog & Stories | Deutsche Yathras{% endblock %}
 
 {% block extra_css %}
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&display=swap');
+
 /* ==========================================
-   BLOG LISTING - DEUTSCHE YATHRAS
+   SHARED (same palette as Home + About + Packages)
 ========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+--dy-body-font:"Poppins",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
 
-.dy-blog-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:inline;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-page-hero-title em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-crumbs{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
 }
 
-.dy-blog-card .post-featured-image {
-    overflow: hidden;
+/* ==========================================
+   1) BLOG LISTING  (sky + drifting clouds)
+========================================== */
+.dy-blogs{position:relative;overflow:hidden;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e8f6ff);}
+.dy-blogs *{box-sizing:border-box;}
+.dy-blogs::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-blogs-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+.dy-blogs .dy-wrap{position:relative;z-index:2;}
+
+.dy-blogs-head{max-width:760px;margin:0 auto 55px;text-align:center;}
+.dy-blogs-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+
+/* grid: 2 large cards per row */
+.dy-blog-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;}
+
+/* card */
+.dy-blog-card{display:flex;flex-direction:column;height:100%;padding:0;background:#fff;border-radius:34px;overflow:hidden;
+    box-shadow:0 10px 30px rgba(20,48,94,.08);transition:transform .35s,box-shadow .35s;}
+.dy-blog-card:hover{transform:translateY(-8px);box-shadow:0 20px 44px rgba(20,48,94,.16);}
+.dy-blog-image{position:relative;display:block;flex-shrink:0;height:340px;border-radius:34px;overflow:hidden;background:#cfe6f6;}
+.dy-blog-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s;}
+.dy-blog-card:hover .dy-blog-image img{transform:scale(1.07);}
+.dy-blog-noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    background:#e8f0eb;color:var(--dy-navy);font-size:54px;}
+.dy-blog-badge{position:absolute;top:18px;left:18px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+    padding:9px 18px;border-radius:50px;background:#fff;color:var(--dy-navy);font-size:13px;font-weight:700;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);}
+.dy-blog-badge i{color:var(--dy-orange);}
+
+.dy-blog-body{display:flex;flex-direction:column;flex:1;min-width:0;padding:26px 30px 30px;}
+.dy-blog-body h3{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:0 0 12px;
+    font-family:"Playfair Display",Georgia,serif !important;font-weight:700 !important;color:var(--dy-navy);
+    font-size:clamp(25px,2.2vw,32px);line-height:1.25;letter-spacing:-.3px;}
+.dy-blog-body h3 a{color:inherit;text-decoration:none;}
+.dy-blog-body h3 a:hover{color:var(--dy-coral);}
+.dy-blog-excerpt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+    margin:0 0 22px;color:#6b7280;font-size:16px;line-height:1.7;}
+.dy-blog-more{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:12px;align-self:flex-start;
+    padding:14px 28px;border-radius:50px;background:var(--dy-navy);color:#fff;font-size:14px;font-weight:700;
+    text-decoration:none;transition:background .3s,transform .3s;}
+.dy-blog-more:hover{background:#0e2347;color:#fff;transform:translateY(-2px);}
+.dy-blog-more i{transition:transform .3s;} .dy-blog-more:hover i{transform:translateX(5px);}
+.dy-blog-more:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* empty state */
+.dy-blog-empty{grid-column:1/-1;padding:70px 24px;text-align:center;background:rgba(255,255,255,.85);border-radius:30px;}
+.dy-blog-empty>i{margin-bottom:18px;color:var(--dy-orange);font-size:44px;}
+.dy-blog-empty h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:28px;}
+.dy-blog-empty p{max-width:460px;margin:0 auto;color:#5b6b85;line-height:1.7;}
+
+/* pagination */
+.dy-pager{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:60px 0 0;padding:0;list-style:none;}
+.dy-pager a{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;
+    background:#fff;border:1px solid rgba(20,48,94,.12);color:var(--dy-navy);font-size:15px;font-weight:700;
+    text-decoration:none;box-shadow:0 6px 18px rgba(20,48,94,.06);transition:background .3s,color .3s,transform .3s;}
+.dy-pager a:hover{transform:translateY(-3px);border-color:var(--dy-navy);}
+.dy-pager li.active a{background:var(--dy-navy);border-color:var(--dy-navy);color:#fff;pointer-events:none;}
+.dy-pager a:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+@media(max-width:1199px){.dy-blog-grid{gap:28px;}.dy-blog-image{height:300px;}}
+@media(max-width:991px){
+    .dy-blogs{padding:70px 0 80px;}
+    .dy-blogs-plane{max-width:24%;}
+}
+@media(max-width:767px){
+    .dy-blog-grid{grid-template-columns:1fr;}
+    .dy-blogs-plane{display:none;}
+    .dy-blog-image{height:250px;}
 }
 
-.dy-blog-card .post-featured-image img {
-    display: block;
-    width: 100%;
-    height: 270px;
-    object-fit: cover;
-    transition: transform .5s ease;
+/* ==========================================
+   2) CTA BANNER
+========================================== */
+.dy-cta{position:relative;overflow:hidden;isolation:isolate;padding:30px 0 100px;
+    background:linear-gradient(180deg,#e8f6ff,#e8f5fd);}
+.dy-cta *{box-sizing:border-box;}
+.dy-cta-box{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-cta-box::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-cta-box::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-cta h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-cta h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-cta p{margin:0;max-width:520px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-cta-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+@media(max-width:991px){
+    .dy-cta{padding:10px 0 70px;}
+    .dy-cta-box{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-cta-btns{justify-content:flex-start;}
 }
 
-.dy-blog-card:hover .post-featured-image img {
-    transform: scale(1.06);
+@media(prefers-reduced-motion:reduce){
+    .dy-blogs::before,.dy-blogs-plane{animation:none !important;}
+    .dy-blog-card,.dy-blog-image img,.dy-btn,.dy-btn-ghost,.dy-blog-more,.dy-pager a{transition:none !important;}
 }
-
-.dy-blog-card .post-item-body {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.dy-blog-card .post-item-btn {
-    margin-top: auto;
-}
-
-.dy-blog-date {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #b58b4b;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.dy-blog-excerpt {
-    color: #71817a;
-    font-size: 14px;
-    line-height: 1.8;
-    margin-top: 12px;
-    margin-bottom: 20px;
-}
-
-.dy-blog-empty {
-    padding: 75px 20px;
-    text-align: center;
-    background: #f2f7f4;
-    border-radius: 22px;
-}
-
-.dy-blog-empty i {
-    color: #194d42;
-    font-size: 44px;
-    margin-bottom: 18px;
-}
-
-.dy-blog-empty h3 {
-    color: #194d42;
-    margin-bottom: 12px;
-}
-
-.dy-blog-pagination .pagination {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
-}
-
-.dy-blog-pagination .pagination a {
-    text-decoration: none;
-}
-
-.dy-blog-pagination .pagination .active a {
-    pointer-events: none;
-}
-
-.dy-blog-cta {
-    padding: 80px 0;
-}
-
-.dy-blog-cta-content {
-    max-width: 850px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.dy-blog-cta-content h2 {
-    margin-bottom: 20px;
-}
-
-.dy-blog-cta-content p {
-    margin-bottom: 28px;
-    line-height: 1.8;
-}
-
-@media (max-width: 767px) {
-    .dy-blog-card .post-featured-image img {
-        height: 240px;
-    }
-
-    .dy-blog-cta {
-        padding: 55px 0;
-    }
-}
-
-
-
-
-/* ============================================
-   FIX BLOG CARD EXTRA GAP
-============================================ */
-
-/* Remove forced card height */
-.page-blog .dy-blog-card {
-    height: auto !important;
-    min-height: 0 !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-/* Keep image and content naturally aligned */
-.page-blog .dy-blog-card .post-item-body {
-    display: block !important;
-    flex: none !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-/* Remove extra space from original template */
-.page-blog .dy-blog-card .post-item-content {
-    margin-bottom: 0 !important;
-    padding-bottom: 0 !important;
-}
-
-/* Blog title */
-.page-blog .dy-blog-card .post-item-content h2 {
-    margin-bottom: 8px !important;
-    line-height: 1.4;
-}
-
-/* Short description */
-.page-blog .dy-blog-card .dy-blog-excerpt {
-    margin-top: 8px !important;
-    margin-bottom: 12px !important;
-    padding: 0 !important;
-
-    font-size: 14px;
-    line-height: 1.6;
-    color: #71817a;
-
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-}
-
-/* Read More button directly below description */
-.page-blog .dy-blog-card .post-item-btn {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    margin-bottom: 0 !important;
-    position: static !important;
-}
-
-/* Reduce spacing between cards */
-.page-blog .row > [class*="col-"] {
-    margin-bottom: 25px;
-}
-
 </style>
 {% endblock %}
 
+
 {% block content %}
 
-<!-- ==========================================
-     PAGE HEADER
-========================================== -->
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-page-hero" aria-label="Deutsche Yathras travel blog">
+    <img src="{% static 'frontend/hero.webp' %}" alt="Travel blog by Deutsche Yathras">
 
-<div class="page-header bg-section dark-section">
-
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="page-header-box">
-
-                    <h1
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Travel Blog & Stories
-                    </h1>
-
-                    <nav class="wow fadeInUp">
-
-                        <ol class="breadcrumb">
-
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li
-                                class="breadcrumb-item active"
-                                aria-current="page"
-                            >
-                                Blog
-                            </li>
-
-                        </ol>
-
-                    </nav>
-
-                </div>
-
-            </div>
-        </div>
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">Travel <em>Stories</em></h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Blog</span>
+        </nav>
     </div>
-
-</div>
-<!-- PAGE HEADER END -->
+</section>
 
 
-<!-- ==========================================
-     DYNAMIC BLOG LISTING
-========================================== -->
+<!-- ============ 1) BLOG LISTING ============ -->
+<section class="dy-blogs" id="blogs">
 
-<div class="page-blog">
+    <img class="dy-blogs-plane" src="{% static 'frontend/assets/images/home/airplane.png' %}" alt="" aria-hidden="true" loading="lazy">
 
-    <div class="container">
+    <div class="dy-wrap">
 
-        <div class="row">
+        <div class="dy-blogs-head">
+            <span class="dy-eyebrow is-center">Our Blog</span>
+            <h2 class="dy-h2">Stories To Inspire Your Next <span class="acc">Trip</span></h2>
+            <p>Destination guides, travel tips and real stories to help you plan your perfect holiday.</p>
+        </div>
+
+        <!-- CARDS -->
+        <div class="dy-blog-grid">
 
             {% for post in blogs %}
+            <article class="dy-blog-card">
 
-            <div class="col-lg-4 col-md-6 mb-4">
+                <a href="{% url 'blog_detail' slug=post.slug %}" class="dy-blog-image" aria-label="Read {{ post.title }}">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" loading="lazy">
+                    {% else %}
+                    <div class="dy-blog-noimg"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
+                    {% endif %}
+                    <span class="dy-blog-badge">
+                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>{{ post.created_at|date:"d M Y" }}
+                    </span>
+                </a>
 
-                <div class="post-item dy-blog-card wow fadeInUp">
+                <div class="dy-blog-body">
+                    <h3><a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a></h3>
 
-                    <!-- BLOG IMAGE -->
-                    <div class="post-featured-image">
+                    <p class="dy-blog-excerpt">{{ post.description|striptags|truncatewords:28 }}</p>
 
-                        <a
-                            href="{% url 'blog_detail' slug=post.slug %}"
-                            data-cursor-text="View"
-                            aria-label="Read {{ post.title }}"
-                        >
-
-                            <figure class="image-anime">
-
-                                {% if post.image %}
-
-                                <img
-                                    src="{{ post.image.url }}"
-                                    alt="{{ post.title }}"
-                                    loading="lazy"
-                                >
-
-                                {% else %}
-
-                                <div
-                                    style="height:270px;
-                                           display:flex;
-                                           align-items:center;
-                                           justify-content:center;
-                                           background:#e8f0eb;
-                                           color:#194d42;"
-                                >
-                                    <i
-                                        class="fa-solid fa-book-open"
-                                        style="font-size:50px;"
-                                    ></i>
-                                </div>
-
-                                {% endif %}
-
-                            </figure>
-
-                        </a>
-
-                    </div>
-                    <!-- BLOG IMAGE END -->
-
-
-                    <!-- BLOG BODY -->
-                    <div class="post-item-body">
-
-                        <div class="post-item-content">
-
-                            <!-- PUBLISHED DATE -->
-                            <div class="dy-blog-date">
-
-                                <i class="fa-regular fa-calendar"></i>
-
-                                <span>
-                                    {{ post.created_at|date:"d M Y" }}
-                                </span>
-
-                            </div>
-
-                            <!-- BLOG TITLE -->
-                            <h2>
-
-                                <a href="{% url 'blog_detail' slug=post.slug %}">
-                                    {{ post.title }}
-                                </a>
-
-                            </h2>
-
-                            <!-- SHORT DESCRIPTION -->
-                            <p class="dy-blog-excerpt">
-                                {{ post.description|striptags|truncatewords:12 }}
-                            </p>
-
-                        </div>
-
-                        <!-- READ MORE -->
-                        <div class="post-item-btn">
-
-                            <a
-                                href="{% url 'blog_detail' slug=post.slug %}"
-                                class="readmore-btn"
-                            >
-                                Read More
-                            </a>
-
-                        </div>
-
-                    </div>
-                    <!-- BLOG BODY END -->
-
+                    <a href="{% url 'blog_detail' slug=post.slug %}" class="dy-blog-more">
+                        Read More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
                 </div>
 
-            </div>
+            </article>
 
             {% empty %}
 
-            <div class="col-lg-12">
-
-                <div class="dy-blog-empty">
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    <h3>No Blog Articles Yet</h3>
-
-                    <p>
-                        Travel stories and destination guides
-                        will appear here once published.
-                    </p>
-
-                </div>
-
+            <div class="dy-blog-empty">
+                <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                <h3>No blog articles yet</h3>
+                <p>Travel stories and destination guides will appear here once they are published.</p>
             </div>
 
             {% endfor %}
 
         </div>
 
-
-        <!-- ======================================
-             DYNAMIC PAGINATION
-        ====================================== -->
-
+        <!-- PAGINATION -->
         {% if page_obj.has_other_pages %}
+        <ul class="dy-pager">
+            {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous page"><i class="fa-solid fa-arrow-left-long"></i></a></li>
+            {% endif %}
 
-        <div class="row">
-            <div class="col-lg-12">
+            {% for num in paginator.page_range %}
+            <li class="{% if page_obj.number == num %}active{% endif %}">
+                <a href="?page={{ num }}" {% if page_obj.number == num %}aria-current="page"{% endif %}>{{ num }}</a>
+            </li>
+            {% endfor %}
 
-                <div class="page-pagination dy-blog-pagination wow fadeInUp">
-
-                    <ul class="pagination">
-
-                        <!-- PREVIOUS -->
-                        {% if page_obj.has_previous %}
-
-                        <li>
-                            <a
-                                href="?page={{ page_obj.previous_page_number }}"
-                                aria-label="Previous page"
-                            >
-                                <i class="fa-solid fa-arrow-left-long"></i>
-                            </a>
-                        </li>
-
-                        {% endif %}
-
-
-                        <!-- PAGE NUMBERS -->
-                        {% for num in paginator.page_range %}
-
-                        <li class="{% if page_obj.number == num %}active{% endif %}">
-
-                            <a
-                                href="?page={{ num }}"
-                                {% if page_obj.number == num %}
-                                aria-current="page"
-                                {% endif %}
-                            >
-                                {{ num }}
-                            </a>
-
-                        </li>
-
-                        {% endfor %}
-
-
-                        <!-- NEXT -->
-                        {% if page_obj.has_next %}
-
-                        <li>
-                            <a
-                                href="?page={{ page_obj.next_page_number }}"
-                                aria-label="Next page"
-                            >
-                                <i class="fa-solid fa-arrow-right-long"></i>
-                            </a>
-                        </li>
-
-                        {% endif %}
-
-                    </ul>
-
-                </div>
-
-            </div>
-        </div>
-
+            {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}" aria-label="Next page"><i class="fa-solid fa-arrow-right-long"></i></a></li>
+            {% endif %}
+        </ul>
         {% endif %}
 
     </div>
-
-</div>
-<!-- DYNAMIC BLOG LISTING END -->
+</section>
 
 
-<!-- ==========================================
-     TRAVEL CTA
-     REPLACES MEDICAL APPOINTMENT FORM
-========================================== -->
-
-<div class="book-appointment bg-section dy-blog-cta">
-
-    <div class="container">
-
-        <div class="dy-blog-cta-content">
-
-            <div class="section-title section-title-center">
-
-                <h3 class="wow fadeInUp">
-                    Inspired To Explore?
-                </h3>
-
-                <h2
-                    class="text-anime-style-3"
-                    data-cursor="-opaque"
-                >
-                    Turn Travel Inspiration Into Your Next Adventure
-                </h2>
-
-                <p class="wow fadeInUp" data-wow-delay="0.2s">
-                    Found a destination that inspires you?
-                    Let Deutsche Yathras help you explore
-                    holiday packages, personalised itineraries,
-                    flights, accommodation, and travel assistance.
-                </p>
-
+<!-- ============ 2) CTA BANNER ============ -->
+<section class="dy-cta">
+    <div class="dy-wrap">
+        <div class="dy-cta-box">
+            <div>
+                <h2>Inspired to explore? <em>Let's plan it</em></h2>
+                <p>Found a destination you love? Our travel advisors can build a personalised itinerary with flights, stays and local support.</p>
             </div>
 
-            <a
-                href="{% url 'packages' %}"
-                class="btn-default"
-            >
-                Explore Our Packages
-            </a>
-
+            <div class="dy-cta-btns">
+                <a href="{% url 'packages' %}" class="dy-btn">Explore Packages <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'contact' %}" class="dy-btn-ghost">Contact Us</a>
+            </div>
         </div>
-
     </div>
-
-</div>
-<!-- TRAVEL CTA END -->
-
-
-<!-- ==========================================
-     SCROLLING TICKER
-========================================== -->
-
-<div class="our-scrolling-ticker">
-
-    <div class="scrolling-ticker-box">
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Explore The World
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Travel Stories & Inspiration
-            </span>
-
-        </div>
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Discover New Destinations
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Unforgettable Journeys
-            </span>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- SCROLLING TICKER END -->
+</section>
 
 {% endblock %}

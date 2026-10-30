@@ -1,21 +1,63 @@
-from pathlib import Path
+﻿import os
+from PIL import Image, ImageOps
 
-from PIL import Image
+# width -> WebP quality
+MOBILE_VARIANTS = {480: 72, 768: 75}
+DESKTOP_VARIANTS = {1024: 78, 1440: 80, 1920: 82}
+VARIANTS = {**MOBILE_VARIANTS, **DESKTOP_VARIANTS}
+
+MAX_ORIGINAL_WIDTH = 2200
 
 
-def optimize_image(path: str, max_size: tuple[int, int] = (1200, 1200), quality: int = 70) -> None:
-    """Optimize an image in place if it exists on disk."""
-    image_path = Path(path)
-    if not image_path.exists():
+def variant_name(name, width):
+    base, _ = os.path.splitext(name)
+    return f"{base}-{width}w.webp"
+
+
+def variant_path(path, width):
+    base, _ = os.path.splitext(path)
+    return f"{base}-{width}w.webp"
+
+
+def _prepare(img):
+    img = ImageOps.exif_transpose(img)
+    if img.mode not in ("RGB", "RGBA"):
+        img = img.convert("RGBA" if "transparency" in img.info else "RGB")
+    return img
+
+
+def optimize_image(path):
+    if not os.path.exists(path):
         return
 
-    try:
-        with Image.open(image_path) as img:
-            if img.mode in ("RGBA", "P"):
-                img = img.convert("RGB")
+    with Image.open(path) as src:
+        fmt = (src.format or "JPEG").upper()
+        img = _prepare(src)
 
-            img.thumbnail(max_size)
-            img.save(image_path, quality=quality, optimize=True)
-    except Exception:
-        # Keep model save resilient even if optimization fails.
-        return
+        original = img
+        if img.width > MAX_ORIGINAL_WIDTH:
+            h = round(img.height * MAX_ORIGINAL_WIDTH / img.width)
+            original = img.resize((MAX_ORIGINAL_WIDTH, h), Image.LANCZOS)
+
+        if fmt in ("JPEG", "JPG"):
+            original.convert("RGB").save(path, "JPEG", quality=82, optimize=True, progressive=True)
+        elif fmt == "PNG":
+            original.save(path, "PNG", optimize=True)
+        elif fmt == "WEBP":
+            original.save(path, "WEBP", quality=82, method=6)
+        else:
+            original.save(path, fmt)
+
+        for width, quality in VARIANTS.items():
+            if width >= original.width:
+                continue
+            h = round(original.height * width / original.width)
+            resized = original.resize((width, h), Image.LANCZOS)
+            resized.save(variant_path(path, width), "WEBP", quality=quality, method=6)
+
+
+def delete_variants(path):
+    for width in VARIANTS:
+        p = variant_path(path, width)
+        if os.path.exists(p):
+            os.remove(p)

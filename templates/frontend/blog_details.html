@@ -1,345 +1,406 @@
-
 {% extends 'frontend/base.html' %}
 {% load static %}
+
+{% comment %}
+  Context used: `blog` = the article, `recent_blogs` = more articles.
+  Fields used: title, slug, image, description, created_at.
+{% endcomment %}
 
 {% block title %}{{ blog.title }} | Deutsche Yathras{% endblock %}
 
 {% block extra_css %}
 <style>
-.dy-article-page {
-    padding: 85px 0;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
+
+/* ==========================================
+   SHARED (same palette + fonts as the Packages page)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-text:#5b6b85; --dy-soft:#f2f6fb;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
+
+@keyframes dyClouds{to{background-position:900px 0;}}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.35));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{max-width:1000px;margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(34px,5vw,72px);line-height:1.1;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-crumbs{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
 }
 
-.dy-article-featured {
-    overflow: hidden;
-    border-radius: 25px;
-    margin-bottom: 35px;
+/* ==========================================
+   BANDS (sky + drifting clouds, seamless join)
+========================================== */
+.dy-flow{position:relative;width:100%;overflow-x:clip;background:#e7f4fc;}
+.dy-flow *{box-sizing:border-box;}
+.dy-sec{position:relative;overflow:clip;isolation:isolate;padding:90px 0 100px;}
+.dy-sec::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-sec>.dy-wrap{position:relative;z-index:2;}
+.dy-sec-1{background:linear-gradient(180deg,#e6f8f9 0%,#e8f6ff 55%,#d9eefb 100%);padding-top:70px;padding-bottom:90px;}
+.dy-sec-2{background:linear-gradient(180deg,#d9eefb 0%,#cfe7f7 55%,#e7f4fc 100%);padding-top:70px;padding-bottom:120px;z-index:1;}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+@media(max-width:991px){
+    .dy-sec{padding:60px 0 70px;}
+    .dy-sec-1{padding-top:50px;padding-bottom:70px;}
+    .dy-sec-2{padding-top:50px;padding-bottom:90px;}
 }
 
-.dy-article-featured img {
-    display: block;
-    width: 100%;
-    max-height: 520px;
-    object-fit: cover;
+/* type */
+.dy-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;color:var(--dy-orange);
+    font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;}
+.dy-title{margin:0 0 16px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    letter-spacing:-.025em;line-height:1.12;font-size:clamp(30px,3.4vw,48px);}
+.dy-label{margin:0 0 16px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-weight:800;
+    letter-spacing:-.015em;line-height:1.15;font-size:clamp(24px,2.4vw,32px);}
+
+/* buttons */
+.dy-btn{display:inline-flex;align-items:center;justify-content:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-btn:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* scroll reveal: left column slides from the left, right from the right */
+.rv-ready .rv{opacity:0;transform:translateY(34px);transition:opacity .8s ease var(--d,0s),transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s);}
+.rv-ready .rv.in{opacity:1;transform:none;}
+.rv-ready .rv-left{transform:translateX(-90px);}
+.rv-ready .rv-right{transform:translateX(90px);}
+@media(max-width:767px){.rv-ready .rv-left{transform:translateX(-50px);}.rv-ready .rv-right{transform:translateX(50px);}}
+
+/* ==========================================
+   MAIN COLUMN
+========================================== */
+.dy-stack{display:flex;flex-direction:column;gap:38px;}
+.dy-facts{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;}
+.dy-fact{display:flex;align-items:center;gap:12px;padding:10px 24px 10px 12px;background:#fff;border-radius:50px;
+    box-shadow:0 8px 22px rgba(20,48,94,.08);}
+.dy-fact i{flex:0 0 40px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-orange);color:#fff;font-size:16px;}
+.dy-fact small{display:block;color:#8a96ab;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;}
+.dy-fact strong{color:var(--dy-navy);font-size:16px;font-weight:700;}
+
+.dy-image{position:relative;isolation:isolate;margin:0 14px 14px 0;}
+.dy-image::before{content:"";position:absolute;inset:14px -14px -14px 14px;z-index:-1;border-radius:36px;
+    border:2px dashed var(--dy-gold);}
+.dy-image figure{position:relative;margin:0;border-radius:34px;overflow:hidden;background:#cfe6f6;
+    box-shadow:0 22px 48px rgba(20,48,94,.22);}
+.dy-image figure::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(20,48,94,.18),transparent 30%,transparent 65%,rgba(20,48,94,.35));}
+.dy-image img{display:block;width:100%;height:auto;max-height:520px;object-fit:cover;transition:transform .8s;}
+.dy-image:hover img{transform:scale(1.05);}
+.dy-image-badge{position:absolute;top:20px;left:20px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+    padding:9px 18px;border-radius:50px;background:var(--dy-orange);color:#fff;font-size:13px;font-weight:700;
+    box-shadow:0 8px 18px rgba(244,129,63,.4);}
+@media(max-width:575px){
+    .dy-image{margin:0 10px 10px 0;}
+    .dy-image::before{inset:10px -10px -10px 10px;}
+    .dy-image figure{border-radius:26px;}
+    .dy-image-badge{top:12px;left:12px;}
 }
 
-.dy-article-date {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    margin-bottom: 20px;
-    color: #b58b4b;
-    font-size: 14px;
-    font-weight: 600;
+/* article text (works for plain text or rich HTML from the editor) */
+.dy-desc,.dy-desc p,.dy-desc li{color:var(--dy-text);font-size:17px;line-height:1.9;}
+.dy-desc p{margin:0 0 18px;}
+.dy-desc p:last-child{margin-bottom:0;}
+.dy-desc h2,.dy-desc h3,.dy-desc h4{margin:34px 0 14px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;
+    font-weight:800 !important;line-height:1.2;letter-spacing:-.01em;}
+.dy-desc h2{font-size:clamp(26px,2.6vw,34px);}
+.dy-desc h3{font-size:clamp(22px,2.2vw,28px);}
+.dy-desc ul,.dy-desc ol{margin:0 0 18px;padding-left:24px;}
+.dy-desc li{margin-bottom:8px;}
+.dy-desc a{color:var(--dy-orange);font-weight:600;}
+.dy-desc img{max-width:100%;height:auto;border-radius:22px;margin:10px 0;}
+.dy-desc blockquote{margin:26px 0;padding:22px 28px;background:#fff;border-left:5px solid var(--dy-orange);
+    border-radius:0 22px 22px 0;box-shadow:0 8px 22px rgba(20,48,94,.08);}
+.dy-desc blockquote p{margin:0;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif;font-size:20px;line-height:1.6;}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+.dy-sidebar{position:sticky;top:110px;display:flex;flex-direction:column;gap:30px;}
+.dy-box{padding:30px;background:#fff;border-radius:30px;box-shadow:0 10px 30px rgba(20,48,94,.08);}
+.dy-box h3{margin:0 0 18px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;
+    font-weight:800 !important;font-size:26px;line-height:1.2;}
+
+/* More articles: image cards */
+.dy-more{padding:28px 22px 22px;}
+.dy-more .dy-eyebrow{margin:0 0 6px 8px;}
+.dy-more h3{margin:0 0 16px 8px;}
+.dy-more-list{display:flex;flex-direction:column;gap:12px;max-height:380px;overflow-y:auto;padding:4px 6px 4px 0;}
+.dy-more-list::-webkit-scrollbar{width:5px;}
+.dy-more-list::-webkit-scrollbar-thumb{background:rgba(20,48,94,.25);border-radius:5px;}
+.dy-more-item{display:flex;align-items:center;gap:14px;padding:10px 14px 10px 10px;background:var(--dy-soft);
+    border:1px solid transparent;border-radius:20px;text-decoration:none;
+    transition:transform .3s,background .3s,border-color .3s,box-shadow .3s;}
+.dy-more-item:hover{transform:translateX(4px);background:#fff;border-color:rgba(244,129,63,.45);
+    box-shadow:0 10px 24px rgba(20,48,94,.12);}
+.dy-more-item:focus-visible{outline:3px solid var(--dy-gold);outline-offset:2px;}
+.dy-more-thumb{flex:0 0 68px;width:68px;height:68px;border-radius:16px;overflow:hidden;background:#cfe6f6;
+    display:flex;align-items:center;justify-content:center;color:var(--dy-navy);font-size:22px;}
+.dy-more-thumb img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.dy-more-item:hover .dy-more-thumb img{transform:scale(1.12);}
+.dy-more-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+.dy-more-info strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+    color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:17px;line-height:1.25;}
+.dy-more-info small{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px;color:#6b7280;font-size:13px;line-height:1.4;}
+.dy-more-info small i{margin-right:5px;color:var(--dy-coral);}
+.dy-more-go{flex:0 0 34px;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:#fff;color:var(--dy-orange);font-size:12px;box-shadow:0 4px 10px rgba(20,48,94,.1);
+    transition:background .3s,color .3s,transform .3s;}
+.dy-more-item:hover .dy-more-go{background:var(--dy-orange);color:#fff;transform:translateX(2px);}
+
+/* solid CTA card */
+.dy-cta-card{padding:36px 32px;background:var(--dy-orange);color:#fff;border-radius:30px;
+    box-shadow:0 20px 44px rgba(244,129,63,.35);}
+.dy-cta-card .dy-cta-icon{width:64px;height:64px;margin-bottom:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--dy-navy);color:var(--dy-gold);font-size:26px;}
+.dy-cta-card h3{margin:0 0 20px;color:#fff;font-family:"Playfair Display",Georgia,serif !important;font-weight:800 !important;font-size:26px;line-height:1.2;}
+.dy-cta-card .dy-btn{background:var(--dy-navy);box-shadow:0 10px 22px rgba(20,48,94,.3);width:100%;}
+.dy-cta-card .dy-btn:hover{background:#fff;color:var(--dy-navy);}
+.dy-cta-more{display:flex;align-items:center;gap:14px;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.4);}
+.dy-cta-more i{font-size:20px;}
+.dy-cta-more small{display:block;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.85;}
+.dy-cta-more a{color:#fff;font-size:18px;font-weight:700;text-decoration:none;}
+.dy-cta-more a:hover{color:var(--dy-navy);}
+
+/* ==========================================
+   BAND 2: journey banner
+========================================== */
+.dy-journey{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-journey::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-journey::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-journey h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-journey h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-journey p{margin:0;max-width:540px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-journey-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+
+@media(max-width:991px){
+    .dy-sidebar{position:static;}
+    .dy-journey{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-journey-btns{justify-content:flex-start;}
+}
+@media(max-width:575px){
+    .dy-fact{width:100%;border-radius:30px;}
+    .dy-box{padding:26px 22px;}
+    .dy-cta-card{padding:28px 22px;}
+    .dy-journey{padding:34px 22px;}
 }
 
-.dy-article-content h2 {
-    color: #194d42;
-    font-size: clamp(28px, 3vw, 40px);
-    line-height: 1.3;
-    margin-bottom: 25px;
-}
-
-.dy-article-description {
-    color: #65766f;
-    font-size: 16px;
-    line-height: 1.95;
-    overflow-wrap: anywhere;
-}
-
-.dy-article-description p {
-    margin-bottom: 20px;
-}
-
-.dy-article-sidebar {
-    position: sticky;
-    top: 110px;
-}
-
-.dy-article-sidebar-card {
-    padding: 28px;
-    background: #f4f8f5;
-    border-radius: 22px;
-    margin-bottom: 25px;
-}
-
-.dy-article-sidebar-card h3 {
-    font-size: 23px;
-    color: #194d42;
-    margin-bottom: 25px;
-}
-
-.dy-recent-post {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #dfe8e2;
-    text-decoration: none;
-}
-
-.dy-recent-post:last-child {
-    border-bottom: none;
-}
-
-.dy-recent-post img {
-    width: 85px;
-    height: 75px;
-    object-fit: cover;
-    border-radius: 12px;
-    flex-shrink: 0;
-}
-
-.dy-recent-post h4 {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #194d42;
-    margin: 0 0 6px;
-}
-
-.dy-recent-post span {
-    font-size: 12px;
-    color: #85918b;
-}
-
-.dy-article-cta {
-    padding: 30px;
-    border-radius: 22px;
-    background: #194d42;
-    color: #fff;
-}
-
-.dy-article-cta h3 {
-    color: #fff;
-    font-size: 25px;
-    margin-bottom: 15px;
-}
-
-.dy-article-cta p {
-    color: #dce9e3;
-    line-height: 1.8;
-    margin-bottom: 25px;
-}
-
-.dy-article-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 35px;
-    color: #194d42;
-    text-decoration: none;
-    font-weight: 700;
-}
-
-@media (max-width: 991px) {
-    .dy-article-page {
-        padding: 60px 0;
-    }
-
-    .dy-article-sidebar {
-        position: static;
-        margin-top: 45px;
-    }
-}
-
-@media (max-width: 767px) {
-    .dy-article-featured img {
-        max-height: 300px;
-    }
-
-    .dy-article-description {
-        font-size: 15px;
-    }
+@media(prefers-reduced-motion:reduce){
+    .dy-sec::before{animation:none !important;}
+    .rv-ready .rv{opacity:1;transform:none;transition:none;}
+    .dy-btn,.dy-btn-ghost{transition:none !important;}
 }
 </style>
 {% endblock %}
 
+
 {% block content %}
+{% with b=blog rel=recent_blogs %}
 
-<!-- PAGE HEADER -->
-<div class="page-header bg-section dark-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
+<!-- ============ HERO (blog image + title) ============ -->
+<section class="dy-page-hero" aria-label="{{ b.title }}">
+    {% if b.image %}
+    <img src="{{ b.image.url }}" alt="{{ b.title }}">
+    {% else %}
+    <img src="{% static 'frontend/hero.webp' %}" alt="{{ b.title }}">
+    {% endif %}
 
-                <div class="page-header-box">
-
-                    <h1 class="text-anime-style-3" data-cursor="-opaque">
-                        {{ blog.title }}
-                    </h1>
-
-                    <nav class="wow fadeInUp">
-                        <ol class="breadcrumb">
-
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'blog' %}">
-                                    Blog
-                                </a>
-                            </li>
-
-                            <li class="breadcrumb-item active">
-                                Article
-                            </li>
-
-                        </ol>
-                    </nav>
-
-                </div>
-
-            </div>
-        </div>
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">{{ b.title }}</h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="{% url 'blog' %}">Blog</a>
+            <span aria-hidden="true">/</span>
+            <span>Details</span>
+        </nav>
     </div>
-</div>
+</section>
 
 
-<!-- ARTICLE CONTENT -->
-<section class="dy-article-page">
+<div class="dy-flow">
 
-    <div class="container">
+<!-- ============ BAND 1: title, image, article + sidebar ============ -->
+<section class="dy-sec dy-sec-1">
+    <div class="dy-wrap">
+        <div class="row g-4 g-xl-5">
 
-        <div class="row">
+            <!-- Main column -->
+            <div class="col-lg-8 order-lg-2">
+                <div class="dy-stack">
 
-            <!-- MAIN ARTICLE -->
-            <div class="col-lg-8">
+                    <!-- 1. Title + facts -->
+                    <div class="rv rv-right">
+                        <div class="dy-eyebrow"><i class="fa-solid fa-crown"></i>Travel Story</div>
+                        <h2 class="dy-title">{{ b.title }}</h2>
 
-                <article class="dy-article-content">
+                        <div class="dy-facts">
+                            <div class="dy-fact">
+                                <i class="fa-regular fa-calendar"></i>
+                                <div><small>Published</small><strong>{{ b.created_at|date:"d M Y" }}</strong></div>
+                            </div>
+                            <div class="dy-fact">
+                                <i class="fa-regular fa-user"></i>
+                                <div><small>Written by</small><strong>Deutsche Yathras</strong></div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <!-- FEATURED IMAGE -->
-                    {% if blog.image %}
-
-                    <div class="dy-article-featured">
-                        <figure class="image-anime reveal">
-
-                            <img
-                                src="{{ blog.image.url }}"
-                                alt="{{ blog.title }}"
-                            >
-
+                    <!-- 2. Image -->
+                    {% if b.image %}
+                    <div class="dy-image rv rv-right">
+                        <figure>
+                            <img src="{{ b.image.url }}" alt="{{ b.title }}" decoding="async" fetchpriority="high">
+                            <span class="dy-image-badge"><i class="fa-regular fa-calendar" aria-hidden="true"></i>{{ b.created_at|date:"d M Y" }}</span>
                         </figure>
                     </div>
-
                     {% endif %}
 
-
-                    <!-- DATE -->
-                    <div class="dy-article-date">
-
-                        <i class="fa-regular fa-calendar"></i>
-
-                        <span>
-                            {{ blog.created_at|date:"d F Y" }}
-                        </span>
-
+                    <!-- 3. Article (works for plain text or HTML) -->
+                    <div class="rv rv-right">
+                        <h3 class="dy-label">Read the story</h3>
+                        <div class="dy-desc">
+                            {% if "<" in b.description %}{{ b.description|safe }}{% else %}{{ b.description|linebreaks }}{% endif %}
+                        </div>
                     </div>
 
-
-                    <!-- TITLE -->
-                    <h2>{{ blog.title }}</h2>
-
-
-                    <!-- DATABASE DESCRIPTION -->
-                    <div class="dy-article-description">
-                        {{ blog.description|linebreaks }}
-                    </div>
-
-
-                    <!-- BACK BUTTON -->
-                    <a
-                        href="{% url 'blog' %}"
-                        class="dy-article-back"
-                    >
-                        <i class="fa-solid fa-arrow-left"></i>
-                        Back to All Blogs
-                    </a>
-
-                </article>
-
+                </div>
             </div>
 
+            <!-- Sidebar -->
+            <div class="col-lg-4 order-lg-1">
+                <aside class="dy-sidebar">
 
-            <!-- SIDEBAR -->
-            <div class="col-lg-4">
-
-                <aside class="dy-article-sidebar">
-
-                    <!-- RECENT BLOGS -->
-                    {% if recent_blogs %}
-
-                    <div class="dy-article-sidebar-card">
-
-                        <h3>Recent Articles</h3>
-
-                        {% for recent in recent_blogs %}
-
-                        <a
-                            href="{% url 'blog_detail' slug=recent.slug %}"
-                            class="dy-recent-post"
-                        >
-
-                            {% if recent.image %}
-
-                            <img
-                                src="{{ recent.image.url }}"
-                                alt="{{ recent.title }}"
-                                loading="lazy"
-                            >
-
-                            {% endif %}
-
-                            <div>
-
-                                <h4>{{ recent.title }}</h4>
-
-                                <span>
-                                    {{ recent.created_at|date:"d M Y" }}
+                    {% if rel %}
+                    <div class="dy-box dy-more rv rv-left">
+                        <span class="dy-eyebrow"><i class="fa-solid fa-compass"></i>Keep reading</span>
+                        <h3>More Articles</h3>
+                        <div class="dy-more-list">
+                            {% for o in rel %}
+                            <a href="{% url 'blog_detail' slug=o.slug %}" class="dy-more-item">
+                                <span class="dy-more-thumb">
+                                    {% if o.image %}
+                                    <img src="{{ o.image.url }}" alt="" loading="lazy">
+                                    {% else %}
+                                    <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                                    {% endif %}
                                 </span>
-
-                            </div>
-
-                        </a>
-
-                        {% endfor %}
-
+                                <span class="dy-more-info">
+                                    <strong>{{ o.title }}</strong>
+                                    <small><span><i class="fa-regular fa-calendar" aria-hidden="true"></i>{{ o.created_at|date:"d M Y" }}</span></small>
+                                </span>
+                                <span class="dy-more-go" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                            </a>
+                            {% endfor %}
+                        </div>
                     </div>
-
                     {% endif %}
 
-
-                    <!-- TRAVEL CTA -->
-                    <div class="dy-article-cta">
-
-                        <h3>Ready for Your Next Adventure?</h3>
-
-                        <p>
-                            Explore curated holiday packages,
-                            discover inspiring destinations,
-                            and plan your next journey with
-                            Deutsche Yathras.
-                        </p>
-
-                        <a
-                            href="{% url 'packages' %}"
-                            class="btn-default"
-                        >
-                            Explore Packages
+                    <div class="dy-cta-card rv rv-left" style="--d:.1s">
+                        <div class="dy-cta-icon"><i class="fa-solid fa-plane-departure"></i></div>
+                        <h3>Plan your journey with Deutsche Yathras</h3>
+                        <a href="#" class="dy-btn open-book-trip">
+                            Book Now <i class="fa-solid fa-arrow-right"></i>
                         </a>
-
+                        <div class="dy-cta-more">
+                            <i class="fa-solid fa-headset"></i>
+                            <div>
+                                <small>Have questions?</small>
+                                <a href="{% url 'contact' %}">Enquire Now</a>
+                            </div>
+                        </div>
                     </div>
 
                 </aside>
-
             </div>
 
         </div>
-
     </div>
-
 </section>
 
+<!-- ============ BAND 2: journey banner ============ -->
+<section class="dy-sec dy-sec-2">
+    <div class="dy-wrap">
+        <div class="dy-journey rv">
+            <div>
+                <h2>Inspired to explore? <em>Let's plan it</em></h2>
+                <p>Turn this story into your next trip. Our travel advisors can build a personalised itinerary with flights, stays and local support.</p>
+            </div>
+            <div class="dy-journey-btns">
+                <a href="{% url 'packages' %}" class="dy-btn">Explore Packages <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'contact' %}" class="dy-btn-ghost">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</div>
+<!-- ===== /dy-flow ===== -->
+
+{% endwith %}
+{% endblock %}
+
+
+{% block extra_js %}
+<!-- Scroll reveal -->
+<script>
+(function () {
+    var items = document.querySelectorAll('.rv');
+    if (!items.length || !('IntersectionObserver' in window)) return;
+    document.body.classList.add('rv-ready');
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+            if (en.isIntersecting) en.target.classList.add('in'); else en.target.classList.remove('in');
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+})();
+</script>
 {% endblock %}

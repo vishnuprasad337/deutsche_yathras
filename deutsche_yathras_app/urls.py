@@ -311,6 +311,7 @@ path(
     name="destination_detail"
 ),
 
-path("booking/",views.booking,name='booking')
+path("booking/",views.booking,name='booking'),
+ path("contact/", views.contact, name="contact"),
 
 ]

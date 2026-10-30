@@ -1,4 +1,3 @@
-
 {% extends 'frontend/base.html' %}
 {% load static %}
 
@@ -8,797 +7,311 @@
 
 {% block extra_css %}
 <style>
-/* Destination filters */
-.dy-destination-filters {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 45px;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Kaushan+Script&family=Playfair+Display:wght@500;600;700;800;900&display=swap');
+
+/* ==========================================
+   SHARED (same palette as Home + About + Packages)
+========================================== */
+:root{
+    --dy-navy:#14305e; --dy-orange:#f4813f; --dy-gold:#f5a623; --dy-coral:#f4906e;
+    --dy-body-font:"DM Sans",-apple-system,"Segoe UI",Arial,sans-serif;
+    --dy-clouds:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22560%22 viewBox=%220 0 900 560%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 gradientUnits=%22userSpaceOnUse%22 x1=%220%22 y1=%22-60%22 x2=%220%22 y2=%2236%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffffff%22/%3E%3Cstop offset=%221%22 stop-color=%22%23c5dff7%22/%3E%3C/linearGradient%3E%3Cfilter id=%22b%22 x=%22-20%25%22 y=%22-40%25%22 width=%22140%25%22 height=%22180%25%22%3E%3CfeGaussianBlur stdDeviation=%222.2%22/%3E%3C/filter%3E%3Cg id=%22c%22%3E%3Cg filter=%22url(%23b)%22%3E%3Ccircle cx=%220%22 cy=%220%22 r=%2230%22/%3E%3Ccircle cx=%2236%22 cy=%22-20%22 r=%2242%22/%3E%3Ccircle cx=%2284%22 cy=%22-8%22 r=%2234%22/%3E%3Ccircle cx=%22120%22 cy=%228%22 r=%2224%22/%3E%3Crect x=%22-30%22 y=%220%22 width=%22176%22 height=%2234%22 rx=%2217%22/%3E%3C/g%3E%3C/g%3E%3C/defs%3E%3Cg fill=%22url(%23g)%22%3E%3Cuse href=%22%23c%22 transform=%22translate(150 190) scale(1.5)%22 opacity=%221%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(600 440) scale(1.05)%22 opacity=%22.95%22/%3E%3Cuse href=%22%23c%22 transform=%22translate(690 110) scale(.62)%22 opacity=%22.85%22/%3E%3C/g%3E%3C/svg%3E");
+}
+body, body :is(p,li,a,button,input,textarea,select,label,blockquote,small,strong,figcaption,h3,h4,h5,h6){font-family:var(--dy-body-font);}
+
+@keyframes dyClouds{to{background-position:900px 0;}}
+@keyframes dyFloat{50%{transform:translateY(-16px);}}
+
+.dy-h2{font-family:"Playfair Display",Georgia,serif !important;font-weight:900 !important;
+    font-size:clamp(34px,3.8vw,58px) !important;line-height:1.08 !important;
+    letter-spacing:-.025em !important;color:var(--dy-navy) !important;margin:0 0 16px;}
+.dy-h2 .acc{display:inline;color:var(--dy-orange);}
+.dy-eyebrow{display:inline-block;margin-bottom:14px;padding-bottom:10px;position:relative;
+    color:var(--dy-navy);font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-eyebrow::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--dy-gold);}
+.dy-eyebrow.is-center::after{left:50%;transform:translateX(-50%);}
+.dy-btn{display:inline-flex;align-items:center;gap:14px;padding:16px 30px;border-radius:50px;
+    background:var(--dy-orange);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    box-shadow:0 12px 26px rgba(244,129,63,.35);transition:transform .3s,background .3s;}
+.dy-btn:hover{background:#ea7330;color:#fff;transform:translateY(-3px);}
+.dy-btn i{transition:transform .3s;} .dy-btn:hover i{transform:translateX(5px);}
+.dy-wrap{width:min(calc(100% - 48px),1320px);margin:0 auto;}
+
+/* ==========================================
+   PINNED ROUNDED NAVBAR + HERO IMAGE
+========================================== */
+header.main-header{position:fixed !important;top:0;left:0;width:100%;z-index:1000;background:transparent !important;border-bottom:none !important;}
+header.main-header .header-sticky,header.main-header .header-sticky.hide,header.main-header .header-sticky.active{transform:none !important;visibility:visible !important;}
+header.main-header .header-sticky{width:calc(100% - 40px);max-width:1250px;margin:16px auto;background:#fff !important;border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.12) !important;}
+header.main-header .main-menu .nav-link,header.main-header .main-menu ul li a{color:#123e34 !important;white-space:nowrap;}
+header.main-header .main-menu ul li a:hover{color:#b58b4b !important;}
+
+.dy-page-hero{position:relative;width:100%;height:clamp(380px,62vh,640px);
+    border-radius:0 0 60px 60px;overflow:hidden;isolation:isolate;background:#cfe6f6;}
+.dy-page-hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.dy-page-hero::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.35),rgba(0,0,0,.05) 40%,rgba(0,0,0,.25));}
+.dy-page-hero-content{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:110px 20px 30px;text-align:center;color:#fff;}
+.dy-page-hero-eyebrow{display:inline-block;position:relative;margin-bottom:16px;padding-bottom:10px;
+    color:#fff;font-size:13px;font-weight:600;letter-spacing:4px;text-transform:uppercase;}
+.dy-page-hero-eyebrow::after{content:"";position:absolute;left:50%;bottom:0;width:56px;height:2px;
+    background:var(--dy-gold);transform:translateX(-50%);}
+.dy-page-hero-title{margin:0 0 18px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(42px,6vw,88px);line-height:1.05;letter-spacing:-.025em;text-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dy-page-hero-title em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-crumbs{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:50px;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:14px;font-weight:600;}
+.dy-crumbs a{color:#fff;text-decoration:none;}
+.dy-crumbs a:hover{color:var(--dy-gold);}
+@media(max-width:991px){.dy-page-hero{border-radius:0 0 40px 40px;height:clamp(300px,50vh,460px);}}
+@media(max-width:575px){
+    .dy-page-hero{border-radius:0 0 28px 28px;}
+    .dy-page-hero-content{padding-top:100px;}
+    .dy-crumbs{font-size:13px;padding:8px 18px;}
 }
 
-.dy-destination-filter {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 26px;
-    border: 1px solid #dfe9e4;
-    border-radius: 50px;
-    background: #fff;
-    color: #194d42;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all .3s ease;
+/* ==========================================
+   1) DESTINATION LISTING  (sky + drifting clouds)
+========================================== */
+.dy-dests{position:relative;overflow:hidden;isolation:isolate;padding:100px 0 110px;
+    background:linear-gradient(180deg,#e6f8f9,#e8f6ff);}
+.dy-dests *{box-sizing:border-box;}
+.dy-dests::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background-image:var(--dy-clouds);background-size:900px 560px;background-repeat:repeat;opacity:.8;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
+    animation:dyClouds 200s linear infinite;}
+.dy-dests-plane{position:absolute;top:30px;right:40px;z-index:1;width:300px;max-width:30%;pointer-events:none;
+    animation:dyFloat 6s ease-in-out infinite;}
+.dy-dests .dy-wrap{position:relative;z-index:2;}
+.dy-dests .dy-wrap{width:min(calc(100% - 40px),1680px);}
+
+.dy-dests-head{max-width:760px;margin:0 auto 55px;text-align:center;}
+.dy-dests-head p{margin:0 auto;max-width:620px;color:#5b6b85;font-size:17px;line-height:1.7;}
+
+/* grid: 2 LARGE cards in a row */
+.dy-dest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 28px;}
+
+/* whole card is clickable (original card design) */
+.dy-place-card{position:relative;display:block;width:100%;height:100%;color:inherit;transition:transform .4s ease;}
+.dy-place-card:hover{transform:translateY(-8px);}
+
+.dy-place-image{position:relative;width:100%;height:clamp(380px,38vw,560px);border-radius:34px;overflow:hidden;
+    background:#cfe6f6;isolation:isolate;box-shadow:0 16px 40px rgba(20,48,94,.16);}
+.dy-place-image>img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+.dy-place-card:hover .dy-place-image>img{transform:scale(1.07);}
+.dy-place-image::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(20,48,94,.12) 0%,transparent 30%,rgba(10,25,55,.5) 62%,rgba(10,25,55,.9) 100%);}
+.dy-place-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+    background:#dcecf8;color:var(--dy-navy);font-size:64px;}
+
+/* arrow appears on hover */
+.dy-place-arrow{position:absolute;top:22px;right:22px;z-index:2;width:54px;height:54px;display:flex;align-items:center;
+    justify-content:center;border-radius:50%;background:#fff;color:var(--dy-navy);font-size:17px;
+    box-shadow:0 8px 20px rgba(20,48,94,.22);opacity:0;transform:translateY(-10px);
+    transition:opacity .3s ease,transform .3s ease,background .3s ease,color .3s ease;}
+.dy-place-card:hover .dy-place-arrow{opacity:1;transform:translateY(0);background:var(--dy-orange);color:#fff;}
+
+/* name + location + description INSIDE the card (over the image) */
+.dy-place-info{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px 30px 32px;text-align:left;}
+.dy-place-info p.dy-place-loc{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px !important;padding:7px 16px;
+    border-radius:50px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:#fff !important;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);font-size:14px;font-weight:600;line-height:1.4;}
+.dy-place-info p.dy-place-loc i{color:var(--dy-gold);font-size:13px;flex-shrink:0;}
+.dy-place-info h3{margin:0 0 10px !important;padding:0;color:#fff !important;
+    font-family:"Playfair Display",Georgia,serif !important;font-weight:800 !important;
+    font-size:clamp(28px,2.8vw,42px);line-height:1.15;letter-spacing:-.4px;text-shadow:0 3px 14px rgba(0,0,0,.35);
+    transition:color .3s ease;}
+.dy-place-card:hover .dy-place-info h3{color:var(--dy-gold) !important;}
+.dy-place-info p.dy-place-desc{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+    margin:0 !important;max-width:560px;color:rgba(255,255,255,.88) !important;font-size:16px;line-height:1.65;}
+.dy-place-link{position:absolute;inset:0;z-index:1;border-radius:34px;}
+.dy-place-link:focus-visible{outline:3px solid var(--dy-gold);outline-offset:-6px;}
+.dy-place-info{pointer-events:none;}
+
+/* action buttons: Explore More + Book Now */
+.dy-place-actions{position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;pointer-events:auto;}
+.dy-place-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 28px;border-radius:50px;
+    font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;cursor:pointer;
+    transition:background .3s,color .3s,transform .3s,border-color .3s;}
+.dy-place-btn i{font-size:13px;transition:transform .3s;}
+.dy-place-btn:hover i{transform:translateX(4px);}
+.dy-place-btn.is-explore{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.75);color:#fff;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.dy-place-btn.is-explore:hover{background:#fff;border-color:#fff;color:var(--dy-navy);transform:translateY(-2px);}
+.dy-place-btn.is-book{background:var(--dy-orange);border:1.5px solid var(--dy-orange);color:#fff;
+    box-shadow:0 10px 22px rgba(244,129,63,.4);}
+.dy-place-btn.is-book:hover{background:#ea7330;border-color:#ea7330;color:#fff;transform:translateY(-2px);}
+.dy-place-btn:focus-visible{outline:3px solid var(--dy-gold);outline-offset:3px;}
+
+/* empty state */
+.dy-dest-empty{grid-column:1/-1;padding:70px 24px;text-align:center;background:rgba(255,255,255,.85);border-radius:30px;}
+.dy-dest-empty>i{margin-bottom:18px;color:var(--dy-orange);font-size:44px;}
+.dy-dest-empty h3{margin:0 0 10px;color:var(--dy-navy);font-family:"Playfair Display",Georgia,serif !important;font-weight:700;font-size:28px;}
+.dy-dest-empty p{max-width:460px;margin:0 auto 26px;color:#5b6b85;line-height:1.7;}
+
+@media(max-width:991px){
+    .dy-dests{padding:70px 0 80px;}
+    .dy-dests-plane{max-width:24%;}
+    .dy-dest-grid{gap:44px 24px;}
+    .dy-place-image{height:clamp(300px,44vw,420px);border-radius:26px;}
+}
+@media(max-width:640px){
+    .dy-dest-grid{grid-template-columns:1fr;gap:38px;}
+    .dy-place-btn{padding:12px 20px;font-size:13px;}
+    .dy-dests-plane{display:none;}
+    .dy-place-image{height:400px;}
+    .dy-place-info{padding:22px 22px 24px;}
+    .dy-place-arrow{opacity:1;transform:none;width:44px;height:44px;font-size:14px;}
 }
 
-.dy-destination-filter:hover,
-.dy-destination-filter.active {
-    background: #194d42;
-    border-color: #194d42;
-    color: #fff;
+/* ==========================================
+   2) CTA BANNER
+========================================== */
+.dy-cta{position:relative;overflow:hidden;isolation:isolate;padding:30px 0 100px;
+    background:linear-gradient(180deg,#e8f6ff,#e8f5fd);}
+.dy-cta *{box-sizing:border-box;}
+.dy-cta-box{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1.3fr 1fr;gap:30px;
+    align-items:center;padding:60px 64px;border-radius:40px;background:var(--dy-navy);color:#fff;
+    box-shadow:0 26px 60px rgba(20,48,94,.28);}
+.dy-cta-box::before{content:"";position:absolute;right:-90px;top:-90px;z-index:-1;width:320px;height:320px;
+    border-radius:50%;border:2px dashed rgba(245,166,35,.55);}
+.dy-cta-box::after{content:"";position:absolute;right:60px;bottom:-120px;z-index:-1;width:260px;height:260px;
+    border-radius:50%;background:rgba(255,255,255,.06);}
+.dy-cta h2{margin:0 0 14px;color:#fff;font-family:"Playfair Display",Georgia,serif;font-weight:900;
+    font-size:clamp(30px,3.2vw,46px);line-height:1.1;letter-spacing:-.02em;}
+.dy-cta h2 em{font-family:"Kaushan Script",cursive;font-style:normal;font-weight:400;color:var(--dy-coral);}
+.dy-cta p{margin:0;max-width:520px;color:rgba(255,255,255,.82);font-size:17px;line-height:1.7;}
+.dy-cta-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:16px;}
+.dy-btn-ghost{display:inline-flex;align-items:center;gap:14px;padding:14px 28px;border-radius:50px;
+    border:2px solid rgba(255,255,255,.8);color:#fff;font-weight:700;font-size:15px;text-decoration:none;
+    transition:background .3s,color .3s,transform .3s;}
+.dy-btn-ghost:hover{background:#fff;color:var(--dy-navy);transform:translateY(-3px);}
+@media(max-width:991px){
+    .dy-cta{padding:10px 0 70px;}
+    .dy-cta-box{grid-template-columns:1fr;padding:44px 30px;border-radius:30px;}
+    .dy-cta-btns{justify-content:flex-start;}
 }
 
-/* Preserve original team card layout */
-.page-team .dy-destination-card {
-    height: 100%;
+@media(prefers-reduced-motion:reduce){
+    .dy-dests::before,.dy-dests-plane{animation:none !important;}
+    .dy-place-card,.dy-place-image>img,.dy-place-arrow,.dy-place-btn,.dy-btn,.dy-btn-ghost{transition:none !important;}
 }
-
-.page-team .dy-destination-card .team-image img {
-    width: 100%;
-    height: 330px;
-    object-fit: cover;
-}
-
-.page-team .dy-destination-card .team-content h3 a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.dy-destination-location {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    margin-bottom: 9px;
-}
-
-.dy-destination-location i {
-    color: #b58b4b;
-    font-size: 13px;
-}
-
-.dy-destination-description {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    line-height: 1.7;
-}
-
-.dy-destination-type {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 6px 12px;
-    border-radius: 50px;
-    background: #edf5f0;
-    color: #194d42;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.dy-destination-view {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    color: #194d42;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-}
-
-.dy-destination-view:hover {
-    color: #b58b4b;
-}
-
-.dy-destination-empty {
-    padding: 70px 25px;
-    text-align: center;
-    border: 1px dashed #d4e2da;
-    border-radius: 24px;
-}
-
-.dy-destination-empty i {
-    font-size: 42px;
-    color: #194d42;
-    margin-bottom: 20px;
-}
-
-.dy-destination-empty h3 {
-    color: #194d42;
-    margin-bottom: 12px;
-}
-
-/* Travel enquiry section */
-.dy-travel-enquiry {
-    padding: 90px 0;
-}
-
-.dy-travel-enquiry .booking-contact-list {
-    margin-bottom: 25px;
-}
-
-.dy-travel-enquiry .dy-travel-support {
-    padding: 30px;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 20px;
-}
-
-.dy-travel-support h3 {
-    color: #fff;
-    font-size: 26px;
-    margin-bottom: 15px;
-}
-
-.dy-travel-support p {
-    color: rgba(255,255,255,.85);
-    line-height: 1.8;
-}
-
-.dy-travel-support ul {
-    padding-left: 20px;
-    color: #fff;
-    line-height: 2;
-}
-
-.dy-travel-enquiry .booking-form-box .section-title {
-    margin-bottom: 30px;
-}
-
-.dy-travel-enquiry-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.dy-travel-enquiry-actions .btn-default {
-    text-decoration: none;
-}
-
-@media (max-width: 767px) {
-    .dy-destination-filters {
-        gap: 8px;
-        margin-bottom: 30px;
-    }
-
-    .dy-destination-filter {
-        padding: 10px 16px;
-        font-size: 12px;
-    }
-
-    .page-team .dy-destination-card .team-image img {
-        height: 290px;
-    }
-
-    .dy-travel-enquiry {
-        padding: 55px 0;
-    }
-}
-
-
-
-/* ============================================
-   DEUTSCHE YATHRAS - DESTINATION CARDS
-============================================ */
-
-.dy-destination-grid {
-    row-gap: 45px;
-}
-
-/* Entire card is clickable */
-.dy-place-card {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none !important;
-    color: inherit;
-    transition: transform 0.4s ease;
-}
-
-.dy-place-card:hover {
-    transform: translateY(-7px);
-}
-
-/* Image wrapper */
-.dy-place-image {
-    position: relative;
-    width: 100%;
-    height: 340px;
-    border-radius: 25px;
-    overflow: hidden;
-    background: #e9efed;
-    isolation: isolate;
-}
-
-/* Actual destination image */
-.dy-place-image > img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.7s ease;
-}
-
-.dy-place-card:hover .dy-place-image > img {
-    transform: scale(1.07);
-}
-
-/* Very subtle image shading */
-.dy-place-image::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: linear-gradient(
-        to bottom,
-        transparent 65%,
-        rgba(0, 0, 0, 0.12) 100%
-    );
-}
-
-/* Arrow appears on hover */
-.dy-place-arrow {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    z-index: 2;
-
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-    background: #ffffff;
-    color: #194d42;
-
-    font-size: 15px;
-
-    opacity: 0;
-    transform: translateY(-10px);
-
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease,
-        background 0.3s ease,
-        color 0.3s ease;
-}
-
-.dy-place-card:hover .dy-place-arrow {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.dy-place-arrow:hover {
-    background: #194d42;
-    color: #ffffff;
-}
-
-/* Image fallback */
-.dy-place-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background: #e7f0ed;
-    color: #194d42;
-    font-size: 55px;
-}
-
-/* Text section BELOW image */
-.dy-place-info {
-    padding: 18px 4px 0;
-    background: transparent;
-    position: relative;
-    z-index: 2;
-    text-align: left;
-}
-
-/* Destination name */
-.dy-place-info h3 {
-    margin: 0 0 7px !important;
-    padding: 0;
-
-    color: #194d42 !important;
-
-    font-size: 23px;
-    font-weight: 600;
-    line-height: 1.3;
-    letter-spacing: -0.4px;
-
-    transition: color 0.3s ease;
-}
-
-.dy-place-card:hover .dy-place-info h3 {
-    color: #b58b4b !important;
-}
-
-/* Location */
-.dy-place-info p {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    margin: 0 !important;
-    padding: 0;
-
-    color: #74827c !important;
-
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-
-.dy-place-info p i {
-    color: #b58b4b;
-    font-size: 13px;
-    flex-shrink: 0;
-}
-
-/* Keyboard accessibility */
-.dy-place-card:focus-visible {
-    outline: 3px solid #b58b4b;
-    outline-offset: 5px;
-    border-radius: 25px;
-}
-
-/* ============================================
-   TABLET
-============================================ */
-
-@media (max-width: 991px) {
-    .dy-place-image {
-        height: 340px;
-        border-radius: 22px;
-    }
-
-    .dy-place-info h3 {
-        font-size: 21px;
-    }
-}
-
-/* ============================================
-   MOBILE
-============================================ */
-
-@media (max-width: 767px) {
-    .dy-destination-grid {
-        row-gap: 30px;
-    }
-
-    .dy-place-image {
-        height: 300px;
-        border-radius: 20px;
-    }
-
-    .dy-place-info {
-        padding-top: 14px;
-    }
-
-    .dy-place-info h3 {
-        font-size: 20px;
-    }
-
-    .dy-place-info p {
-        font-size: 13px;
-    }
-
-    .dy-place-arrow {
-        opacity: 1;
-        transform: none;
-        width: 36px;
-        height: 36px;
-    }
-}
-
-@media (max-width: 575px) {
-    .dy-place-image {
-        height: 370px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .dy-place-card,
-    .dy-place-image > img,
-    .dy-place-arrow {
-        transition: none;
-    }
-}
-
 </style>
 {% endblock %}
 
 
 {% block content %}
 
-<!-- ==========================================
-     PAGE HEADER
-========================================== -->
+<!-- ============ HERO IMAGE + TITLE ============ -->
+<section class="dy-page-hero" aria-label="Deutsche Yathras destinations">
+    <img src="{% static 'frontend/hero.webp' %}" alt="Travel destinations by Deutsche Yathras">
 
-<div class="page-header bg-section dark-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="page-header-box">
-
-                    <h1
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Explore Destinations
-                    </h1>
-
-                    <nav class="wow fadeInUp">
-                        <ol class="breadcrumb">
-
-                            <li class="breadcrumb-item">
-                                <a href="{% url 'home' %}">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li
-                                class="breadcrumb-item active"
-                                aria-current="page"
-                            >
-                                Destinations
-                            </li>
-
-                        </ol>
-                    </nav>
-
-                </div>
-
-            </div>
-        </div>
+    <div class="dy-page-hero-content">
+        <span class="dy-page-hero-eyebrow">Deutsche Yathras</span>
+        <h1 class="dy-page-hero-title">Explore <em>Destinations</em></h1>
+        <nav class="dy-crumbs" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <span>Destinations</span>
+        </nav>
     </div>
-</div>
+</section>
 
 
-<!-- ==========================================
-     DYNAMIC DESTINATIONS SECTION
-========================================== -->
+<!-- ============ 1) DESTINATION LISTING ============ -->
+<section class="dy-dests" id="destinations">
 
-<div class="page-team">
+    <img class="dy-dests-plane" src="{% static 'frontend/assets/images/home/airplane.png' %}" alt="" aria-hidden="true" loading="lazy">
 
-    <div class="container">
+    <div class="dy-wrap">
 
-        <!-- SECTION HEADING -->
-        <div class="row section-row">
-            <div class="col-lg-12">
-
-                <div class="section-title section-title-center">
-
-                    <h3 class="wow fadeInUp">
-                        Discover The World
-                    </h3>
-
-                    <h2
-                        class="text-anime-style-3"
-                        data-cursor="-opaque"
-                    >
-                        Your Next Adventure Awaits
-                    </h2>
-
-                    <p class="wow fadeInUp" data-wow-delay="0.2s">
-                        From beautiful destinations across India
-                        to unforgettable international escapes,
-                        discover places worth exploring with
-                        Deutsche Yathras.
-                    </p>
-
-                </div>
-
-            </div>
+        <div class="dy-dests-head">
+            <span class="dy-eyebrow is-center">Discover the World</span>
+            <h2 class="dy-h2">Your Next Adventure <span class="acc">Awaits</span></h2>
+            <p>From beautiful destinations across India to unforgettable international escapes, discover places worth exploring with Deutsche Yathras.</p>
         </div>
 
+        <!-- CARDS (2 large cards per row) -->
+        <div class="dy-dest-grid">
 
-        <!-- CATEGORY FILTERS -->
-        <div class="dy-destination-filters wow fadeInUp">
+            {% for destination in destinations %}
+            <article class="dy-place-card">
 
-            <a
-                href="{% url 'destinations' %}"
-                class="dy-destination-filter {% if selected_type == 'all' %}active{% endif %}"
-            >
-                All Destinations
-            </a>
+                <!-- DESTINATION IMAGE -->
+                <div class="dy-place-image">
+                    {% if destination.image %}
+                    <img src="{{ destination.image.url }}" alt="{{ destination.name }}" loading="lazy">
+                    {% else %}
+                    <div class="dy-place-placeholder"><i class="fa-solid fa-earth-asia" aria-hidden="true"></i></div>
+                    {% endif %}
 
-            <a
-                href="{% url 'destinations' %}?type=domestic"
-                class="dy-destination-filter {% if selected_type == 'domestic' %}active{% endif %}"
-            >
-                Domestic
-            </a>
+                    <!-- whole card clickable -->
+                    <a href="{% url 'destination_detail' slug=destination.slug %}" class="dy-place-link" aria-label="Explore {{ destination.name }}"></a>
 
-            <a
-                href="{% url 'destinations' %}?type=international"
-                class="dy-destination-filter {% if selected_type == 'international' %}active{% endif %}"
-            >
-                International
-            </a>
+                    <!-- HOVER ARROW -->
+                    <span class="dy-place-arrow" aria-hidden="true">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </span>
 
-        </div>
+                    <!-- NAME, LOCATION, DESCRIPTION + BUTTONS INSIDE THE CARD -->
+                    <div class="dy-place-info">
+                        {% if destination.location %}
+                        <p class="dy-place-loc"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span>{{ destination.location }}</span></p>
+                        {% endif %}
+                        <h3>{{ destination.name }}</h3>
+                        {% if destination.description %}
+                        <p class="dy-place-desc">{{ destination.description|striptags|truncatewords:30 }}</p>
+                        {% endif %}
 
-
-        <!-- DESTINATION CARDS -->
-        
-<!-- DESTINATION CARDS -->
-<div class="row g-4 dy-destination-grid">
-
-    {% for destination in destinations %}
-
-    <div class="col-lg-3 col-md-6 col-sm-6">
-
-        <a
-            href="{% url 'destination_detail' slug=destination.slug %}"
-            class="dy-place-card wow fadeInUp"
-            aria-label="Explore {{ destination.name }}"
-        >
-
-            <!-- DESTINATION IMAGE -->
-            <div class="dy-place-image">
-
-                {% if destination.image %}
-
-                <img
-                    src="{{ destination.image.url }}"
-                    alt="{{ destination.name }}"
-                    loading="lazy"
-                >
-
-                {% else %}
-
-                <div class="dy-place-placeholder">
-                    <i class="fa-solid fa-earth-asia"></i>
-                </div>
-
-                {% endif %}
-
-                <!-- HOVER ARROW -->
-                <span class="dy-place-arrow" aria-hidden="true">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                </span>
-
-            </div>
-
-            <!-- DESTINATION NAME AND LOCATION -->
-            <div class="dy-place-info">
-
-                <h3>{{ destination.name }}</h3>
-
-                {% if destination.location %}
-
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    <span>{{ destination.location }}</span>
-                </p>
-
-                {% endif %}
-
-            </div>
-
-        </a>
-
-    </div>
-
-    {% empty %}
-
-    <div class="col-12">
-
-        <div class="dy-destination-empty">
-
-            <i class="fa-solid fa-earth-asia"></i>
-
-            <h3>No Destinations Found</h3>
-
-            <p>
-                There are currently no destinations
-                available in this category.
-            </p>
-
-            <a href="{% url 'destinations' %}" class="btn-default">
-                View All Destinations
-            </a>
-
-        </div>
-
-    </div>
-
-    {% endfor %}
-
-</div>
-<!-- DESTINATION CARDS END -->
-
-
-    </div>
-
-</div>
-<!-- DYNAMIC DESTINATIONS END -->
-
-
-<!-- ==========================================
-     TRAVEL ENQUIRY SECTION
-     REPLACES MEDICAL APPOINTMENT SECTION
-========================================== -->
-
-<div class="book-appointment bg-section dy-travel-enquiry">
-
-    <div class="container">
-
-        <div class="row align-items-center">
-
-            <!-- LEFT CONTENT -->
-            <div class="col-lg-5 order-lg-1 order-2">
-
-                <div class="book-appointment-content">
-
-                    <div class="dy-travel-support wow fadeInUp">
-
-                        <h3>
-                            Travel Beyond Expectations
-                        </h3>
-
-                        <p>
-                            Discover new destinations with
-                            guidance from our travel team.
-                            We help you explore holiday options
-                            suited to your interests, budget,
-                            and travel preferences.
-                        </p>
-
-                        <ul>
-                            <li>Domestic and international holidays</li>
-                            <li>Customised travel itineraries</li>
-                            <li>Flights and accommodation assistance</li>
-                            <li>Tourist visa guidance</li>
-                            <li>Travel insurance assistance</li>
-                        </ul>
-
+                        <div class="dy-place-actions">
+                            <a href="{% url 'destination_detail' slug=destination.slug %}" class="dy-place-btn is-explore">
+                                Explore More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                            <a href="#" class="dy-place-btn is-book open-book-trip"
+                               data-package-name="{{ destination.name }}"
+                               aria-label="Book a trip to {{ destination.name }}">
+                                Book Now <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                            </a>
+                        </div>
                     </div>
-
                 </div>
 
+            </article>
+
+            {% empty %}
+
+            <div class="dy-dest-empty">
+                <i class="fa-solid fa-earth-asia" aria-hidden="true"></i>
+                <h3>No destinations found</h3>
+                <p>There are currently no destinations available in this category. Try another category or check back soon.</p>
+                <a href="{% url 'destinations' %}" class="dy-btn">View All Destinations <i class="fa-solid fa-arrow-right"></i></a>
             </div>
 
+            {% endfor %}
 
-            <!-- RIGHT CONTENT -->
-            <div class="col-lg-7 order-lg-2 order-1">
+        </div>
+    </div>
+</section>
 
-                <div class="booking-form-box">
 
-                    <div class="section-title section-title-center">
-
-                        <h3 class="wow fadeInUp">
-                            Start Your Journey
-                        </h3>
-
-                        <h2
-                            class="text-anime-style-3"
-                            data-cursor="-opaque"
-                        >
-                            Let's Plan Your Next Escape
-                        </h2>
-
-                        <p
-                            class="wow fadeInUp"
-                            data-wow-delay="0.2s"
-                        >
-                            Dreaming of a relaxing beach holiday,
-                            a cultural getaway, or an adventurous
-                            escape? Contact Deutsche Yathras
-                            and let us help you explore the
-                            possibilities.
-                        </p>
-
-                    </div>
-
-                    <div class="dy-travel-enquiry-actions wow fadeInUp">
-
-                        <a
-                            href="{% url 'contact' %}"
-                            class="btn-default"
-                        >
-                            Contact Our Travel Team
-                        </a>
-
-                    </div>
-
-                </div>
-
+<!-- ============ 2) TRAVEL ENQUIRY BANNER ============ -->
+<section class="dy-cta">
+    <div class="dy-wrap">
+        <div class="dy-cta-box">
+            <div>
+                <h2>Dreaming of a trip? We'll <em>plan it for you</em></h2>
+                <p>Tell us your dates, budget and interests, and our travel advisors will build a personalised itinerary, with flights, stays and visa guidance.</p>
             </div>
 
+            <div class="dy-cta-btns">
+                <a href="#" class="dy-btn open-book-trip">Book Now <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="{% url 'contact' %}" class="dy-btn-ghost">Contact Our Travel Team</a>
+            </div>
         </div>
-
     </div>
-
-</div>
-<!-- TRAVEL ENQUIRY END -->
-
-
-<!-- ==========================================
-     SCROLLING TICKER
-========================================== -->
-
-<div class="our-scrolling-ticker">
-
-    <div class="scrolling-ticker-box">
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Explore The World
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Discover New Destinations
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Unforgettable Travel Experiences
-            </span>
-
-        </div>
-
-        <div class="scrolling-content">
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Explore The World
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Discover New Destinations
-            </span>
-
-            <span>
-                <img
-                    src="{% static 'frontend/assets/images/asterisk-icon.svg' %}"
-                    alt=""
-                >
-                Unforgettable Travel Experiences
-            </span>
-
-        </div>
-
-    </div>
-
-</div>
+</section>
 
 {% endblock %}
