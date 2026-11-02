@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex">
+	<title>Page Not Found - Deutsche Yathras</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/x-icon" href="{% static 'frontend/favicon (4).ico' %}">
+	<link rel="icon" type="image/png" sizes="512x512" href="{% static 'frontend/favicon (1).png' %}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{% static 'frontend/apple-touch-icon (2).png' %}">
+
+	<!-- Poppins + Font Awesome (the plane icon) -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="{% static 'frontend/assets/css/all.min.css' %}" rel="stylesheet">
+
+	<style>
+		*, *::before, *::after { box-sizing: border-box; }
+
+		/* GLOBAL FONT: same rule as base.html (Poppins everywhere, Font Awesome icons keep working) */
+		html body,
+		body *:not(i):not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.fa-brands):not([class^="fa-"]):not([class*=" fa-"]):not(svg):not(svg *) {
+			font-family: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif !important;
+		}
+
+		/* same heading weight and spacing as base.html */
+		html body h1 {
+			font-weight: 600 !important;
+			letter-spacing: -.01em !important;
+		}
+
+		html, body {
+			margin: 0;
+			padding: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Poppins", -apple-system, "Segoe UI", Arial, sans-serif;
+			color: #ffffff;
+			background: linear-gradient(135deg, #00367E 0%, #046BF2 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 40px 20px;
+			text-align: center;
+			overflow-x: hidden;
+			position: relative;
+		}
+
+		/* soft decorative circles */
+		body::before,
+		body::after {
+			content: "";
+			position: fixed;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, .06);
+			pointer-events: none;
+		}
+		body::before { width: 520px; height: 520px; top: -180px; left: -160px; }
+		body::after  { width: 420px; height: 420px; bottom: -160px; right: -120px; }
+
+		.dy-404-inner {
+			position: relative;
+			z-index: 2;
+			max-width: 720px;
+			width: 100%;
+		}
+
+		.dy-404-logo {
+			display: inline-block;
+			margin-bottom: 20px;
+		}
+		.dy-404-logo img {
+			display: block;
+			height: 90px;
+			width: auto;
+			max-width: 100%;
+		}
+
+		/* big 404 with a plane flying through the "0" */
+		.dy-404-code {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			font-size: clamp(90px, 20vw, 200px);
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: -.02em;
+			margin-bottom: 10px;
+		}
+		.dy-404-zero {
+			position: relative;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 1em;
+			height: 1em;
+			color: #f4813f;
+		}
+		.dy-404-zero i {
+			position: absolute;
+			font-size: .5em;
+			color: #ffffff;
+			animation: dyFloat 3.2s ease-in-out infinite;
+		}
+		@keyframes dyFloat {
+			0%, 100% { transform: translate(-10px, 8px) rotate(-8deg); }
+			50%      { transform: translate(10px, -8px) rotate(8deg); }
+		}
+
+		h1 {
+			margin: 0 0 14px;
+			font-size: clamp(26px, 4vw, 40px);
+			font-weight: 600;
+			letter-spacing: -.01em;
+			color: #ffffff;
+		}
+
+		p {
+			max-width: 560px;
+			margin: 0 auto 32px;
+			font-size: 17px;
+			line-height: 1.6;
+			color: rgba(255, 255, 255, .85);
+		}
+
+		.dy-404-actions {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 14px;
+			margin-bottom: 38px;
+		}
+		.dy-btn {
+			display: inline-block;
+			padding: 15px 32px;
+			border-radius: 50px;
+			font-size: 16px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease;
+		}
+		.dy-btn-orange {
+			background: #f4813f;
+			color: #ffffff;
+			border: 2px solid #f4813f;
+		}
+		.dy-btn-orange:hover {
+			background: #ea7330;
+			border-color: #ea7330;
+			transform: translateY(-2px);
+		}
+		.dy-btn-outline {
+			background: transparent;
+			color: #ffffff;
+			border: 2px solid rgba(255, 255, 255, .7);
+		}
+		.dy-btn-outline:hover {
+			background: #ffffff;
+			border-color: #ffffff;
+			color: #00367E;
+			transform: translateY(-2px);
+		}
+
+		.dy-404-links {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 10px 26px;
+			padding-top: 26px;
+			border-top: 1px solid rgba(255, 255, 255, .2);
+		}
+		.dy-404-links a {
+			color: #ffffff;
+			font-size: 15px;
+			font-weight: 500;
+			text-decoration: none;
+			opacity: .85;
+			transition: opacity .25s ease, color .25s ease;
+		}
+		.dy-404-links a:hover { opacity: 1; color: #f5a623; }
+
+		@media (max-width: 575px) {
+			.dy-404-logo img { height: 72px; }
+			p { font-size: 16px; }
+			.dy-btn { padding: 13px 26px; font-size: 15px; }
+		}
+	</style>
+</head>
+<body>
+
+	<div class="dy-404-inner">
+
+		<a class="dy-404-logo" href="{% url 'home' %}">
+			<img src="{% static 'frontend/logo-2d.png' %}" alt="Deutsche Yathras">
+		</a>
+
+		<div class="dy-404-code" aria-hidden="true">
+			<span>4</span>
+			<span class="dy-404-zero">0<i class="fa-solid fa-plane"></i></span>
+			<span>4</span>
+		</div>
+
+		<h1>Oops! This destination doesn't exist</h1>
+		<p>
+			The page you are looking for may have been moved, renamed or is
+			temporarily unavailable. Let's get you back on the right route.
+		</p>
+
+		<div class="dy-404-actions">
+			<a href="{% url 'home' %}" class="dy-btn dy-btn-orange">Back to Home</a>
+			<a href="{% url 'packages' %}" class="dy-btn dy-btn-outline">Browse Packages</a>
+		</div>
+
+		<div class="dy-404-links">
+			<a href="{% url 'destinations' %}">Destinations</a>
+			<a href="{% url 'blog' %}">Blog</a>
+			<a href="{% url 'gallery' %}">Gallery</a>
+			<a href="{% url 'about' %}">About Us</a>
+			<a href="{% url 'contact' %}">Contact Us</a>
+		</div>
+
+	</div>
+
+</body>
+</html>

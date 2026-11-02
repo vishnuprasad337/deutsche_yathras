@@ -1542,12 +1542,14 @@ def destination_detail(request, slug):
         "frontend/destination_detail.html",
         context
     )
-
-from django.http import JsonResponse
-
-
+from django.core.mail import EmailMessage, send_mail
 def booking(request):
     if request.method == "POST":
+
+        # Honeypot: real visitors never fill this hidden field
+        if request.POST.get("website"):
+            return JsonResponse({"success": True, "message": "Thank you!"})
+
         name = request.POST.get("name", "").strip()
         email = request.POST.get("email", "").strip()
         phone = request.POST.get("phone", "").strip()
@@ -1563,6 +1565,22 @@ def booking(request):
                 status=400,
             )
 
+        try:
+            validate_email(email)
+        except ValidationError:
+            return JsonResponse(
+                {"success": False, "message": "Please enter a valid email address."},
+                status=400,
+            )
+
+        clean = clean_phone(phone)
+        if not clean:
+            return JsonResponse(
+                {"success": False, "message": "Please enter a valid phone number (7 to 15 digits)."},
+                status=400,
+            )
+        phone = clean
+
         if end_date < start_date:
             return JsonResponse(
                 {"success": False, "message": "End date cannot be before the start date."},
@@ -1576,6 +1594,8 @@ def booking(request):
                 {"success": False, "message": "Please select a valid package."},
                 status=400,
             )
+
+        message = message[:MESSAGE_MAX_LENGTH]
 
         model_fields = {f.name: f for f in BookingEnquiry._meta.get_fields()}
 
@@ -1599,11 +1619,9 @@ def booking(request):
             if field:
                 data[field] = value
 
-        # Children (only if the model has this field and the form doesn't send it)
         if "children" in model_fields and "children" not in data:
             data["children"] = 0
 
-        # Package: store the object if the field is a ForeignKey, otherwise the name
         package_field = pick(["package", "tour_package", "package_name", "destination", "trip"])
         if package_field:
             if model_fields[package_field].is_relation:
@@ -1611,30 +1629,77 @@ def booking(request):
             else:
                 data[package_field] = str(package)
 
-        # Message (also keeps the end date if the model has no end-date field yet)
         message_field = pick(["message", "notes", "comments"])
         if message_field:
             extra = "" if pick(["end_date", "to_date", "return_date", "check_out"]) else f"End date: {end_date}\n"
             data[message_field] = f"{extra}{message}".strip()
 
+        # 1) Save first so the enquiry is never lost
         try:
             BookingEnquiry.objects.create(**data)
-        except Exception as e:
+        except Exception:
             import traceback
             traceback.print_exc()
-            print("DATA SENT TO MODEL:", data)
             return JsonResponse(
-                {"success": False, "message": f"Could not save: {e}"},
+                {"success": False, "message": "Could not save your enquiry. Please try again."},
                 status=500,
             )
 
+        # 2) Email to the admin (a failure here must not hide the saved enquiry)
+        body = (
+            "New booking enquiry from the website\n\n"
+            f"Name: {name}\n"
+            f"Email: {email}\n"
+            f"Phone: {phone}\n"
+            f"Package: {package}\n"
+            f"Start date: {start_date}\n"
+            f"End date: {end_date}\n"
+            f"Travelers: {travelers}\n\n"
+            f"Message:\n{message or '-'}\n"
+        )
+        recipient = getattr(
+            settings, "BOOKING_NOTIFY_EMAIL", settings.DEFAULT_FROM_EMAIL
+        )
+        try:
+            EmailMessage(
+                subject=f"Booking enquiry - {name} - {package}",
+                body=body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[recipient],
+                reply_to=[email],  # hitting "Reply" answers the customer
+            ).send(fail_silently=False)
+        except Exception:
+            pass
+
+        # 3) Confirmation email to the customer
+        try:
+            send_mail(
+                subject="We received your booking enquiry - Deutsche Yathras",
+                message=(
+                    f"Hello {name},\n\n"
+                    f"Thank you for your enquiry about {package}.\n"
+                    f"Travel dates: {start_date} to {end_date} ({travelers} traveler(s)).\n\n"
+                    "Our team will contact you shortly.\n\n"
+                    "Deutsche Yathras"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=True,
+            )
+        except Exception:
+            pass
+
         return JsonResponse(
-            {"success": True, "message": "Thank you! We will contact you shortly."}
+            {
+                "success": True,
+                "message": "Thank you! We will contact you shortly. A confirmation has been sent to your email.",
+            }
         )
 
     return render(request, "frontend/booking.html")
 
-
+def custom_404(request, exception):
+    return render(request, "frontend/404.html", status=404)
 
 
 

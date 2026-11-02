@@ -4902,6 +4902,72 @@ html body .dy-why-explore-text:not(#dy) { font-size: 17px; font-weight: 500; fon
 .dy-destinations-slider {
     padding-bottom: 8px;
 }
+/* ==========================================
+   HERO SOUND BUTTON (round icon)
+========================================== */
+.dy-hero-sound {
+    position: absolute;
+    right: clamp(20px, 4vw, 70px);
+    bottom: 90px;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border: 1.5px solid rgba(255,255,255,.75);
+    border-radius: 50%;
+    background: rgba(255,255,255,.14);
+    -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+    color: #fff;
+    cursor: pointer;
+    transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease;
+}
+
+.dy-hero-sound svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* show one icon at a time */
+.dy-hero-sound .ico-on { display: none; }
+.dy-hero-sound.is-on .ico-on  { display: block; }
+.dy-hero-sound.is-on .ico-off { display: none; }
+
+.dy-hero-sound:hover { background: #fff; color: #14305e; transform: scale(1.08); }
+.dy-hero-sound:focus-visible { outline: 3px solid #f5a623; outline-offset: 3px; }
+.dy-hero-sound.is-on { background: #f4813f; border-color: #f4813f; color: #fff; }
+.dy-hero-sound.is-on:hover { background: #ea7330; border-color: #ea7330; color: #fff; }
+
+/* soft pulse while sound is off, so visitors notice it */
+.dy-hero-sound:not(.is-on)::after {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,.6);
+    animation: dySoundPulse 2.4s ease-out infinite;
+    pointer-events: none;
+}
+@keyframes dySoundPulse {
+    0%   { transform: scale(1);   opacity: .8; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+@media (max-width: 575px) {
+    .dy-hero-sound { bottom: 24px; width: 48px; height: 48px; }
+    .dy-hero-sound svg { width: 22px; height: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .dy-hero-sound { display: none; }
+}
 </style>    
 
 
@@ -4917,8 +4983,24 @@ html body .dy-why-explore-text:not(#dy) { font-size: 17px; font-weight: 500; fon
             <!-- Full Screen Video Start -->
             <video autoplay muted loop playsinline preload="auto" id="myVideo"
        poster="{% static 'frontend/hero.webp' %}">
-    <source src="{% static 'frontend/hero2.mp4' %}" type="video/mp4">
+    <source src="{% static 'frontend/h4.mp4' %}" type="video/mp4">
 </video>
+ <button type="button" class="dy-hero-sound" id="dyHeroSound"
+        aria-label="Turn sound on" aria-pressed="false" title="Sound">
+
+    <!-- sound OFF icon -->
+    <svg class="ico-off" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+        <path d="M16 9.5l5 5M21 9.5l-5 5"/>
+    </svg>
+
+    <!-- sound ON icon -->
+    <svg class="ico-on" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+        <path d="M15.5 9a4.5 4.5 0 0 1 0 6"/>
+        <path d="M18.5 6.5a8 8 0 0 1 0 11"/>
+    </svg>
+</button>
             <!-- Full Screen Video End -->
 
             <div class="container dy-hero-wrap">
@@ -6204,6 +6286,7 @@ document.addEventListener('click', function (e) {
         <div class="dy-packages-container">
             <div class="dy-packages-header">
                 <div class="dy-packages-heading">
+                    <span class="dy-kicker">OUR PACKAGES</span>
                     <h2>Popular Tour <span class="dy-title-accent">Packages</span></h2>
                     <p>Handpicked journeys planned around you.</p>
                 </div>
@@ -6547,7 +6630,7 @@ document.addEventListener('click', function (e) {
                 <img class="dy-sv-bgimg is-on" src="{% static 'frontend/service-1.png' %}" alt="">
                 <img class="dy-sv-bgimg" src="{% static 'frontend/service-2.png' %}" alt="">
                 <img class="dy-sv-bgimg" src="{% static 'frontend/service-3.png' %}" alt="">
-                <img class="dy-sv-bgimg" src="{% static 'frontend/services/service-4.jpg' %}" alt="">
+                <img class="dy-sv-bgimg" src="{% static 'frontend/all.png' %}" alt="">
                 <img class="dy-sv-bgimg" src="{% static 'frontend/service-5.webp' %}" alt="">
                 <img class="dy-sv-bgimg" src="{% static 'frontend/service-6.png' %}" alt="">
             </div>
@@ -6695,7 +6778,7 @@ document.addEventListener('click', function (e) {
                         </article>
 
                         <article class="dy-sv-card">
-                            <img class="dy-sv-img" src="{% static 'frontend/services/service-4.jpg' %}" alt="All-in-one booking support" loading="lazy">
+                            <img class="dy-sv-img" src="{% static 'frontend/all.png' %}" alt="All-in-one booking support" loading="lazy">
                             <span class="dy-sv-icon" aria-hidden="true">
                                 <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9 15.5l2 2 4-4"/></svg>
                             </span>
@@ -6788,10 +6871,9 @@ document.addEventListener('click', function (e) {
     content: "";
     position: absolute; inset: 0;
     background:
-        linear-gradient(90deg, rgba(4,14,34,.92) 0%, rgba(4,14,34,.70) 42%, rgba(4,14,34,.38) 100%),
-        linear-gradient(to top, rgba(4,14,34,.55) 0%, rgba(4,14,34,0) 40%);
+        linear-gradient(90deg, rgba(4,14,34,.66) 0%, rgba(4,14,34,.40) 42%, rgba(4,14,34,.12) 100%),
+        linear-gradient(to top, rgba(4,14,34,.32) 0%, rgba(4,14,34,0) 40%);
 }
-
 /* ---------- LEFT CONTENT ---------- */
 .dy-sv-copy {
     position: relative; z-index: 3;
@@ -7020,11 +7102,11 @@ document.addEventListener('click', function (e) {
     /* background (crossfades as you swipe) */
     .dy-sv-bg { display: block; }
     .dy-sv-bg::after {
-        background: linear-gradient(180deg,
-            rgba(4,14,34,.88) 0%,
-            rgba(4,14,34,.72) 45%,
-            rgba(4,14,34,.60) 100%);
-    }
+    background: linear-gradient(180deg,
+        rgba(4,14,34,.66) 0%,
+        rgba(4,14,34,.50) 45%,
+        rgba(4,14,34,.38) 100%);
+}
 
     /* left content */
     .dy-sv-copy { width: auto; margin: 0 24px 28px; }
@@ -8026,15 +8108,17 @@ document.addEventListener("DOMContentLoaded", function () {
 .tv-pic.is-prev { opacity: 0; }
 @keyframes tvKen { from { transform: scale(1); } to { transform: scale(1.09); } }
 
+.tv-framewrap { position: relative; }
+
 .tv-google {
-    position: absolute; right: 10px; bottom: 10px; z-index: 2;
-    padding: 8px 14px; border-radius: 10px; background: #fff; text-align: center;
-    box-shadow: 0 8px 18px rgba(20,60,130,.22);
+    position: absolute; left: -20px; top: 24px; z-index: 3;
+    padding: 16px 26px; border-radius: 18px; background: #fff; text-align: center;
+    box-shadow: 0 14px 30px rgba(20,60,130,.25);
 }
-.tv-google b { display: block; font: 700 13px/1 "Product Sans", Arial, sans-serif; letter-spacing: -.2px; }
+.tv-google b { display: block; font: 700 24px/1 "Product Sans", Arial, sans-serif; letter-spacing: -.3px; }
 .tv-google .g1{color:#4285f4}.tv-google .g2{color:#ea4335}.tv-google .g3{color:#fbbc05}.tv-google .g4{color:#4285f4}.tv-google .g5{color:#34a853}.tv-google .g6{color:#ea4335}
-.tv-google span { display: inline-flex; align-items: center; gap: 5px; margin-top: 3px; font-size: 11px; font-weight: 700; color: #222; }
-.tv-google em { font-style: normal; color: #fbbc05; font-size: 8px; letter-spacing: 1px; }
+.tv-google span { display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 18px; font-weight: 700; color: #222; }
+.tv-google em { font-style: normal; color: #fbbc05; font-size: 14px; letter-spacing: 2px; }
 
 .tv-thumbs { display: flex; gap: 10px; margin-top: 12px; padding: 4px; overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
 .tv-thumbs::-webkit-scrollbar { display: none; }
@@ -8135,10 +8219,83 @@ document.addEventListener("DOMContentLoaded", function () {
     .tv-fill, .tv-planeimg, .tv-testimonials::before { animation: none !important; }
     .tv-pic.is-on, .tv-pic.is-prev { animation: none !important; }
 }
+@media (max-width: 575px) {
+    .tv-google { left: -8px; top: 14px; padding: 10px 16px; }
+    .tv-google b { font-size: 18px; }
+    .tv-google span { font-size: 14px; margin-top: 5px; }
+    .tv-google em { font-size: 11px; }
+}
+/* ==========================================
+   FAQ + BLOG LABELS = TESTIMONIAL KICKER STYLE
+   (no pill, no green dot, yellow/grey line after)
+========================================== */
+
+html body .our-faqs .section-title h3:not(#dy),
+html body .our-blog.dy-blog-sky .section-title h3:not(#dy) {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    background: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    font-family: "DM Sans", -apple-system, "Segoe UI", Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase !important;
+    color: #3c4f73 !important;
+}
+
+/* remove the theme's green dot */
+html body .our-faqs .section-title h3:not(#dy)::before,
+html body .our-blog.dy-blog-sky .section-title h3:not(#dy)::before {
+    content: none !important;
+    display: none !important;
+}
+
+/* yellow + grey line after the text (same as testimonials) */
+html body .our-faqs .section-title h3:not(#dy)::after,
+html body .our-blog.dy-blog-sky .section-title h3:not(#dy)::after {
+    content: "" !important;
+    display: block !important;
+    position: static !important;
+    width: 48px !important;
+    height: 3px !important;
+    border-radius: 3px !important;
+    background: linear-gradient(90deg, #f5b301 45%, rgba(11, 36, 87, .25) 45%) !important;
+}
+/* ==========================================
+   PACKAGES LABEL = SAME KICKER STYLE
+========================================== */
+
+html body .dy-packages-heading .dy-kicker:not(#dy) {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    font-family: "DM Sans", -apple-system, "Segoe UI", Arial, sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: .14em !important;
+    text-transform: uppercase !important;
+    color: #3c4f73 !important;
+}
+
+html body .dy-packages-heading .dy-kicker:not(#dy)::after {
+    content: "" !important;
+    display: block !important;
+    width: 48px !important;
+    height: 3px !important;
+    border-radius: 3px !important;
+    background: linear-gradient(90deg, #f5b301 45%, rgba(11, 36, 87, .25) 45%) !important;
+}
 </style>
 
 <div class="our-testimonials tv-testimonials">
-
 
     <div class="tv-outer">
 
@@ -8157,25 +8314,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 <!-- ============ PHOTO + THUMBS ============ -->
                 <div class="tv-photo">
-                    <div class="tv-frame">
-                        {% for testimonial in testimonials %}
-                        {% if testimonial.photo %}
-                        <img class="tv-pic" src="{{ testimonial.photo.url }}" alt="Trip photo from {{ testimonial.name }}" loading="lazy" draggable="false">
-                        {% elif testimonial.image %}
-                        <img class="tv-pic" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
-                        {% else %}
-                        <img class="tv-pic" src="{% static 'frontend/tr.png' %}" alt="Happy travellers" loading="lazy" draggable="false">
-                        {% endif %}
-                        {% empty %}
-                        <img class="tv-pic is-on" src="{% static 'frontend/tr.png' %}" alt="Happy travellers" loading="lazy" draggable="false">
-                        {% endfor %}
 
-                        <!-- edit the rating here -->
+                    <div class="tv-framewrap">
+
+                        <div class="tv-frame">
+                            {% for testimonial in testimonials %}
+                            {% if testimonial.photo %}
+                            <img class="tv-pic" src="{{ testimonial.photo.url }}" alt="Trip photo from {{ testimonial.name }}" loading="lazy" draggable="false">
+                            {% elif testimonial.image %}
+                            <img class="tv-pic" src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
+                            {% else %}
+                            <img class="tv-pic" src="{% static 'frontend/tr.png' %}" alt="Happy travellers" loading="lazy" draggable="false">
+                            {% endif %}
+                            {% empty %}
+                            <img class="tv-pic is-on" src="{% static 'frontend/tr.png' %}" alt="Happy travellers" loading="lazy" draggable="false">
+                            {% endfor %}
+                        </div><!-- /.tv-frame -->
+
+                        <!-- Google rating card (outside the frame so it is not clipped) -->
                         <div class="tv-google" aria-label="Google rating 4.8 out of 5">
                             <b><span class="g1">G</span><span class="g2">o</span><span class="g3">o</span><span class="g4">g</span><span class="g5">l</span><span class="g6">e</span></b>
                             <span>4.8 <em><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></em></span>
                         </div>
-                    </div>
+
+                    </div><!-- /.tv-framewrap -->
 
                     <div class="tv-thumbs">
                         {% for testimonial in testimonials %}
@@ -8190,62 +8352,62 @@ document.addEventListener("DOMContentLoaded", function () {
                         </button>
                         {% endfor %}
                     </div>
-                </div>
+                </div><!-- /.tv-photo -->
 
                 <!-- ============ REVIEW CARD (plane flies above it) ============ -->
                 <div class="tv-cardcol">
-                <!-- static image 2: plane with banner -->
-                <img class="tv-planeimg" src="{% static 'frontend/re.png' %}" alt="" aria-hidden="true">
+                    <img class="tv-planeimg" src="{% static 'frontend/re.png' %}" alt="" aria-hidden="true">
 
-                <div class="tv-card">
+                    <div class="tv-card">
 
-                    <div class="tv-slides" aria-live="polite">
-                        {% for testimonial in testimonials %}
-                        <figure class="tv-slide">
-                            <span class="tv-qmark" style="--i:0" aria-hidden="true">&rdquo;</span>
+                        <div class="tv-slides" aria-live="polite">
+                            {% for testimonial in testimonials %}
+                            <figure class="tv-slide">
+                                <span class="tv-qmark" style="--i:0" aria-hidden="true">&rdquo;</span>
 
-                            <div class="tv-who" style="--i:0">
-                                <div class="tv-avatar">
-                                    {% if testimonial.image %}
-                                    <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
-                                    {% else %}
-                                    <img src="{% static 'frontend/assets/images/author-1.jpg' %}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
-                                    {% endif %}
-                                </div>
-                                <div>
-                                    <h3 class="tv-name">{{ testimonial.name }}</h3>
-                                    <span class="tv-place">{% if testimonial.location %}{{ testimonial.location }}{% else %}Happy Traveller{% endif %}</span>
-                                    <div class="tv-stars" aria-label="5 out of 5 stars">
-                                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                <div class="tv-who" style="--i:0">
+                                    <div class="tv-avatar">
+                                        {% if testimonial.image %}
+                                        <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
+                                        {% else %}
+                                        <img src="{% static 'frontend/assets/images/author-1.jpg' %}" alt="{{ testimonial.name }}" loading="lazy" draggable="false">
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <h3 class="tv-name">{{ testimonial.name }}</h3>
+                                        <span class="tv-place">{% if testimonial.location %}{{ testimonial.location }}{% else %}Happy Traveller{% endif %}</span>
+                                        <div class="tv-stars" aria-label="5 out of 5 stars">
+                                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <blockquote class="tv-text" style="--i:2">{% with r=testimonial.review|striptags %}{% if r|slice:":1" == "“" or r|slice:":1" == '"' %}{{ r }}{% else %}&ldquo;{{ r }}&rdquo;{% endif %}{% endwith %}</blockquote>
-                        </figure>
-                        {% empty %}
-                        <figure class="tv-slide is-on">
-                            <blockquote class="tv-text">Traveller experiences and reviews will appear here soon.</blockquote>
-                        </figure>
-                        {% endfor %}
-                    </div>
+                                <blockquote class="tv-text" style="--i:2">{% with r=testimonial.review|striptags %}{% if r|slice:":1" == "“" or r|slice:":1" == '"' %}{{ r }}{% else %}&ldquo;{{ r }}&rdquo;{% endif %}{% endwith %}</blockquote>
+                            </figure>
+                            {% empty %}
+                            <figure class="tv-slide is-on">
+                                <blockquote class="tv-text">Traveller experiences and reviews will appear here soon.</blockquote>
+                            </figure>
+                            {% endfor %}
+                        </div>
 
-                    <div class="tv-progress" aria-hidden="true">
-                        <div class="tv-track"><span class="tv-fill"></span></div>
-                        <span class="tv-count"></span>
-                    </div>
+                        <div class="tv-progress" aria-hidden="true">
+                            <div class="tv-track"><span class="tv-fill"></span></div>
+                            <span class="tv-count"></span>
+                        </div>
 
-                    <div class="tv-controls">
-                        <button type="button" class="tv-prev" aria-label="Previous review"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button type="button" class="tv-next" aria-label="Next review"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
+                        <div class="tv-controls">
+                            <button type="button" class="tv-prev" aria-label="Previous review"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button type="button" class="tv-next" aria-label="Next review"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
 
-                </div>
+                    </div><!-- /.tv-card -->
                 </div><!-- /.tv-cardcol -->
-            </div>
-        </div>
 
-    </div>
+            </div><!-- /.tv-stage -->
+        </div><!-- /.tv-rev -->
+
+    </div><!-- /.tv-outer -->
 
     <!-- static image 1: travel couple (left) -->
     <img class="tv-couple" src="{% static 'frontend/map.png' %}" alt="Smiling travel couple studying a map" loading="lazy">
@@ -10585,4 +10747,108 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 {% comment %} testimonials js end  {% endcomment %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var video = document.getElementById("myVideo");
+    var btn   = document.getElementById("dyHeroSound");
+    if (!video || !btn) return;
+
+   
+    var VOLUME = 0.6;           // 0 to 1, raise or lower to taste
+    var wantsSound = false;
+    var fadeTimer = null;
+
+    // iPhone/iPad Safari ignores video.volume, so fading is skipped there
+    var canFade = (function () {
+        var old = video.volume;
+        video.volume = 0.5;
+        var ok = Math.abs(video.volume - 0.5) < 0.01;
+        video.volume = old;
+        return ok;
+    })();
+
+    function fadeTo(level, done) {
+        clearInterval(fadeTimer);
+        if (!canFade) { if (done) done(); return; }
+        var steps = 0;
+        fadeTimer = setInterval(function () {
+            steps++;
+            var diff = level - video.volume;
+            if (Math.abs(diff) < 0.03 || steps > 40) {
+                video.volume = level;
+                clearInterval(fadeTimer);
+                if (done) done();
+                return;
+            }
+            video.volume = Math.min(1, Math.max(0, video.volume + diff * 0.2));
+        }, 40);
+    }
+
+        function setUI(on) {
+        btn.classList.toggle("is-on", on);
+        btn.setAttribute("aria-pressed", String(on));
+        btn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
+        btn.title = on ? "Sound on" : "Sound off";
+    }
+
+    function soundOn() {
+        if (canFade) video.volume = 0;
+        video.muted = false;
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+        fadeTo(VOLUME);
+    }
+
+    function soundOff() {
+        fadeTo(0, function () { video.muted = true; });
+    }
+
+    btn.addEventListener("click", function () {
+        wantsSound = !wantsSound;
+        setUI(wantsSound);
+        wantsSound ? soundOn() : soundOff();
+    });
+
+    // fade the sound out while scrolling away from the hero, then stop it
+    function stopSound() {
+        wantsSound = false;
+        setUI(false);
+        soundOff();
+    }
+
+    var scrollTick = false;
+    function onHeroScroll() {
+        scrollTick = false;
+        if (!wantsSound) return;
+
+        var r = video.getBoundingClientRect();
+        var visible = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0));
+        var ratio = r.height ? visible / r.height : 0;   // 1 = hero fully in view, 0 = gone
+
+        // hero mostly gone: stop the sound completely
+        if (ratio < 0.2) {
+            stopSound();
+            return;
+        }
+
+        // iPhone/iPad can't change volume, so they just keep playing until the cutoff above
+        if (!canFade) return;
+
+        // fade smoothly with the scroll
+        clearInterval(fadeTimer);
+        var level = VOLUME * Math.min(1, (ratio - 0.2) / 0.6);
+        video.volume = Math.max(0, Math.min(1, level));
+    }
+
+    window.addEventListener("scroll", function () {
+        if (scrollTick) return;
+        scrollTick = true;
+        requestAnimationFrame(onHeroScroll);
+    }, { passive: true });
+    document.addEventListener("visibilitychange", function () {
+        if (!wantsSound) return;
+        document.hidden ? soundOff() : soundOn();
+    });
+});
+</script>
 {% endblock %}
